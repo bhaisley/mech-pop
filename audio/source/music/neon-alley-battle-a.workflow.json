@@ -1,0 +1,104 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_music3_dit_fp16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "minimax_music3_text_encoder_pruned_bf16.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_music3_dav.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "MiniMaxMusic3TextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "caption": "Global Metadata: An original instrumental arcade battle composition titled Neon Alley for MECH POP, a vivid game about tiny expressive robots breaking and stealing each other's oversized weapons. A rainy rooftop market full of violet signs, turquoise reflections, pink lanterns and electric city lights. Upbeat electro-funk crossed with nimble arcade rock. 152 BPM, straight 4/4 with syncopated bass, F-sharp minor with an exuberant A-major chorus lift. Generate 108 seconds of continuous music. The identity is a cheeky, instantly recognizable four-note FM-synth hook and a rubbery, syncopated slap-synth bass riff. Modern clean stereo production, punchy drums, controlled low end, detailed but uncluttered midrange, room for game effects.\n\nVocal Details: Completely instrumental. No human voice, singing, speech, rap, choir, chants, vocal chops, or sampled dialogue. The melody must be played by electronic instruments only.\n\nArrangement: Start on a strong musical downbeat with the main FM-synth hook, bright gated chords, tight electronic kick and snare, and the bouncing bass line. Add small crunchy guitar stabs and playful metallic rim-shot answers. Develop a sixteen-bar A section with octave bass variation, then a brighter spacious chorus with a new soaring synth counter-melody. Include an eight-bar rhythm break of bass, drums and flickering arpeggios before returning to the full hook. Keep a steady tempo and danceable momentum. Use crisp two-beat fills and changing orchestration every eight bars. The final phrase must carry the groove forward into a return to the opening. No long introduction, ambient prelude, cinematic build, tempo change, fade-out, final crash or resolving ending. Fresh original composition; no imitation of any existing artist, game soundtrack or song.",
+      "lyrics": "[Instrumental intro]\n\n[Instrumental hook]\n\n[Instrumental verse]\n\n[Instrumental chorus]\n\n[Instrumental bridge]\n\n[Instrumental chorus]\n\n[Instrumental outro]",
+      "seed": 41927,
+      "max_duration": 108.0,
+      "cfg_scale": 1.7,
+      "top_k": 50
+    }
+  },
+  "5": {
+    "class_type": "EmptyMiniMaxMusic3LatentAudio",
+    "inputs": {
+      "seconds": 108.0,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 41928,
+      "steps": 30,
+      "cfg": 1.7,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "8",
+        0
+      ],
+      "filename_prefix": "audio/mech-pop/neon-alley-battle-a"
+    }
+  }
+}

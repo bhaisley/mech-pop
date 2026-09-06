@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"skyport"
+display_name = "SKYPORT"
+subtitle = "HIGH-SKY SCRAP PARTY"
+description = "Open decks and a drifting transit platform."
+platforms = Array[Rect2]([Rect2(-1100, 0, 2200, 100), Rect2(-1000, -360, 600, 32), Rect2(400, -360, 600, 32), Rect2(-200, -620, 400, 32)])
+spawns = Array[Vector2]([Vector2(-750, -100), Vector2(750, -100), Vector2(-600, -470), Vector2(600, -470)])
+moving_index = 3
+moving_amplitude = Vector2(300, 0)
+moving_speed = 0.24
+music = "res://audio/music/sky-port.wav"
+matte = "res://stages/skyport/skyport-matte.png"
+accent = Color(0.231373, 0.8, 0.835294, 1)
+deck = Color(0.905882, 0.956863, 0.960784, 1)
+dark = Color(0.129412, 0.231373, 0.34902, 1)
+trim = Color(1.0, 0.803922, 0.333333, 1)
+sky_top = Color(0.192157, 0.498039, 0.686275, 1)
+sky_horizon = Color(0.741176, 0.905882, 0.917647, 1)
+ambient = Color(0.8, 0.905882, 0.945098, 1)
+sunlight = Color(1.0, 0.941176, 0.835294, 1)

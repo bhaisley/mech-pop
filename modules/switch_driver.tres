@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"drive_strike"
+startup = 0.16
+active = 0.17
+recovery = 0.28
+damage = 22
+component_damage = 22
+knockback = Vector2(920, -410)
+offset = Vector2(119, -85)
+size = Vector2(208, 128)
+breaker = true
+movement = 730.0
+feedback = &"switch"
+
+[sub_resource type="Resource" id="up_attack"]
+script = ExtResource("2")
+id = &"drive_lift"
+startup = 0.18
+active = 0.12
+recovery = 0.31
+damage = 21
+component_damage = 22
+knockback = Vector2(270, -1320)
+offset = Vector2(63, -147)
+size = Vector2(183, 230)
+breaker = true
+feedback = &"switch"
+
+[sub_resource type="Resource" id="down_attack"]
+script = ExtResource("2")
+id = &"drive_guard"
+startup = 0.23
+active = 0.1
+recovery = 0.32
+damage = 17
+component_damage = 23
+knockback = Vector2(520, -700)
+offset = Vector2(85, -40)
+size = Vector2(200, 145)
+breaker = true
+target_slot = &"shell"
+delivery = &"field"
+projectile_speed = Vector2(420, 100)
+projectile_lifetime = 1.2
+projectile_radius = Vector2(81, 65)
+piercing = true
+feedback = &"switch"
+
+[resource]
+script = ExtResource("1")
+id = &"switch_driver"
+display_name = "SWITCH DRIVER"
+short_name = "DRIVER"
+donor = &"zero"
+color = Color(0.278431, 0.270588, 0.317647, 1)
+energy = Color(1.0, 0.360784, 0.466667, 1)
+cooldown = 1.05
+action = &"adaptive"
+attack = SubResource("attack")
+up_attack = SubResource("up_attack")
+down_attack = SubResource("down_attack")

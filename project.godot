@@ -1,0 +1,44 @@
+; MECH★POP — native Godot project. Engine version is pinned in docs/BUILD.md.
+config_version=5
+
+[application]
+config/name="MECH★POP"
+run/main_scene="res://ui/app.tscn"
+run/flush_stdout_on_print=true
+config/features=PackedStringArray("4.7", "Forward Plus")
+config/version="0.2.0-dev"
+config/description="Small mechs. Massive mayhem."
+config/icon="res://ui/brand/icon.svg"
+
+[display]
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1440
+window/size/window_height_override=810
+window/size/min_width=960
+window/size/min_height=540
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=1
+window/handheld/orientation=0
+
+[rendering]
+renderer/rendering_method="forward_plus"
+renderer/rendering_method.mobile="mobile"
+rendering_device/driver.macos="metal"
+rendering_device/driver.ios="metal"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0.21, 0.42, 0.67, 1)
+
+[physics]
+common/physics_ticks_per_second=120
+common/max_physics_steps_per_frame=16
+2d/default_gravity=0.0
+
+[audio]
+driver/enable_input=false
+
+[debug]
+gdscript/warnings/untyped_declaration=0

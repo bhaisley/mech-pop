@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"fin_plate"
+display_name = "FIN PLATE"
+short_name = "FIN"
+slot = &"shell"
+donor = &"nova"
+color = Color(0.157,0.459,0.937,1)
+energy = Color(0.33,0.91,1,1)
+maximum = 60.0
+air_scale = 1.17
+resistance = 0.96

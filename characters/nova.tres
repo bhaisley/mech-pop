@@ -1,0 +1,72 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="Light"]
+script = ExtResource("2")
+id = &"nova_light"
+startup = 0.055
+active = 0.075
+recovery = 0.16
+damage = 9.0
+component_damage = 8.0
+knockback = Vector2(420, -245)
+movement = 100.0
+
+[sub_resource type="Resource" id="Heavy"]
+script = ExtResource("2")
+id = &"nova_heavy"
+startup = 0.18
+active = 0.095
+recovery = 0.25
+damage = 21.0
+component_damage = 18.0
+hitstun = 0.31
+hitstop = 0.085
+knockback = Vector2(920, -580)
+offset = Vector2(88, -90)
+size = Vector2(180, 118)
+breaker = true
+feedback = &"heavy"
+movement = 220.0
+
+[sub_resource type="Resource" id="Uppercut"]
+script = ExtResource("2")
+id = &"nova_uppercut"
+startup = 0.14
+active = 0.09
+recovery = 0.27
+damage = 18.0
+component_damage = 19.0
+hitstun = 0.34
+hitstop = 0.08
+knockback = Vector2(290, -1090)
+offset = Vector2(42, -140)
+size = Vector2(140, 180)
+breaker = true
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="Slam"]
+script = ExtResource("2")
+id = &"nova_slam"
+startup = 0.2
+active = 0.095
+recovery = 0.28
+damage = 24.0
+component_damage = 21.0
+hitstun = 0.31
+hitstop = 0.09
+knockback = Vector2(610, -760)
+offset = Vector2(65, -45)
+size = Vector2(180, 140)
+breaker = true
+target_slot = &"shell"
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+light = SubResource("Light")
+heavy = SubResource("Heavy")
+uppercut = SubResource("Uppercut")
+slam = SubResource("Slam")

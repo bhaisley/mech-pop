@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"kai_light"
+startup = 0.065
+active = 0.07
+recovery = 0.18
+damage = 10
+component_damage = 9
+knockback = Vector2(420, -190)
+offset = Vector2(96, -91)
+size = Vector2(160, 80)
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"kai_heavy"
+startup = 0.24
+active = 0.09
+recovery = 0.36
+damage = 27
+component_damage = 27
+knockback = Vector2(1160, -430)
+offset = Vector2(137, -86)
+size = Vector2(198, 100)
+breaker = true
+hitstop = 0.09
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+id = &"kai_uppercut"
+startup = 0.2
+active = 0.09
+recovery = 0.35
+damage = 25
+component_damage = 25
+knockback = Vector2(350, -1340)
+offset = Vector2(58, -145)
+size = Vector2(148, 211)
+breaker = true
+hitstop = 0.085
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+id = &"kai_slam"
+startup = 0.265
+active = 0.095
+recovery = 0.34
+damage = 29
+component_damage = 29
+knockback = Vector2(850, -770)
+offset = Vector2(113, -42)
+size = Vector2(208, 125)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.09
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+role = "GLASS CANNON"
+quote = "One clean shot."
+description = "Charge up. Commit to the shot.\nHuge power, a fragile frame."
+height = 177.0
+width = 71.0
+mass = 0.7
+speed = 835.0
+acceleration = 6800.0
+air_acceleration = 3100.0
+gravity = 2480.0
+jump_speed = 1340.0
+air_jump_speed = 1130.0
+incoming_damage_scale = 1.12
+authored_height = 300.0
+portrait_size = 3.5
+portrait_center_x = 0.69
+face_region = Rect2(155, 250, 410, 410)
+native_weapon = &"rail_lance"
+native_shell = &"flux_frame"
+id = &"kai"
+display_name = "KAI"
+color = Color(0.196078, 0.541176, 0.862745, 1)
+energy = Color(0.470588, 0.913725, 1.0, 1)
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

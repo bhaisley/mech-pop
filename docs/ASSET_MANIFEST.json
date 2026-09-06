@@ -1,0 +1,924 @@
+{
+  "version": "0.2.0-preview",
+  "asset_source_commit": "35b103e856c5d96088aeab836a2060eca382fc6b",
+  "assets": [
+    {
+      "path": "art_source/characters/nova/nova-construction-v001.png",
+      "sha256": "2fa53a5a1659c9e89a0cfc118f29fa3b194fb0450943c733e42baf64ffbc463b",
+      "bytes": 1917392,
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/characters/nova/nova-construction-v001.prompt.txt",
+      "terms": "Project-specific generated reference",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/arc_blade.blend",
+      "sha256": "7ef7cc1a8251f7c47e17e8878935b6718381597e8f729999beaf521c0961088b",
+      "bytes": 680853,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/bulwark.blend",
+      "sha256": "1dbc3891480cd07f1a1738ebd93d549846dc8a506c9e6c8510c0fbe6f8e95769",
+      "bytes": 1053940,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/burst_knuckle.blend",
+      "sha256": "206e4fda61a09d974bec44c231a61cb6a4a163613bb9994888d754a368fee3aa",
+      "bytes": 957803,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/fin_plate.blend",
+      "sha256": "05993ba069265e465ec8e836954defcb0c29a66987f144d2e16aef90071bdb3e",
+      "bytes": 1013338,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/halo_caster.blend",
+      "sha256": "61fe13816247f5512daba94cad019c27daa98129a04eb4ee617789b59b48efb7",
+      "bytes": 1079966,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/halo_shell.blend",
+      "sha256": "989f911da1e0e6de4304586928afb6888aba7d09a33dd35cde8f6d8770451f3f",
+      "bytes": 1111054,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/kuren.blend",
+      "sha256": "ea737d7ec97f960d4380aaee033c8a1eb5942c71f22069d98f8e87f2ba6fe13c",
+      "bytes": 1349278,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/momo.blend",
+      "sha256": "614bb493b7d08fe04eb65507806ad12ea1b982255c48c00406951342c24289fc",
+      "bytes": 2226868,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/nova.blend",
+      "sha256": "3b6142c5333b3a0d18439c477b211d3ba2088a6e537f6d166d9a3d6d5e2a5a90",
+      "bytes": 1496848,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/pile_cannon.blend",
+      "sha256": "f1d8458fe448de0fc210bf56f1e670b1a3db6acc8deac32265b222858f532906",
+      "bytes": 887156,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/terra.blend",
+      "sha256": "4ed9ef07462e407e3bacf434ca51eec00080a57ce98e852f58604530fd903195",
+      "bytes": 1507992,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "art_source/models/vent_shell.blend",
+      "sha256": "ed4a9fc452214505550ec2c346266deb5fda7deb77067dc07f6560aed594428e",
+      "bytes": 1041043,
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content",
+      "runtime": false
+    },
+    {
+      "path": "audio/music/blossom-core.ogg",
+      "provider": "MiniMax-Music3 composition, edited and mastered for this game",
+      "source": "audio/source/music/blossom-core-loop-edit.json; tools/master_expansion_music.py",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true,
+      "sha256": "f3f6c043fd179a5ac3275ce41082e7c57dae44a7c8d96cb12b1ecb0526ff2431",
+      "bytes": 2508581
+    },
+    {
+      "path": "audio/music/hangar.wav",
+      "sha256": "e58b049a7fb4615c4b69483e6383cc6a4e62e58b4362c5dc72d0ed362ba753fa",
+      "bytes": 5760078,
+      "provider": "MiniMax-Music3 generation and project-specific edit",
+      "source": "audio/source/music/sky-port-battle-a.prompt.txt; audio/source/music/sky-port-battle-a.workflow.json; tools/master_audio.py",
+      "terms": "MiniMax-Music3 community license; see third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true
+    },
+    {
+      "path": "audio/music/junk-fields.ogg",
+      "provider": "MiniMax-Music3 composition, edited and mastered for this game",
+      "source": "audio/source/music/junk-fields-loop-edit.json; tools/master_expansion_music.py",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true,
+      "sha256": "b017b1c1272105c096b46c90c857a3ce2dc39f117d888d5c90840bc21bb9073c",
+      "bytes": 1965953
+    },
+    {
+      "path": "audio/music/neon-alley.ogg",
+      "provider": "MiniMax-Music3 composition, edited and mastered for this game",
+      "source": "audio/source/music/neon-alley-loop-edit.json; tools/master_expansion_music.py",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true,
+      "sha256": "24b9f94b17e8c20f7c91a28f946097817c38a43a3c30a15b95a6c1606da1a0fc",
+      "bytes": 2577256
+    },
+    {
+      "path": "audio/music/reactor-ring.ogg",
+      "provider": "MiniMax-Music3 composition, edited and mastered for this game",
+      "source": "audio/source/music/reactor-ring-loop-edit.json; tools/master_expansion_music.py",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true,
+      "sha256": "411686c1dbc6a4eff6c5f36f6a84492750f45dc0d21ec92f0ea0a15fcddfb961",
+      "bytes": 2549128
+    },
+    {
+      "path": "audio/music/sky-port.wav",
+      "sha256": "473d5ff82fc7ec2621aa80740321e91b144d96b05dccd81f66f12039ef6870ea",
+      "bytes": 18288382,
+      "provider": "MiniMax-Music3 generation and project-specific edit",
+      "source": "audio/source/music/sky-port-battle-a.prompt.txt; audio/source/music/sky-port-battle-a.workflow.json; tools/master_audio.py",
+      "terms": "MiniMax-Music3 community license; see third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/blade.wav",
+      "sha256": "d3b41d89c222ce8ebf41ccc184072892be654cf448573be21225bdd99c5bdd2a",
+      "bytes": 132908,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/boost.wav",
+      "sha256": "2733e5c3ec116e43614767ccdeeb26771bddacb77a8913d1433c2c16d14034e6",
+      "bytes": 115628,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/burst.wav",
+      "sha256": "133e963a4845819153af16aeee6a1ee31eb7f4543773ae506a3a4dbd3054abc3",
+      "bytes": 147116,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/cannon.wav",
+      "sha256": "646b924297f44cdc201c59e3b793296adaeb706362b29bcf069ba9d1271179c7",
+      "bytes": 262316,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/core_pop.wav",
+      "sha256": "8adbe4bfef6a4c8d264b4a925f458512b33943a631e917c30426f2c27ef20f9e",
+      "bytes": 374828,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/go.wav",
+      "sha256": "833f120f836db520482032b403333de75a30b49ab665f9b2b73e7cf3968413d1",
+      "bytes": 225068,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/halo.wav",
+      "sha256": "caae55a4c57e489ca4746a909b8c044d5d4f916d242df6ec29d7d0983c2e0e1b",
+      "bytes": 187436,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_heavy_1.wav",
+      "sha256": "3eae38bf9af5b964cb15c08e295e1e608fba32ac80b0f1e18604aebce215ebb8",
+      "bytes": 178988,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_heavy_2.wav",
+      "sha256": "e1f538d627fa0e0e213aaa083d9139840d940edb8f673dfafef51cd6dd083112",
+      "bytes": 178988,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_heavy_3.wav",
+      "sha256": "2a3a60e7225351254fd2b18571ffc3f5600f37d007178b1c23ab736aed3e702c",
+      "bytes": 178988,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_light_1.wav",
+      "sha256": "b51e206991f19ce72df96afe85174172204ec88a0904131a4c73501d8aadc592",
+      "bytes": 121388,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_light_2.wav",
+      "sha256": "70edfc970ad42acb77abcf864a84e928425447dd706c95617f691c429b8199f5",
+      "bytes": 121388,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/hit_light_3.wav",
+      "sha256": "a21220e25a69ce227c34d0128ba38f9ef0772a0f5984474ca7e1ecce84200c24",
+      "bytes": 121388,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/jump.wav",
+      "sha256": "4845101c5774bc92a16311f6f7c3b2dd268d5d120309054f968b6d112bd2db44",
+      "bytes": 109868,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/land.wav",
+      "sha256": "441c54cfcba0dba5f5aca3a5415b6e608470242baa43891e973c1ae41ff28280",
+      "bytes": 95276,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/part_pop.wav",
+      "sha256": "b43a27df6c7cf3b5dc755d18d36e8de6c97b2e1d6017328c7bcce6728b93a6ea",
+      "bytes": 219308,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/phase.wav",
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_expansion_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0760399d30cde3f9609f07be42f54b4055364768f983b6862a006bd937ec894d",
+      "bytes": 150188
+    },
+    {
+      "path": "audio/sfx/prism.wav",
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_expansion_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "690be446bf5071214dd53d2269a7265273d9d387d2a8d057033a06fc8d0cbdc4",
+      "bytes": 207788
+    },
+    {
+      "path": "audio/sfx/rail.wav",
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_expansion_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "e8db9e0e133f6345fd64ba21ea130c6d9bead787ea7e3ec46f3c124206e7c1a6",
+      "bytes": 178988
+    },
+    {
+      "path": "audio/sfx/rail_charge.wav",
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_expansion_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "360ea72a1bc6845fa249bea905c77a684b2d6c5faacfeb8e923affe93735532c",
+      "bytes": 92588
+    },
+    {
+      "path": "audio/sfx/ready.wav",
+      "sha256": "5f600005b9890b5a4b1beb936fcb01dea4bf1eecb046bf67fea94386208ff230",
+      "bytes": 104108,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/snap.wav",
+      "sha256": "b3d0568ef13b3aaf3a919f6666ddbf88e53add916ef0e0683fb30eafd8029b18",
+      "bytes": 173228,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/switch.wav",
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_expansion_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "6b07b1fa8f014ebb63d7d81c63afe044014bd0fa243ebbf138dd949ff99374f4",
+      "bytes": 150188
+    },
+    {
+      "path": "audio/sfx/ui_confirm.wav",
+      "sha256": "7207714cf0b6eeb5263fd7362fab81649f47a7d429bc622f46e64c82a48f6f00",
+      "bytes": 115628,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/ui_move.wav",
+      "sha256": "04b1ebc7f9144c56262adbc05bc7f8ad773b57055fdb928b037b7fb12ea3fc0d",
+      "bytes": 52268,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/victory.wav",
+      "sha256": "be36fa5daf25805db0a5e0b7c62f5185e2cf3d12537f1e6ba39464c85863724e",
+      "bytes": 518828,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/sfx/warning.wav",
+      "sha256": "c6c63188e146050e8cb812a1ad12cee2cbb3fdc9640f66f9dc2efe04b43f6fbb",
+      "bytes": 170156,
+      "provider": "Original SuperCollider synthesis",
+      "source": "audio/source/render_sfx.scd",
+      "terms": "Original game content; no external samples",
+      "runtime": true
+    },
+    {
+      "path": "audio/source/music/blossom-core-battle-a.flac",
+      "provider": "MiniMax-Music3 generated original lossless recording",
+      "source": "audio/source/music/blossom-core-battle-a.workflow.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "03a55de1209d23036a9f93fdb6289f5539e57554d0b231f222d9254566bf022b",
+      "bytes": 10706169
+    },
+    {
+      "path": "audio/source/music/junk-fields-battle-a.flac",
+      "provider": "MiniMax-Music3 generated original lossless recording",
+      "source": "audio/source/music/junk-fields-battle-a.workflow.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "33bbfdbdd3135a8a6f18ad43fb830eb1001d67ae95228326fb207b6b35579f0b",
+      "bytes": 11891984
+    },
+    {
+      "path": "audio/source/music/masters/blossom-core-loop.wav",
+      "provider": "Edited 48 kHz/24-bit lossless loop master",
+      "source": "tools/master_expansion_music.py; audio/source/music/*-loop-edit.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "2ec76b41be4d52cf47522dc179c498cb7bca0b0c8d0ec549776812845eeca576",
+      "bytes": 27144000
+    },
+    {
+      "path": "audio/source/music/masters/junk-fields-loop.wav",
+      "provider": "Edited 48 kHz/24-bit lossless loop master",
+      "source": "tools/master_expansion_music.py; audio/source/music/*-loop-edit.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "53d8e2404214cd08826c1ad30ba2e45201517ec78716a554485f0706460d3b51",
+      "bytes": 20017476
+    },
+    {
+      "path": "audio/source/music/masters/neon-alley-loop.wav",
+      "provider": "Edited 48 kHz/24-bit lossless loop master",
+      "source": "tools/master_expansion_music.py; audio/source/music/*-loop-edit.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "2315c9af8c9a3656ef392ff4667fdbb2675216a09249578703dcc0d4a1f2512e",
+      "bytes": 27959148
+    },
+    {
+      "path": "audio/source/music/masters/reactor-ring-loop.wav",
+      "provider": "Edited 48 kHz/24-bit lossless loop master",
+      "source": "tools/master_expansion_music.py; audio/source/music/*-loop-edit.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "2f59c5035f24a3a095e1fb389044f58ff86b823fdb64a39f659318108074b133",
+      "bytes": 23363598
+    },
+    {
+      "path": "audio/source/music/neon-alley-battle-a.flac",
+      "provider": "MiniMax-Music3 generated original lossless recording",
+      "source": "audio/source/music/neon-alley-battle-a.workflow.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "1a203d55abb98dd0009b5cc5548d20d56f058cff93819cafe5637236a48a0485",
+      "bytes": 10850463
+    },
+    {
+      "path": "audio/source/music/reactor-ring-battle-a.flac",
+      "provider": "MiniMax-Music3 generated original lossless recording",
+      "source": "audio/source/music/reactor-ring-battle-a.workflow.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false,
+      "sha256": "6249b435aba4597d1e0644e63c4522ed0ea91c5834176551d6a2d7ac6f3c538e",
+      "bytes": 12813913
+    },
+    {
+      "path": "audio/source/music/sky-port-battle-a.flac",
+      "sha256": "9d09c2ec8b3b73a8ed191a7d6085d113dca3908c994b87ddd479c5aef8bfa802",
+      "bytes": 11628425,
+      "provider": "MiniMax-Music3 generated original lossless master",
+      "source": "audio/source/music/sky-port-battle-a.workflow.json",
+      "terms": "third_party/MiniMax-Music3-LICENSE.txt",
+      "runtime": false
+    },
+    {
+      "path": "characters/models/kai.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/kai.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "73a08bf368a099220d4f1ef64ae3d1f9d67803d16437511593f8c8bea774ea1a",
+      "bytes": 741624
+    },
+    {
+      "path": "characters/models/kuren.glb",
+      "sha256": "f2aaa67f9d78ce13594c7e9a2d409d95ff4831bd9ef26505411e8d5ea8f89d8c",
+      "bytes": 750504,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/kuren.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "characters/models/lumi.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/lumi.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "89dde910ca4bdbf818a94736c19563c3bb4f93e28877f2055d7f6bb572dcf8af",
+      "bytes": 781564
+    },
+    {
+      "path": "characters/models/momo.glb",
+      "sha256": "25259f57d3b11934b2051ab3e64359ab345aac0924e71720b13d248c645a65a1",
+      "bytes": 954492,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/momo.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "characters/models/nova.glb",
+      "sha256": "09e61be24f92312beb055aebb6cb5fba00c5a486573957b303b925a2a9868b6c",
+      "bytes": 848984,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/nova.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "characters/models/shadow.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/shadow.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "7e63eab71c25fbc7b0eff3d436abab0bf6a64ddda237aee5c19542cefab504ad",
+      "bytes": 680472
+    },
+    {
+      "path": "characters/models/terra.glb",
+      "sha256": "d70038a614af06dfec6659de290bdc680feb6c86783288204e3c27f4a1345e04",
+      "bytes": 823396,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/terra.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "characters/models/zero.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/zero.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d6e1a5da26478679a2da817f07101624ee65c1335dc28b4152e8a42d1488c456",
+      "bytes": 712460
+    },
+    {
+      "path": "modules/models/adaptive_shell.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/adaptive_shell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "760f320e39df2af8a2c47f4a60d9c717d15165428c5e6d115ba3c6ecb3889934",
+      "bytes": 159780
+    },
+    {
+      "path": "modules/models/arc_blade.glb",
+      "sha256": "cc72fc4914c829088abbf4e477c57439fe81a87249c26c670d98b804eac889a9",
+      "bytes": 109856,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/arc_blade.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/bulwark.glb",
+      "sha256": "361d1660462d15ac8569d1884373fc766197684f62fda2bdea99b40784ce1b64",
+      "bytes": 186224,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/bulwark.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/burst_knuckle.glb",
+      "sha256": "41487401a4f12fcbfa37bddc0e573ad4090da4ef4b56af0802b350f5372b499c",
+      "bytes": 207680,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/burst_knuckle.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/fin_plate.glb",
+      "sha256": "c5c5e2a019abdeafd9ab5c08e999dcea83f4770cdcf88fdfdb979e8db9ba8256",
+      "bytes": 138552,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/fin_plate.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/flux_frame.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/flux_frame.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "8cd2d4bc6d6d479deb1a037c8991d1bf20e914113647de4f2945e8768fd61a06",
+      "bytes": 184500
+    },
+    {
+      "path": "modules/models/halo_caster.glb",
+      "sha256": "84e105f21142f7046cea191fb822b93e02bd56c7c0100cefb57c30fd02ec1e66",
+      "bytes": 114796,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/halo_caster.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/halo_shell.glb",
+      "sha256": "975e4b9378ccf6d6eac2421d08d7a2b50805c5b8c559c2089a6fff84748d6af2",
+      "bytes": 168868,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/halo_shell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/mirage_mantle.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/mirage_mantle.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a1e095a6c458705661a3c13acd99dbcd15a72bbf78e4fb88120bc82c49ec6215",
+      "bytes": 152188
+    },
+    {
+      "path": "modules/models/phase_talon.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/phase_talon.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "77fe42833316226b4b5a3d21d4a7ca7d1e17f8d04dbdd35bf5be1e649dc7ec09",
+      "bytes": 99200
+    },
+    {
+      "path": "modules/models/pile_cannon.glb",
+      "sha256": "4d66d461c71f73486af9fcffa1f429605b4d75d5f7a9922bb3b698924177078b",
+      "bytes": 232164,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/pile_cannon.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "modules/models/prism_emitter.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/prism_emitter.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "8ac29c7279a0c66d36fd60cbb94d76f9f12a9b59c8e30c27df88593c9cd20ca0",
+      "bytes": 83152
+    },
+    {
+      "path": "modules/models/prism_shell.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/prism_shell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "2aceb038af6e424e9a8b055b4bbe645c4de35b973422c2b4209377af8f7d6feb",
+      "bytes": 186728
+    },
+    {
+      "path": "modules/models/rail_lance.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/rail_lance.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "888a18dbe8cab498309c60bc8307a38ee9b13492e93cfac56318765e878b2a09",
+      "bytes": 201276
+    },
+    {
+      "path": "modules/models/switch_driver.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/switch_driver.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "600013c87a3ae1eb2d9afb1dda3bc2aac1ca1c335d593ad4d9bc586eba127da7",
+      "bytes": 121744
+    },
+    {
+      "path": "modules/models/vent_shell.glb",
+      "sha256": "58c72ceee91ca0571a1329810909c80708af0a56dfcc19517dcbc3147b49a3cd",
+      "bytes": 171052,
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/vent_shell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true
+    },
+    {
+      "path": "stages/blossom_core/blossom-core-matte.png",
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/arena-prompts.json; art_source/arena-provenance.json",
+      "terms": "Project-specific generated asset",
+      "runtime": true,
+      "sha256": "7d7fe3377d50dee77f9bec66a7ba3e10844f3adc6304109c4a3cb98950a3fb2e",
+      "bytes": 2138898
+    },
+    {
+      "path": "stages/junk_fields/junk-fields-matte.png",
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/arena-prompts.json; art_source/arena-provenance.json",
+      "terms": "Project-specific generated asset",
+      "runtime": true,
+      "sha256": "0b3bf782911721c18dcd96117191563faf4643aad551702a51017eab0a6bfada",
+      "bytes": 1977696
+    },
+    {
+      "path": "stages/neon_alley/neon-alley-matte.png",
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/arena-prompts.json; art_source/arena-provenance.json",
+      "terms": "Project-specific generated asset",
+      "runtime": true,
+      "sha256": "ca6f766f67072442f9fe1929f9f367bb28db30e3b14c3771dea9987cdb0ae865",
+      "bytes": 2202039
+    },
+    {
+      "path": "stages/reactor_ring/reactor-ring-matte.png",
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/arena-prompts.json; art_source/arena-provenance.json",
+      "terms": "Project-specific generated asset",
+      "runtime": true,
+      "sha256": "847181fc3dc0b560ff991fa99f204a66117441eb71e3b93ccea155a675ee315d",
+      "bytes": 2112892
+    },
+    {
+      "path": "stages/skyport/skyport-matte.png",
+      "sha256": "72eed66ba5fe3237e3a77dec8cb5e195abb19f9754dd16f642db88752296d470",
+      "bytes": 1927299,
+      "provider": "Built-in ImageGen; model identifier not exposed",
+      "source": "art_source/environments/skyport-matte.prompt.txt",
+      "terms": "Project-specific generated asset",
+      "runtime": true
+    },
+    {
+      "path": "third_party/Barlow-OFL.txt",
+      "sha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+      "bytes": 4377,
+      "provider": "Upstream license notice",
+      "source": "docs/THIRD_PARTY_LICENSES.md",
+      "terms": "Included license text",
+      "runtime": true
+    },
+    {
+      "path": "third_party/GODOT_NOTICES.txt",
+      "sha256": "fc070e982416d987d605f6dd93c0a25e65d60c6aaf122809049f43ead0192bb8",
+      "bytes": 97302,
+      "provider": "Upstream license notice",
+      "source": "docs/THIRD_PARTY_LICENSES.md",
+      "terms": "Included license text",
+      "runtime": true
+    },
+    {
+      "path": "third_party/MiniMax-Music3-LICENSE.txt",
+      "sha256": "b21d12df2adae59dad3fcf80c1d81492654c662342f497d9a9770198c9317e58",
+      "bytes": 7373,
+      "provider": "Upstream license notice",
+      "source": "docs/THIRD_PARTY_LICENSES.md",
+      "terms": "Included license text",
+      "runtime": true
+    },
+    {
+      "path": "ui/brand/icon.svg",
+      "sha256": "9a253c331af0ffdb601f014264334e7a8c59c0ed2ec8627507d4bcb53f4e6a00",
+      "bytes": 290,
+      "provider": "Original vector artwork",
+      "source": "Project source",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "ui/fonts/Barlow-SemiBold.ttf",
+      "sha256": "86577cb32f8abe3673db53ca0f4221e6856751a4f6730c867e00f720f8bb1fc5",
+      "bytes": 108348,
+      "provider": "Jeremy Tribby / Google Fonts",
+      "source": "https://github.com/google/fonts/blob/main/ofl/barlow/Barlow-SemiBold.ttf",
+      "terms": "SIL Open Font License 1.1; third_party/Barlow-OFL.txt",
+      "runtime": true
+    },
+    {
+      "path": "ui/fonts/BarlowCondensed-BlackItalic.ttf",
+      "sha256": "e1ed5d7e50c6a4498454d40509ce2362384a2c7870df3418fdbd010f81dffad3",
+      "bytes": 112592,
+      "provider": "Jeremy Tribby / Google Fonts",
+      "source": "https://github.com/google/fonts/blob/main/ofl/barlowcondensed/BarlowCondensed-BlackItalic.ttf",
+      "terms": "SIL Open Font License 1.1; third_party/Barlow-OFL.txt",
+      "runtime": true
+    },
+    {
+      "path": "ui/fonts/BarlowCondensed-Bold.ttf",
+      "sha256": "e476562ec9c1e16cf16475895b511f08c804f438cc9a9f80a44ea50a0eeb5b65",
+      "bytes": 109912,
+      "provider": "Jeremy Tribby / Google Fonts",
+      "source": "https://github.com/google/fonts/blob/main/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+      "terms": "SIL Open Font License 1.1; third_party/Barlow-OFL.txt",
+      "runtime": true
+    },
+    {
+      "path": "ui/portraits/kai.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/kai.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0bbbb4482ab24fe0afc31c15e80c2cc2a1b93605483db65345755c0e06467611",
+      "bytes": 93987
+    },
+    {
+      "path": "ui/portraits/kuren.png",
+      "sha256": "7b519b6875ebc5fcee6320ef8b378381c316a17e358459b49765cfda41e4133c",
+      "bytes": 107358,
+      "provider": "Native render of original game model",
+      "source": "characters/models/kuren.glb; tools/render_assets.gd",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "ui/portraits/lumi.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/lumi.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ea06eb1aaa39082b3c085b7fe4bfcf70b03ce7e948542d8f7886fc980db1119f",
+      "bytes": 113285
+    },
+    {
+      "path": "ui/portraits/momo.png",
+      "sha256": "da59f2e63da4d62695afa71bf3bf3cf2d6b28f0a6a557d5d3da0eb825f0759b5",
+      "bytes": 104673,
+      "provider": "Native render of original game model",
+      "source": "characters/models/momo.glb; tools/render_assets.gd",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "ui/portraits/nova.png",
+      "sha256": "a01f656e799c76ad85708cd158b6c7f6874a3657abed8d8baf52e95858e8e3e6",
+      "bytes": 113520,
+      "provider": "Native render of original game model",
+      "source": "characters/models/nova.glb; tools/render_assets.gd",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "ui/portraits/shadow.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/shadow.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "98a7a51409eac159088e07a75247cdc0a52d1f5a2f7f0ad39b19d673889351f8",
+      "bytes": 102432
+    },
+    {
+      "path": "ui/portraits/terra.png",
+      "sha256": "c6b336ca68a304108e53c6e0549ff85b1ce7a67342132661f4111bb918dae2bc",
+      "bytes": 94358,
+      "provider": "Native render of original game model",
+      "source": "characters/models/terra.glb; tools/render_assets.gd",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "ui/portraits/zero.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/zero.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d6e494f3d66aaa3f3ce2c08f08a4e43c778d291fd360c72796dee827dba3005a",
+      "bytes": 95270
+    },
+    {
+      "path": "vfx/shaders/hit_flash.gdshader",
+      "sha256": "dd22320523d42a9fe4b3864a0ae5c95b10f59fa470b0e17416bab37737ecc568",
+      "bytes": 169,
+      "provider": "Original game shader",
+      "source": "Project source",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "vfx/shaders/mech_outline.gdshader",
+      "sha256": "53716dccf93f060d74766eb3f7322681846ae351c36e14fd937eab2a0108ef14",
+      "bytes": 204,
+      "provider": "Original game shader",
+      "source": "Project source",
+      "terms": "Original game content",
+      "runtime": true
+    },
+    {
+      "path": "vfx/shaders/mech_toon.gdshader",
+      "sha256": "8defba7ca67f75580ef11eebe081f3cf16ce74a175af08c5227cbdedf868e6e1",
+      "bytes": 742,
+      "provider": "Original game shader",
+      "source": "Project source",
+      "terms": "Original game content",
+      "runtime": true
+    }
+  ]
+}

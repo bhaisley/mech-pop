@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"bulwark"
+display_name = "BULWARK"
+short_name = "WALL"
+slot = &"shell"
+donor = &"terra"
+color = Color(0.443,0.545,0.22,1)
+energy = Color(0.78,0.922,0.325,1)
+maximum = 60.0
+acceleration_scale = 0.87
+resistance = 1.15

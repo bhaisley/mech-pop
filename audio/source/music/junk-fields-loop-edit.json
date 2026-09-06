@@ -1,0 +1,88 @@
+{
+  "source": "audio/source/music/junk-fields-battle-a.flac",
+  "source_sha256": "33bbfdbdd3135a8a6f18ad43fb830eb1001d67ae95228326fb207b6b35579f0b",
+  "source_seconds": 107.99602083333333,
+  "requested_bpm": 140,
+  "estimated_bpm": 138.12,
+  "edit_bpm": 138.12,
+  "start_seconds": 1.04,
+  "bars": 40,
+  "loop_seconds": 69.50477083333334,
+  "crossfade_ms": 160,
+  "gain_db": -2.21,
+  "lossless_master": "audio/source/music/masters/junk-fields-loop.wav",
+  "master_sha256": "53d8e2404214cd08826c1ad30ba2e45201517ec78716a554485f0706460d3b51",
+  "master_lufs": -19.76,
+  "master_true_peak_db": -2.13,
+  "runtime": "audio/music/junk-fields.ogg",
+  "runtime_sha256": "b017b1c1272105c096b46c90c857a3ce2dc39f117d888d5c90840bc21bb9073c",
+  "runtime_lufs": -19.83,
+  "runtime_true_peak_db": -2.25,
+  "runtime_bytes": 1965953,
+  "master_seam_step": 0.0039137788116931915,
+  "vorbis_seam_step": 0.004328597337007523,
+  "top_cut_candidates": [
+    {
+      "score": 1.5746,
+      "start": 1.04,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.5777,
+      "start": 1.02,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.584,
+      "start": 1.0,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.5908,
+      "start": 1.06,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.6359,
+      "start": 1.08,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.6609,
+      "start": 1.1,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.7005,
+      "start": 1.12,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.7253,
+      "start": 3.0,
+      "duration": 97.307,
+      "bars": 56
+    },
+    {
+      "score": 1.7368,
+      "start": 1.14,
+      "duration": 69.505,
+      "bars": 40
+    },
+    {
+      "score": 1.744,
+      "start": 2.98,
+      "duration": 97.307,
+      "bars": 56
+    }
+  ],
+  "listening_status": "Pending: analysis does not establish musical quality or a human-confirmed beat grid.",
+  "method": "100 Hz log-band spectral flux, multi-beat autocorrelation, phrase-length spectral/level recurrence, cosine tail-to-pre-start crossfade, linear loudness gain, 48 kHz 24-bit lossless master, Vorbis quality 7 runtime."
+}

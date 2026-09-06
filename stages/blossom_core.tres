@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"blossom_core"
+display_name = "BLOSSOM CORE"
+subtitle = "PETALS & POWER CELLS"
+description = "Garden terraces around a floating petal lift."
+platforms = Array[Rect2]([Rect2(-1030, 0, 2060, 100), Rect2(-980, -300, 620, 32), Rect2(360, -300, 620, 32), Rect2(-340, -650, 680, 32), Rect2(-160, -155, 320, 32)])
+spawns = Array[Vector2]([Vector2(-720, -100), Vector2(720, -100), Vector2(-670, -410), Vector2(670, -410)])
+moving_index = 4
+moving_amplitude = Vector2(540, -150)
+moving_speed = 0.28
+music = "res://audio/music/blossom-core.ogg"
+matte = "res://stages/blossom_core/blossom-core-matte.png"
+accent = Color(0.45098, 0.886275, 0.772549, 1)
+deck = Color(1.0, 0.941176, 0.929412, 1)
+dark = Color(0.32549, 0.431373, 0.517647, 1)
+trim = Color(0.929412, 0.596078, 0.788235, 1)
+sky_top = Color(0.458824, 0.776471, 0.85098, 1)
+sky_horizon = Color(0.901961, 0.964706, 0.937255, 1)
+ambient = Color(0.85098, 0.952941, 0.913725, 1)
+sunlight = Color(1.0, 0.94902, 0.866667, 1)

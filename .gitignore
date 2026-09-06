@@ -1,0 +1,29 @@
+.DS_Store
+.godot/
+.tools/
+.venv/
+__pycache__/
+*.pyc
+*.blend1
+*.blend2
+/work/
+/builds/
+/server/logs/
+/server/.venv/
+/captures/raw/
+/audio/candidates/
+/art_source/experiments/
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+
+# Keep production assets, source models, import settings and Godot UID files.
+# Explicitly promote selected captures/candidates into their final asset folders.
+
+# Local signing and uncompressed capture output
+*.mobileprovision
+*.xcuserstate
+*.avi
+*.mov

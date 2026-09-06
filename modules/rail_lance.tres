@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"rail_shot"
+startup = 0.62
+active = 0.065
+recovery = 0.52
+damage = 40
+component_damage = 34
+knockback = Vector2(1570, -470)
+offset = Vector2(165, -98)
+size = Vector2(170, 75)
+breaker = true
+delivery = &"rail"
+projectile_speed = Vector2(2800, 0)
+projectile_lifetime = 0.82
+projectile_radius = Vector2(38, 17)
+piercing = true
+hitstop = 0.1
+hitstun = 0.36
+feedback = &"rail"
+
+[resource]
+script = ExtResource("1")
+id = &"rail_lance"
+display_name = "RAIL LANCE"
+short_name = "RAIL"
+donor = &"kai"
+color = Color(0.196078, 0.541176, 0.862745, 1)
+energy = Color(0.470588, 0.913725, 1.0, 1)
+cooldown = 1.85
+action = &"rail"
+attack = SubResource("attack")

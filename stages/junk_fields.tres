@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"junk_fields"
+display_name = "JUNK FIELDS"
+subtitle = "HEAVY METAL PLAYGROUND"
+description = "Wide scrap decks and uneven stacks beneath a crane lift."
+platforms = Array[Rect2]([Rect2(-1220, 0, 2440, 110), Rect2(-1000, -250, 430, 32), Rect2(-240, -320, 480, 32), Rect2(510, -480, 630, 32), Rect2(-190, -650, 380, 32)])
+spawns = Array[Vector2]([Vector2(-940, -100), Vector2(940, -100), Vector2(-820, -360), Vector2(830, -590)])
+moving_index = 4
+moving_amplitude = Vector2(0, 130)
+moving_speed = 0.38
+music = "res://audio/music/junk-fields.ogg"
+matte = "res://stages/junk_fields/junk-fields-matte.png"
+accent = Color(0.447059, 0.886275, 0.788235, 1)
+deck = Color(0.866667, 0.67451, 0.384314, 1)
+dark = Color(0.235294, 0.321569, 0.380392, 1)
+trim = Color(0.952941, 0.517647, 0.25098, 1)
+sky_top = Color(0.482353, 0.713725, 0.741176, 1)
+sky_horizon = Color(0.945098, 0.835294, 0.647059, 1)
+ambient = Color(0.847059, 0.905882, 0.823529, 1)
+sunlight = Color(1.0, 0.882353, 0.694118, 1)

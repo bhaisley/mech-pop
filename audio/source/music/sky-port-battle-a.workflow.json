@@ -1,0 +1,104 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_music3_dit_fp16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "minimax_music3_text_encoder_pruned_bf16.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_music3_dav.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "MiniMaxMusic3TextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "caption": "Global Metadata: Original instrumental arcade battle theme for MECH POP, a colorful game about expressive tiny robots fighting and swapping oversized weapons on a futuristic sky port. Japanese arcade energy, electronic rock, playful heroic anime adventure. 144 BPM, 4/4, E minor with bright major-color lift in the hook. Exactly 108 seconds of continuous energetic music. Confident, propulsive, mischievous, optimistic; energetic without oppressive aggression. Studio-quality stereo mix with crisp controlled drums, punchy bass, clear memorable melody and space for game sound effects.\n\nVocal Details: Entirely instrumental. No singing, no speech, no rap, no choir, no vocal chops, no human voices. The lead melody is played only by bright synthesizers and electric guitar.\n\nArrangement: Start directly on the strong downbeat with an instantly catchy four-bar bright synth lead hook answered by playful plucked bell notes. Tight electronic drums with real rock snare character, syncopated warm synth bass, short crunchy distorted guitar accents and futuristic mechanical percussion. Arrange 64 bars: 8-bar hook, 16-bar driving A section, 16-bar soaring B section, 8-bar playful half-density break, 8-bar A variation, 8-bar hook reprise that leads seamlessly back into the opening downbeat. Keep rhythm and tempo steady. Change orchestration and drum fills every eight bars to maintain excitement. Wide synth and guitar accents, focused centered kick and bass, restrained cymbals. Avoid a long intro, cinematic build, abrupt tempo changes, fade-out or final resolving ending. End with a short pickup fill that naturally continues into the beginning for an arcade gameplay loop. Do not imitate any existing artist or song.",
+      "lyrics": "[Instrumental intro]\n\n[Instrumental hook]\n\n[Instrumental verse]\n\n[Instrumental chorus]\n\n[Instrumental bridge]\n\n[Instrumental chorus]\n\n[Instrumental outro]",
+      "seed": 27491,
+      "max_duration": 108.0,
+      "cfg_scale": 1.7,
+      "top_k": 50
+    }
+  },
+  "5": {
+    "class_type": "EmptyMiniMaxMusic3LatentAudio",
+    "inputs": {
+      "seconds": 108.0,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 27492,
+      "steps": 30,
+      "cfg": 1.7,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "8",
+        0
+      ],
+      "filename_prefix": "audio/mech-pop/sky-port-battle-a"
+    }
+  }
+}

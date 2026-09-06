@@ -1,0 +1,12 @@
+{
+  "source": "sky-port-battle-a.flac",
+  "source_seconds": 107.99602083333333,
+  "estimated_bpm": 141.1,
+  "bars": 56,
+  "start_seconds": 0.5,
+  "loop_seconds": 95.25158333333333,
+  "crossfade_ms": 120,
+  "sample_peak_db": -3.77,
+  "seam_step": 0.004998607560992241,
+  "method": "broadband onset autocorrelation and boundary-envelope alignment; not a human beat-grid confirmation"
+}

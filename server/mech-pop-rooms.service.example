@@ -1,0 +1,27 @@
+[Unit]
+Description=MECH POP private game rooms
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mechpop
+Group=mechpop
+WorkingDirectory=/opt/mech-pop
+ExecStart=/opt/mech-pop/server/.venv/bin/python /opt/mech-pop/server/start_rooms.py --engine /opt/mech-pop/bin/godot --pack /opt/mech-pop/server/game.pck --max-rooms 2
+Restart=on-failure
+RestartSec=3
+KillMode=control-group
+TimeoutStopSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/mech-pop/server/logs /var/lib/mechpop
+StateDirectory=mechpop
+Environment=XDG_DATA_HOME=/var/lib/mechpop
+MemoryMax=2G
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target

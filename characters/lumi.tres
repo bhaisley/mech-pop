@@ -1,0 +1,88 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"lumi_light"
+startup = 0.07
+active = 0.085
+recovery = 0.2
+damage = 9
+component_damage = 9
+knockback = Vector2(380, -220)
+offset = Vector2(108, -92)
+size = Vector2(192, 85)
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"lumi_heavy"
+startup = 0.225
+active = 0.12
+recovery = 0.3
+damage = 21
+component_damage = 23
+knockback = Vector2(910, -420)
+offset = Vector2(147, -89)
+size = Vector2(232, 128)
+breaker = true
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+id = &"lumi_uppercut"
+startup = 0.185
+active = 0.11
+recovery = 0.29
+damage = 20
+component_damage = 22
+knockback = Vector2(250, -1210)
+offset = Vector2(62, -145)
+size = Vector2(183, 202)
+breaker = true
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+id = &"lumi_slam"
+startup = 0.24
+active = 0.12
+recovery = 0.31
+damage = 24
+component_damage = 26
+knockback = Vector2(650, -790)
+offset = Vector2(93, -39)
+size = Vector2(223, 125)
+breaker = true
+target_slot = &"shell"
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+role = "ZONER"
+quote = "Every angle is covered."
+description = "Leave a prism in their path.\nMake space, then own it."
+height = 179.0
+width = 79.0
+mass = 0.97
+speed = 685.0
+acceleration = 5700.0
+air_acceleration = 3200.0
+gravity = 2150.0
+jump_speed = 1310.0
+air_jump_speed = 1120.0
+authored_height = 298.0
+portrait_size = 2.95
+portrait_center_x = 0.4
+face_region = Rect2(220, 260, 430, 430)
+native_weapon = &"prism_emitter"
+native_shell = &"prism_shell"
+id = &"lumi"
+display_name = "LUMI"
+color = Color(0.956863, 0.803922, 0.447059, 1)
+energy = Color(0.67451, 0.933333, 1.0, 1)
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

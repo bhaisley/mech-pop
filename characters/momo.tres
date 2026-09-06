@@ -1,0 +1,93 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"momo_light"
+startup = 0.06
+active = 0.075
+recovery = 0.18
+damage = 8
+component_damage = 9
+knockback = Vector2(370, -245)
+offset = Vector2(102, -82)
+size = Vector2(190, 72)
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"momo_snare"
+startup = 0.17
+active = 0.095
+recovery = 0.28
+damage = 16
+component_damage = 20
+knockback = Vector2(400, -620)
+offset = Vector2(105, -65)
+size = Vector2(180, 105)
+breaker = true
+hitstop = 0.07
+feedback = &"heavy"
+delivery = &"snare"
+projectile_speed = Vector2(310, -180)
+projectile_lifetime = 3.0
+projectile_radius = Vector2(55, 48)
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+id = &"momo_uppercut"
+startup = 0.14
+active = 0.1
+recovery = 0.27
+damage = 17
+component_damage = 19
+knockback = Vector2(250, -1070)
+offset = Vector2(50, -130)
+size = Vector2(160, 170)
+breaker = true
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+id = &"momo_slam"
+startup = 0.185
+active = 0.1
+recovery = 0.29
+damage = 19
+component_damage = 24
+knockback = Vector2(490, -690)
+offset = Vector2(85, -40)
+size = Vector2(200, 130)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.08
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+display_name = "MOMO"
+role = "TECH / TRICKSTER"
+quote = "Cute is a combat strategy."
+color = Color(0.965, 0.569, 0.8, 1)
+energy = Color(1, 0.882, 0.941, 1)
+height = 156.0
+width = 73.0
+mass = 0.78
+speed = 730.0
+acceleration = 5900.0
+air_acceleration = 3700.0
+gravity = 1930.0
+jump_speed = 1220.0
+air_jump_speed = 1040.0
+native_weapon = &"halo_caster"
+native_shell = &"halo_shell"
+id = &"momo"
+description = "Set a snare. Call a repair drone.\nMake their cannon your cannon."
+authored_height = 295.5
+face_region = Rect2(235, 330, 380, 380)
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

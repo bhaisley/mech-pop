@@ -1,0 +1,104 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_music3_dit_fp16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "minimax_music3_text_encoder_pruned_bf16.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_music3_dav.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "MiniMaxMusic3TextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "caption": "Global Metadata: An original instrumental arcade battle composition titled Reactor Ring for MECH POP, featuring tiny expressive robots brawling around a bright cyan reactor in a circular orange-and-white industrial arena. Fast driving synth-rock and arcade racing energy, 160 BPM, precise 4/4, C minor with a bold E-flat-major chorus lift. Generate 108 seconds of continuous music. The identity is a pulsing sequenced arpeggio, a distinctive ascending saw-synth hook and tightly gated rhythm guitar accents. Urgent, competitive, exciting and optimistic, not horror or oppressive aggression. Crisp powerful studio stereo mix, focused low end, snappy snare, disciplined cymbals and open midrange space for combat sound effects.\n\nVocal Details: Purely instrumental. Absolutely no singing, speech, rap, human voices, chants, choirs, vocal chops or sampled dialogue. Melody is played by synthesizers and electric guitar only.\n\nArrangement: Hit the opening downbeat immediately with the pulsing arpeggio, firm four-on-the-floor kick, offbeat bass and signature ascending lead hook. Move into a sixteen-bar driving A section with syncopated guitar punctuation, then a sixteen-bar soaring chorus with wide lead synth and brighter harmony. Use an eight-bar stripped groove section with toms, bass and the reactor-like sequencer, then rebuild with a variation of the main riff. Aim for 72 bars including a strong hook reprise. Every eight bars gets a short mechanical percussion fill and a small change of instrumentation. Maintain constant tempo and energy. End with a tight pickup fill and harmonic anticipation that loops naturally into the first downbeat; no finale, fade-out, ambient tail or silence. Compose fresh original music with no imitation of any artist or known soundtrack.",
+      "lyrics": "[Instrumental intro]\n\n[Instrumental hook]\n\n[Instrumental verse]\n\n[Instrumental chorus]\n\n[Instrumental bridge]\n\n[Instrumental chorus]\n\n[Instrumental outro]",
+      "seed": 72077,
+      "max_duration": 108.0,
+      "cfg_scale": 1.7,
+      "top_k": 50
+    }
+  },
+  "5": {
+    "class_type": "EmptyMiniMaxMusic3LatentAudio",
+    "inputs": {
+      "seconds": 108.0,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 72078,
+      "steps": 30,
+      "cfg": 1.7,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "8",
+        0
+      ],
+      "filename_prefix": "audio/mech-pop/reactor-ring-battle-a"
+    }
+  }
+}

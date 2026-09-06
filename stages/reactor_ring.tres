@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"reactor_ring"
+display_name = "REACTOR RING"
+subtitle = "FULL-CHARGE FREE-FOR-ALL"
+description = "A broad central ring and a fast vertical reactor lift."
+platforms = Array[Rect2]([Rect2(-1100, 0, 2200, 100), Rect2(-1160, -480, 440, 32), Rect2(720, -480, 440, 32), Rect2(-410, -310, 820, 32), Rect2(-225, -680, 450, 32)])
+spawns = Array[Vector2]([Vector2(-770, -100), Vector2(770, -100), Vector2(-940, -590), Vector2(940, -590)])
+moving_index = 4
+moving_amplitude = Vector2(0, 140)
+moving_speed = 0.55
+music = "res://audio/music/reactor-ring.ogg"
+matte = "res://stages/reactor_ring/reactor-ring-matte.png"
+accent = Color(0.321569, 0.905882, 1.0, 1)
+deck = Color(0.835294, 0.894118, 0.921569, 1)
+dark = Color(0.152941, 0.203922, 0.309804, 1)
+trim = Color(1.0, 0.596078, 0.282353, 1)
+sky_top = Color(0.12549, 0.184314, 0.321569, 1)
+sky_horizon = Color(0.356863, 0.517647, 0.619608, 1)
+ambient = Color(0.741176, 0.858824, 0.941176, 1)
+sunlight = Color(0.85098, 0.976471, 1.0, 1)

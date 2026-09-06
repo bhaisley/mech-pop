@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"prism_zone"
+startup = 0.24
+active = 0.08
+recovery = 0.34
+damage = 18
+component_damage = 21
+knockback = Vector2(520, -650)
+offset = Vector2(105, -95)
+size = Vector2(170, 170)
+breaker = true
+delivery = &"field"
+projectile_speed = Vector2(610, 0)
+projectile_lifetime = 2.8
+projectile_radius = Vector2(88, 83)
+piercing = true
+feedback = &"prism"
+
+[resource]
+script = ExtResource("1")
+id = &"prism_emitter"
+display_name = "PRISM EMITTER"
+short_name = "PRISM"
+donor = &"lumi"
+color = Color(0.956863, 0.803922, 0.447059, 1)
+energy = Color(0.67451, 0.933333, 1.0, 1)
+cooldown = 2.35
+action = &"field"
+attack = SubResource("attack")

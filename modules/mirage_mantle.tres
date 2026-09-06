@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"mirage_mantle"
+display_name = "MIRAGE MANTLE"
+short_name = "MIRAGE"
+slot = &"shell"
+donor = &"shadow"
+color = Color(0.286275, 0.25098, 0.388235, 1)
+energy = Color(0.87451, 0.454902, 1.0, 1)
+maximum = 60.0
+air_scale = 1.19
+resistance = 0.88
+dodge_cooldown_scale = 0.82

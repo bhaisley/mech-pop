@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"halo_shell"
+display_name = "HALO SHELL"
+short_name = "HALO"
+slot = &"shell"
+donor = &"momo"
+color = Color(0.965,0.569,0.8,1)
+energy = Color(1,0.882,0.941,1)
+maximum = 60.0
+hover_bonus = 0.35
+resistance = 0.94

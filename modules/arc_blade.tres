@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"arc_sweep"
+startup = 0.13
+active = 0.17
+recovery = 0.29
+damage = 22
+component_damage = 19
+knockback = Vector2(840, -450)
+offset = Vector2(140, -100)
+size = Vector2(280, 145)
+breaker = true
+movement = 600.0
+hitstop = 0.075
+feedback = &"blade"
+
+[resource]
+script = ExtResource("1")
+id = &"arc_blade"
+display_name = "ARC BLADE"
+short_name = "BLADE"
+donor = &"nova"
+color = Color(0.157,0.459,0.937,1)
+energy = Color(0.33,0.91,1,1)
+cooldown = 0.75
+action = &"melee"
+attack = SubResource("attack")

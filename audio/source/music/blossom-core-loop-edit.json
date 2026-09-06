@@ -1,0 +1,88 @@
+{
+  "source": "audio/source/music/blossom-core-battle-a.flac",
+  "source_sha256": "03a55de1209d23036a9f93fdb6289f5539e57554d0b231f222d9254566bf022b",
+  "source_seconds": 107.99602083333333,
+  "requested_bpm": 144,
+  "estimated_bpm": 142.6,
+  "edit_bpm": 142.6,
+  "start_seconds": 8.54,
+  "bars": 56,
+  "loop_seconds": 94.24964583333333,
+  "crossfade_ms": 160,
+  "gain_db": -2.23,
+  "lossless_master": "audio/source/music/masters/blossom-core-loop.wav",
+  "master_sha256": "2ec76b41be4d52cf47522dc179c498cb7bca0b0c8d0ec549776812845eeca576",
+  "master_lufs": -18.2,
+  "master_true_peak_db": -2.17,
+  "runtime": "audio/music/blossom-core.ogg",
+  "runtime_sha256": "f3f6c043fd179a5ac3275ce41082e7c57dae44a7c8d96cb12b1ecb0526ff2431",
+  "runtime_lufs": -18.22,
+  "runtime_true_peak_db": -1.89,
+  "runtime_bytes": 2508581,
+  "master_seam_step": 0.0037278179079294205,
+  "vorbis_seam_step": 0.0019939355552196503,
+  "top_cut_candidates": [
+    {
+      "score": 1.0523,
+      "start": 8.54,
+      "duration": 94.25,
+      "bars": 56
+    },
+    {
+      "score": 1.0622,
+      "start": 8.52,
+      "duration": 94.25,
+      "bars": 56
+    },
+    {
+      "score": 1.0733,
+      "start": 8.56,
+      "duration": 94.25,
+      "bars": 56
+    },
+    {
+      "score": 1.0891,
+      "start": 8.78,
+      "duration": 87.518,
+      "bars": 52
+    },
+    {
+      "score": 1.0971,
+      "start": 8.88,
+      "duration": 87.518,
+      "bars": 52
+    },
+    {
+      "score": 1.1059,
+      "start": 8.5,
+      "duration": 94.25,
+      "bars": 56
+    },
+    {
+      "score": 1.1157,
+      "start": 8.76,
+      "duration": 87.518,
+      "bars": 52
+    },
+    {
+      "score": 1.1222,
+      "start": 8.8,
+      "duration": 87.518,
+      "bars": 52
+    },
+    {
+      "score": 1.1316,
+      "start": 8.58,
+      "duration": 94.25,
+      "bars": 56
+    },
+    {
+      "score": 1.1323,
+      "start": 8.74,
+      "duration": 87.518,
+      "bars": 52
+    }
+  ],
+  "listening_status": "Pending: analysis does not establish musical quality or a human-confirmed beat grid.",
+  "method": "100 Hz log-band spectral flux, multi-beat autocorrelation, phrase-length spectral/level recurrence, cosine tail-to-pre-start crossfade, linear loudness gain, 48 kHz 24-bit lossless master, Vorbis quality 7 runtime."
+}

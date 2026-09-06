@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"flux_frame"
+display_name = "FLUX FRAME"
+short_name = "FLUX"
+slot = &"shell"
+donor = &"kai"
+color = Color(0.196078, 0.541176, 0.862745, 1)
+energy = Color(0.470588, 0.913725, 1.0, 1)
+maximum = 60.0
+acceleration_scale = 1.1
+air_scale = 1.19
+resistance = 0.85

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"prism_shell"
+display_name = "PRISM SHELL"
+short_name = "PRISM"
+slot = &"shell"
+donor = &"lumi"
+color = Color(0.956863, 0.803922, 0.447059, 1)
+energy = Color(0.67451, 0.933333, 1.0, 1)
+maximum = 60.0
+acceleration_scale = 0.96
+air_scale = 1.08
+resistance = 1.06

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"vent_shell"
+display_name = "VENT SHELL"
+short_name = "VENT"
+slot = &"shell"
+donor = &"kuren"
+color = Color(0.937,0.239,0.345,1)
+energy = Color(1,0.624,0.314,1)
+maximum = 60.0
+acceleration_scale = 1.14
+resistance = 0.92

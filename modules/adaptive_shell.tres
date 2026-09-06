@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"adaptive_shell"
+display_name = "ADAPTIVE SHELL"
+short_name = "ADAPT"
+slot = &"shell"
+donor = &"zero"
+color = Color(0.278431, 0.270588, 0.317647, 1)
+energy = Color(1.0, 0.360784, 0.466667, 1)
+maximum = 60.0
+acceleration_scale = 1.06
+air_scale = 1.06
+resistance = 1.0
+dodge_cooldown_scale = 0.94

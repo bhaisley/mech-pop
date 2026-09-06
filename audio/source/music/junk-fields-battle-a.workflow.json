@@ -1,0 +1,104 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_music3_dit_fp16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "minimax_music3_text_encoder_pruned_bf16.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_music3_dav.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "MiniMaxMusic3TextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "caption": "Global Metadata: An original instrumental arcade battle composition titled Junk Fields for MECH POP, a colorful game about small expressive robots battling in a giant scrapyard of orange cranes, stacked teal cargo containers and salvaged machine parts at golden hour. Playful industrial breakbeat and heavy electronic rock, 140 BPM, steady 4/4, D minor with a proud F-major hook. Generate 108 seconds of continuous music. The identity is a chunky low baritone-guitar riff answered by a brassy distorted synth, a rolling breakbeat, and tuned metallic junk percussion. Heavy and mischievous, full of motion and mechanical swagger, never gloomy or frightening. Punchy studio stereo mix, solid centered kick and bass, dry powerful snare, controlled guitars with clear space for game sound effects.\n\nVocal Details: Entirely instrumental. No human voices, singing, rap, speech, chants, choirs, vocal chops, or sampled dialogue. All melodies played by electric guitars, synthesizers and tuned percussion.\n\nArrangement: Begin immediately with the signature low guitar rhythm, a bouncing bass line and a tight breakbeat. Create a clear memorable four-bar riff with a short brass-synth answer. Layer clanking pitched metal percussion like small found machines, but keep it musical and rhythmically exact. A sixteen-bar A section should lead to a broad, optimistic chorus with higher guitar octaves and a strong synth melody. Use an eight-bar half-density groove break with bass and mallet-like metallic notes, then rebuild into a varied A and triumphant hook reprise. Short percussion fills mark eight-bar phrases. Keep constant tempo, no giant cinematic risers. Close with a compact drum pickup that continues naturally into the first downbeat, with no fade-out, silence or resolving finale. Completely original, with no named artist or existing song references.",
+      "lyrics": "[Instrumental intro]\n\n[Instrumental hook]\n\n[Instrumental verse]\n\n[Instrumental chorus]\n\n[Instrumental bridge]\n\n[Instrumental chorus]\n\n[Instrumental outro]",
+      "seed": 52031,
+      "max_duration": 108.0,
+      "cfg_scale": 1.7,
+      "top_k": 50
+    }
+  },
+  "5": {
+    "class_type": "EmptyMiniMaxMusic3LatentAudio",
+    "inputs": {
+      "seconds": 108.0,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 52032,
+      "steps": 30,
+      "cfg": 1.7,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "8",
+        0
+      ],
+      "filename_prefix": "audio/mech-pop/junk-fields-battle-a"
+    }
+  }
+}

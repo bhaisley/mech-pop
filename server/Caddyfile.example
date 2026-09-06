@@ -1,0 +1,5 @@
+# Set MECH_POP_HOST to the approved public hostname before starting Caddy.
+# The room gateway remains on loopback; only Caddy faces the Internet.
+{$MECH_POP_HOST} {
+    reverse_proxy 127.0.0.1:24880
+}

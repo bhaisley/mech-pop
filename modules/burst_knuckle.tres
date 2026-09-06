@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"burst_rush"
+startup = 0.1
+active = 0.2
+recovery = 0.33
+damage = 25
+component_damage = 22
+knockback = Vector2(1170, -430)
+offset = Vector2(105, -85)
+size = Vector2(190, 135)
+breaker = true
+movement = 1120.0
+hitstop = 0.085
+feedback = &"burst"
+
+[resource]
+script = ExtResource("1")
+id = &"burst_knuckle"
+display_name = "BURST KNUCKLE"
+short_name = "BURST"
+donor = &"kuren"
+color = Color(0.937,0.239,0.345,1)
+energy = Color(1,0.624,0.314,1)
+cooldown = 1.15
+action = &"rush"
+attack = SubResource("attack")

@@ -1,0 +1,88 @@
+{
+  "source": "audio/source/music/neon-alley-battle-a.flac",
+  "source_sha256": "1a203d55abb98dd0009b5cc5548d20d56f058cff93819cafe5637236a48a0485",
+  "source_seconds": 107.99602083333333,
+  "requested_bpm": 152,
+  "estimated_bpm": 158.22,
+  "edit_bpm": 158.22,
+  "start_seconds": 1.66,
+  "bars": 64,
+  "loop_seconds": 97.08002083333334,
+  "crossfade_ms": 160,
+  "gain_db": -2.51,
+  "lossless_master": "audio/source/music/masters/neon-alley-loop.wav",
+  "master_sha256": "2315c9af8c9a3656ef392ff4667fdbb2675216a09249578703dcc0d4a1f2512e",
+  "master_lufs": -19.01,
+  "master_true_peak_db": -2.09,
+  "runtime": "audio/music/neon-alley.ogg",
+  "runtime_sha256": "24b9f94b17e8c20f7c91a28f946097817c38a43a3c30a15b95a6c1606da1a0fc",
+  "runtime_lufs": -19.08,
+  "runtime_true_peak_db": -1.58,
+  "runtime_bytes": 2577256,
+  "master_seam_step": 0.0292239710688591,
+  "vorbis_seam_step": 0.027929596602916718,
+  "top_cut_candidates": [
+    {
+      "score": 0.9389,
+      "start": 1.66,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.957,
+      "start": 1.78,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9587,
+      "start": 1.8,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9668,
+      "start": 1.82,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9682,
+      "start": 1.64,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9701,
+      "start": 1.68,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.972,
+      "start": 1.76,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9796,
+      "start": 1.7,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.9812,
+      "start": 1.84,
+      "duration": 97.08,
+      "bars": 64
+    },
+    {
+      "score": 0.99,
+      "start": 1.86,
+      "duration": 97.08,
+      "bars": 64
+    }
+  ],
+  "listening_status": "Pending: analysis does not establish musical quality or a human-confirmed beat grid.",
+  "method": "100 Hz log-band spectral flux, multi-beat autocorrelation, phrase-length spectral/level recurrence, cosine tail-to-pre-start crossfade, linear loudness gain, 48 kHz 24-bit lossless master, Vorbis quality 7 runtime."
+}

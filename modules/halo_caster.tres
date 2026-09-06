@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"halo_pulse"
+startup = 0.2
+active = 0.1
+recovery = 0.26
+damage = 12
+component_damage = 14
+knockback = Vector2(470, -360)
+offset = Vector2(110, -90)
+size = Vector2(210, 130)
+hitstop = 0.05
+feedback = &"halo"
+delivery = &"repair"
+projectile_lifetime = 1.1
+
+[resource]
+script = ExtResource("1")
+id = &"halo_caster"
+display_name = "HALO CASTER"
+short_name = "HALO"
+donor = &"momo"
+color = Color(0.965,0.569,0.8,1)
+energy = Color(1,0.882,0.941,1)
+cooldown = 3.0
+action = &"repair"
+attack = SubResource("attack")

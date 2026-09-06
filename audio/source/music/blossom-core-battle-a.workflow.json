@@ -1,0 +1,104 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_music3_dit_fp16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "minimax_music3_text_encoder_pruned_bf16.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_music3_dav.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "MiniMaxMusic3TextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "caption": "Global Metadata: An original instrumental arcade battle composition titled Blossom Core for MECH POP. Small expressive robots clash in an elevated futuristic greenhouse filled with soft pink blossoms, mint-green glass, white curved architecture, floating petals and glowing garden machinery. Sparkling melodic arcade electronica with bright electric-rock rhythm, 144 BPM, steady 4/4, B minor and a luminous D-major chorus. Generate 108 seconds of continuous music. The identity is a delicate but catchy bell-synth melody answered by warm plucked strings, over confident punchy drums and an agile bass line. Elegant, playful, hopeful and energetic enough for four-player combat. Clean wide stereo arrangement with gentle upper frequencies and generous space for game effects.\n\nVocal Details: Strictly instrumental. No singing, speech, human voice, breathy vocal pads, choir, chants, vocal chops or rap. Use bell synthesizers, plucked strings, piano-like electric keys and electric guitar for melody.\n\nArrangement: Start straight on the first downbeat with a memorable bell-synth motif and the full underlying rhythm. Use bright plucked string answers, soft warm synth chords, a clean electric guitar rhythm and focused electronic drums. Develop a sixteen-bar flowing A section, then a soaring major-color chorus with a new long-line lead melody and quick bell echoes. An eight-bar lighter groove bridge uses bass, snare and arpeggiated keys without losing the beat. Return with layered counter-melody and a full hook reprise. Keep the melody clear rather than busy; use tasteful fills every eight bars. Maintain a constant tempo. Finish with an unresolved rhythmic pickup that leads directly into the opening motif for a game loop. No long intro, slow ballad section, cinematic swell, final resolution, silence or fade-out. Entirely original music, no imitation of any existing song or artist.",
+      "lyrics": "[Instrumental intro]\n\n[Instrumental hook]\n\n[Instrumental verse]\n\n[Instrumental chorus]\n\n[Instrumental bridge]\n\n[Instrumental chorus]\n\n[Instrumental outro]",
+      "seed": 62053,
+      "max_duration": 108.0,
+      "cfg_scale": 1.7,
+      "top_k": 50
+    }
+  },
+  "5": {
+    "class_type": "EmptyMiniMaxMusic3LatentAudio",
+    "inputs": {
+      "seconds": 108.0,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 62054,
+      "steps": 30,
+      "cfg": 1.7,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "8",
+        0
+      ],
+      "filename_prefix": "audio/mech-pop/blossom-core-battle-a"
+    }
+  }
+}

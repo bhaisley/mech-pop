@@ -1,0 +1,77 @@
+{
+  "version": "0.2.0 preview",
+  "native_build": 16,
+  "images": [
+    {
+      "file": "docs/media/original-concept.png",
+      "sha256": "923b1e33c4d08176d3864eac5580e255d92e779ee3f81bfaf107e99408cd0f22",
+      "description": "Original creator-supplied concept poster; not a gameplay screenshot.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/eight-mechs.png",
+      "sha256": "c639d88ca82835cd6565ee7f2205c562c8fba4e1a22746c638e0a98626b7d989",
+      "description": "Native Godot title-screen render showing all eight playable mechs.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/skyport.png",
+      "sha256": "403c493495966deac1552e2338a36f6a31d96bb369cf68cefc8bd14823f8410e",
+      "description": "Native Godot gameplay render of SkyPort with four bots.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/neon-alley.png",
+      "sha256": "5facf141011f46fc6272c600a551e54e0c0256b8110bf98344a2c64a797b9c63",
+      "description": "Native Godot gameplay render of Neon Alley with four bots.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/junk-fields.png",
+      "sha256": "80ad347b9542bc2edd59d1b91de239061216eb0cb19f85c49bdf6b7526092269",
+      "description": "Native Godot gameplay render of Junk Fields with four bots.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/blossom-core.png",
+      "sha256": "9e18fef221c0f553c8d3efd91b82e30aceafa80cee670c4839a79c6c12ee5a05",
+      "description": "Native Godot gameplay render of Blossom Core with four bots.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/reactor-ring.png",
+      "sha256": "aa050700b11b405a8eef338b0a8f1130c919dfb69678ce55ee669f200f4f230d",
+      "description": "Native Godot gameplay render of Reactor Ring with four bots.",
+      "retouched": false
+    }
+  ],
+  "videos": [
+    {
+      "file": "docs/media/gameplay-30s.mp4",
+      "sha256": "af5baf1ae5290c03a8ef294f42b66d013514f6779b655461f1da8934730775c8",
+      "description": "Actual native macOS build 16 gameplay: Nova, Momo, Kai and Zero, controlled by four bots on Neon Alley.",
+      "duration_seconds": 30,
+      "frames": 1800,
+      "frames_per_second": 60,
+      "width": 1280,
+      "height": 720,
+      "video_codec": "H.264",
+      "audio_codec": "AAC",
+      "audio_channels": 2,
+      "audio_sample_rate": 48000,
+      "bytes": 9228988,
+      "source_capture": "Godot Movie Maker, native macOS app, 1440 x 810 at 60 fps",
+      "source_in_seconds": 10,
+      "source_out_seconds": 40,
+      "edits": [
+        "30-second excerpt",
+        "Downscale to 1280 x 720",
+        "H.264/AAC encoding",
+        "Audio fades: 0.12 seconds in, 0.4 seconds out"
+      ],
+      "gameplay_modified": false,
+      "native_binary_sha256": "7af21947254ea1fd8c2251c9c8a334bc6b0d13ff8f3df53ac12a4255a6b5fab4",
+      "native_pack_sha256": "8fd125da6e3ec9ea736cda7e2cf3b5ec83960751512f2272863e9be13b0021ee"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"zero_light"
+startup = 0.055
+active = 0.08
+recovery = 0.17
+damage = 9
+component_damage = 9
+knockback = Vector2(390, -220)
+offset = Vector2(94, -89)
+size = Vector2(162, 88)
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"zero_heavy"
+startup = 0.18
+active = 0.1
+recovery = 0.27
+damage = 21
+component_damage = 22
+knockback = Vector2(950, -450)
+offset = Vector2(119, -82)
+size = Vector2(180, 120)
+breaker = true
+movement = 370.0
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+id = &"zero_uppercut"
+startup = 0.16
+active = 0.095
+recovery = 0.29
+damage = 20
+component_damage = 22
+knockback = Vector2(285, -1190)
+offset = Vector2(58, -140)
+size = Vector2(151, 192)
+breaker = true
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+id = &"zero_slam"
+startup = 0.205
+active = 0.11
+recovery = 0.29
+damage = 23
+component_damage = 25
+knockback = Vector2(690, -730)
+offset = Vector2(97, -40)
+size = Vector2(197, 124)
+breaker = true
+target_slot = &"shell"
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="ranged_heavy"]
+script = ExtResource("2")
+id = &"zero_scope"
+startup = 0.24
+active = 0.06
+recovery = 0.32
+damage = 18
+component_damage = 21
+knockback = Vector2(760, -320)
+offset = Vector2(145, -93)
+size = Vector2(150, 75)
+breaker = true
+delivery = &"rail"
+projectile_speed = Vector2(1750, 0)
+projectile_lifetime = 0.62
+projectile_radius = Vector2(30, 20)
+feedback = &"switch"
+
+[sub_resource type="Resource" id="support_heavy"]
+script = ExtResource("2")
+id = &"zero_sync"
+startup = 0.22
+active = 0.12
+recovery = 0.31
+damage = 16
+component_damage = 20
+knockback = Vector2(540, -590)
+offset = Vector2(89, -92)
+size = Vector2(235, 150)
+breaker = true
+delivery = &"repair"
+projectile_lifetime = 1.1
+feedback = &"halo"
+
+[resource]
+script = ExtResource("1")
+role = "WILDCARD"
+quote = "Your parts. My rules."
+description = "Change Special with up or down.\nStolen gear changes your breaker."
+height = 174.0
+width = 77.0
+mass = 0.94
+speed = 775.0
+acceleration = 6350.0
+air_acceleration = 3000.0
+gravity = 2420.0
+jump_speed = 1330.0
+air_jump_speed = 1150.0
+authored_height = 295.0
+portrait_size = 3.0
+portrait_center_x = 0.4
+face_region = Rect2(205, 260, 430, 430)
+native_weapon = &"switch_driver"
+native_shell = &"adaptive_shell"
+id = &"zero"
+display_name = "ZERO"
+color = Color(0.278431, 0.270588, 0.317647, 1)
+energy = Color(1.0, 0.360784, 0.466667, 1)
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")
+ranged_heavy = SubResource("ranged_heavy")
+support_heavy = SubResource("support_heavy")

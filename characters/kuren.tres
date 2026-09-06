@@ -1,0 +1,93 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"kuren_light"
+startup = 0.042
+active = 0.065
+recovery = 0.135
+damage = 7
+component_damage = 7
+knockback = Vector2(340, -180)
+offset = Vector2(75, -88)
+size = Vector2(125, 92)
+movement = 200.0
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"kuren_heavy"
+startup = 0.145
+active = 0.085
+recovery = 0.23
+damage = 18
+component_damage = 19
+knockback = Vector2(1020, -420)
+offset = Vector2(95, -80)
+size = Vector2(150, 110)
+breaker = true
+hitstop = 0.08
+hitstun = 0.27
+movement = 360.0
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+id = &"kuren_uppercut"
+startup = 0.115
+active = 0.09
+recovery = 0.25
+damage = 18
+component_damage = 19
+knockback = Vector2(350, -1190)
+offset = Vector2(40, -142)
+size = Vector2(120, 175)
+breaker = true
+hitstop = 0.075
+hitstun = 0.3
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+id = &"kuren_slam"
+startup = 0.16
+active = 0.085
+recovery = 0.24
+damage = 20
+component_damage = 23
+knockback = Vector2(650, -650)
+offset = Vector2(75, -45)
+size = Vector2(165, 125)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.08
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+display_name = "KUREN"
+role = "RUSHDOWN"
+quote = "Never stop moving."
+color = Color(0.937, 0.239, 0.345, 1)
+energy = Color(1, 0.624, 0.314, 1)
+height = 170.0
+width = 74.0
+mass = 0.87
+speed = 910.0
+acceleration = 7900.0
+air_acceleration = 3100.0
+gravity = 2650.0
+jump_speed = 1380.0
+air_jump_speed = 1120.0
+native_weapon = &"burst_knuckle"
+native_shell = &"vent_shell"
+id = &"kuren"
+description = "Close the gap. Hit hard.\nKeep the pressure on."
+authored_height = 271.0
+face_region = Rect2(200, 260, 450, 450)
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")
