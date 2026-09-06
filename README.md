@@ -15,7 +15,11 @@ The original concept that started the project. It shows the broader creative vis
 ## 30 seconds of gameplay
 
 <!-- GAMEPLAY_VIDEO -->
-[▶ Watch the 30-second gameplay video with sound](docs/media/gameplay-30s.mp4)
+
+https://github.com/user-attachments/assets/4a619f99-ee8e-4185-9b9f-751972ca2b4d
+
+[Download the 30-second MP4](docs/media/gameplay-30s.mp4)
+
 <!-- /GAMEPLAY_VIDEO -->
 
 Actual native gameplay from **macOS build 16**, featuring Nova, Momo, Kai and Zero on Neon Alley. Four bots drive the match. The clip includes the game's music and sound effects.
