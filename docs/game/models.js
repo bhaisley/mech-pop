@@ -98,6 +98,7 @@
   // A fixed camera-space key keeps the face readable under every stage's light.
   // Paint has a narrow bevel glint. Lenses retain their local emission in shadow.
   const paint = new T.ShaderMaterial({
+    uniforms: {impact: {value: 0}},
     vertexColors: true,
     vertexShader: `
       attribute float emission;
@@ -112,6 +113,7 @@
         gl_Position = projectionMatrix * p;
       }`,
     fragmentShader: `
+      uniform float impact;
       varying vec3 pigment;
       varying vec3 nView;
       varying vec3 toEye;
@@ -125,7 +127,8 @@
         float shine = smoothstep(.90,.95,dot(n,normalize(sun+v))) * (.035 + .035*max(d,0.));
         float rim = pow(1.-max(0.,dot(n,v)),3.);
         vec3 base = pigment*shade*(.93+.085*max(0.,d)) + vec3(.70,.84,1.)*shine + pigment*rim*.15;
-        gl_FragColor = vec4(mix(base, pigment*1.04, lightPart),1.);
+        base = mix(base, pigment*1.04, lightPart);
+        gl_FragColor = vec4(mix(base, vec3(1.,.87,.60), impact),1.);
         #include <colorspace_fragment>
       }`
   });
@@ -932,12 +935,33 @@
       throw new Error('Unknown MECH★POP part: ' + id);
     return id === palettes[donor].weapon ? weapon(donor) : shell(donor);
   }
+  // Local endpoints of the detachable models, measured from the arm coupler.
+  const weaponEnds = {
+    arc_blade: [-.07, .51, 1.37],
+    burst_knuckle: [0, 0, .716],
+    pile_cannon: [0, 0, 1.12],
+    halo_caster: [0, 0, .72],
+    phase_talon: [0, .12, 1.15],
+    prism_emitter: [0, 0, .90],
+    rail_lance: [0, 0, 1.34],
+    switch_driver: [0, 0, .88]
+  };
   function create(id = 'nova') {
     if (!palettes[id])
       throw new Error('Unknown MECH★POP chassis: ' + id);
     const root = new T.Group();
     root.name = id;
-    const mirror = group(root), body = group(mirror), upper = group(body, 0, .805, 0);
+    const mirror = group(root), balance = group(mirror), body = group(balance), upper = group(body, 0, .805, 0);
+    const armorPaint = paint.clone();
+    function tintable(part) {
+      part.traverse(node => {
+        if (node.material === paint)
+          node.material = armorPaint;
+      });
+      return part;
+    }
+    const tip = new T.Object3D(), grip = new T.Object3D();
+    const aim = new T.Quaternion(), parentRotation = new T.Quaternion(), aimEuler = new T.Euler(0, 0, 0, 'YXZ');
     upper.add(torso(id));
     const head = group(upper, 0, .971, .054), helmetShell = helmet(id);
     head.add(helmetShell);
@@ -979,15 +1003,19 @@
       if (w !== weaponId) {
         if (armItem)
           socket.remove(armItem);
-        armItem = w ? part(w) : null;
+        armItem = w ? tintable(part(w)) : null;
         if (armItem)
           socket.add(armItem);
         weaponId = w;
+        const hand = w ? socket : arms[1].elbow;
+        hand.add(grip, tip);
+        grip.position.set(0, w ? 0 : -.16, w ? .20 : .07);
+        tip.position.fromArray(weaponEnds[w] || [0, -.29, .18]);
       }
       if (sh !== shellId) {
         if (shellItem)
           breast.remove(shellItem);
-        shellItem = sh ? part(sh) : null;
+        shellItem = sh ? tintable(part(sh)) : null;
         if (shellItem)
           breast.add(shellItem);
         shellId = sh;
@@ -998,6 +1026,9 @@
       move = 0,
       airborne = false,
       attack = 0,
+      motion = null,
+      impact = 0,
+      recoil = 0,
       hurt = 0,
       facing = 1,
       preview = false,
@@ -1010,7 +1041,11 @@
       const pace = time * (id === 'terra' ? 10 : 13), stride = Math.sin(pace) * walk;
       const breathing = Math.sin(time * 2.1) * .014;
       root.visible = !dead;
+      armorPaint.uniforms.impact.value = impact;
       mirror.scale.x = facing < 0 ? -1 : 1;
+      balance.position.x = 0;
+      balance.rotation.z = recoil * .32;
+      upper.scale.set(1, 1, 1);
       const hero = preview ? 1 : 0;
       body.rotation.y = hero ? .46 + Math.sin(time * .42) * .10 : .94 + walk * .07;
       body.rotation.x = .034 + walk * .115 + swing * .12 - hit * .095 + lunge * .20 +
@@ -1043,8 +1078,7 @@
       ].includes(weaponId);
       // In the hangar the gun sights and blade profile read across the frame.
       // During combat the elbow turns toward the attack axis.
-      socket.rotation.y = hero ? (thrust ? -1.01 : -1.18) : .095;
-      socket.rotation.z = hero && !thrust ? -.36 : -.035;
+      socket.rotation.set(0, hero ? (thrust ? -1.01 : -1.18) : .095, hero && !thrust ? -.36 : -.035);
       for (const {s, shoulder, elbow} of arms) {
         const armed = s < 0 && armItem;
         shoulder.rotation.set(
@@ -1074,14 +1108,65 @@
           }
         }
       }
+      if (motion && !dead && !preview) {
+        const {id: stroke, profile, wind, strike, finish, weight, definition} = motion;
+        const value = values => MechAttacks.channel(values, motion);
+        const heavy = definition.kind !== 'light', power = heavy ? 1 : .62;
+        const firing = stroke === 'fire', lifting = stroke === 'uppercut', slamming = stroke === 'slam';
+        const lead = armItem ? arms[0] : arms[1], guard = armItem ? arms[1] : arms[0];
+        // The hips stay close to the simulation origin. The knees, spine and
+        // off-hand counterbalance the much longer travel of the attacking arm.
+        balance.rotation.z += value(profile.lean);
+        balance.position.x =
+            power * (firing ? .08 * wind - .20 * strike - .06 * finish : -.17 * wind + .21 * strike + .14 * finish);
+        const crouch = power * (slamming ? .05 * wind + .16 * strike + .20 * finish : .16 * wind + .045 * finish);
+        upper.position.y += -crouch + (lifting ? .15 * strike + .18 * finish : 0);
+        upper.scale.set(1 + crouch * .13, 1 - crouch * .26, 1 + crouch * .12);
+        upper.rotation.y += value(profile.turn);
+        head.rotation.y -= value(profile.turn) * .52;
+        head.rotation.z -= value(profile.lean) * .44;
+        head.rotation.x += .16 * wind - .12 * strike;
+        for (const {s, hip, knee} of legs) {
+          hip.rotation.x += s * power * (.36 * wind - .58 * strike - .43 * finish) - crouch * 1.4;
+          knee.rotation.x += crouch * 3.1 + (s > 0 ? .42 : .08) * strike;
+          hip.rotation.z += s * .12 * weight;
+        }
+        lead.shoulder.rotation.x = lead.shoulder.rotation.x * (1 - weight) + value(profile.shoulder);
+        lead.shoulder.rotation.y -= lead.s * power * (.60 * wind - .36 * strike - .45 * finish);
+        lead.shoulder.rotation.z += lead.s * (.54 * wind + .18 * strike + .23 * finish);
+        lead.elbow.rotation.x += -.75 * wind + .19 * strike + .12 * finish;
+        guard.shoulder.rotation.x -= .85 * wind - .54 * strike - .30 * finish;
+        guard.elbow.rotation.x -= .79 * wind + .46 * strike;
+        if (stroke === 'clinch' || firing || stroke === 'cast' || stroke === 'guard') {
+          guard.shoulder.rotation.x -= (firing ? 1.12 : .79) * weight;
+          guard.shoulder.rotation.y -= guard.s * .65 * weight;
+        }
+        if (armItem && weight > .0001) {
+          // Solve the wrist in facing-relative space. A borrowed lance points
+          // along the shot even as its new carrier twists or recoils.
+          parentRotation.copy(balance.quaternion)
+              .multiply(body.quaternion)
+              .multiply(upper.quaternion)
+              .multiply(lead.shoulder.quaternion)
+              .multiply(lead.elbow.quaternion)
+              .invert();
+          const pitch = -value(profile.aim) / weight * Math.PI / 180;
+          aim.setFromEuler(aimEuler.set(pitch, 1.43, .06, 'YXZ'));
+          socket.quaternion.slerp(parentRotation.multiply(aim), weight);
+        }
+      }
     }
+    tintable(root);
     setLoadout(palettes[id].weapon, palettes[id].shell);
     pose({preview: true});
     return {
       root,
+      grip,
+      tip,
       setLoadout,
       pose,
       dispose() {
+        armorPaint.dispose();
         root.removeFromParent();
         root.clear();
       }

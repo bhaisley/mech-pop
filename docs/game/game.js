@@ -237,7 +237,7 @@
                    canvasResizePolicy: 0,
                    persistentPaths: [],
                    executable: path,
-                   args: ['--headless', '--audio-driver', 'Dummy'],
+                   args: ['--main-pack', 'sim.pck', '--headless', '--audio-driver', 'Dummy'],
                    onPrintError: message => console.error(message),
                    onProgress: (now, total) => {
                      const bar = $('load-progress');
@@ -249,7 +249,10 @@
                        rejectBoot?.(new Error('Simulation stopped during startup.'));
                    }
                  });
-                 engine.startGame().catch(reject);
+                 // Cache the engine separately from the smaller game pack. Its
+                 // move timeline must match the version of the renderer in HTML.
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=2', 'sim.pck')])
+                     .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
                }

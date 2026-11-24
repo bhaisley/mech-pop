@@ -21,7 +21,7 @@
   key.position.set(-3, 6, 4);
   scene.add(key);
   const box = new T.BoxGeometry(1, 1, 1), orb = new T.IcosahedronGeometry(1, 1);
-  const loop = new T.TorusGeometry(1, .065, 5, 42), arc = new T.RingGeometry(.77, 1, 36, 1, -1.22, 2.44);
+  const loop = new T.TorusGeometry(1, .065, 5, 42), crystal = new T.OctahedronGeometry(1);
   const shade = new T.CircleGeometry(1, 32);
   const shades = new T.MeshBasicMaterial({color: 0x12243c, transparent: true, opacity: .26, depthWrite: false});
   const paint = new Map();
@@ -61,6 +61,7 @@
   previewShadow.position.y = .001;
   let model = null, previewId = '', yaw = 0, drag = null, mode = 'preview', width = 0, height = 0;
   let arena = null, stage = null, rects = [], fighters = [], labels = [], shadows = [];
+  let combatEffects = null;
   let loose = new Map(), shots = new Map(), effects = [], frame = null, centerX = 0, centerY = 3.2, size = 13,
       shake = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -123,6 +124,8 @@
     }
   });
   function hangar(id) {
+    combatEffects?.dispose();
+    combatEffects = null;
     arena?.dispose();
     arena = null;
     for (const f of fighters)
@@ -143,6 +146,7 @@
     choose(id);
   }
   function start(config) {
+    combatEffects?.dispose();
     arena?.dispose();
     for (const f of fighters)
       f.dispose();
@@ -166,6 +170,7 @@
       battle.add(f.root);
       return f;
     });
+    combatEffects = MechCombatEffects.create(battle, fighters, reducedMotion);
     shadows = fighters.map(() => {
       const s = mesh(battle, shade, shades);
       s.rotation.x = -Math.PI / 2;
@@ -220,22 +225,49 @@
     return root;
   }
   function projectile(item) {
-    const [, type, , , , owner] = item;
-    const root = new T.Group(), color = catalog.mechs[frame.fighters[owner].id].energy;
-    const shell = mesh(root, type === 'snare' || type === 'field' ? loop : orb, flat(color));
-    const core = mesh(root, orb, flat(0xfaffff));
-    if (type === 'rail') {
-      shell.scale.set(1.5, .09, .09);
-      core.scale.set(1.14, .045, .045);
-    } else if (type === 'field' || type === 'snare') {
-      shell.scale.setScalar(type === 'field' ? .75 : .44);
-      core.scale.set(.17, .23, .17);
+    const [, type, , , , owner, , moveId] = item;
+    const move = catalog.moves[moveId], f = frame.fighters[owner];
+    const color = catalog.parts[move?.weapon || f.weapon[0]]?.energy || catalog.mechs[f.id].energy;
+    const root = new T.Group();
+    if (type === 'rail' || type === 'cannon') {
+      const rail = type === 'rail';
+      const shell = mesh(root, rail ? crystal : orb, flat(color));
+      shell.scale.set(rail ? .38 : .47, rail ? .13 : .26, .20);
+      const core = mesh(root, crystal, flat(0xfffbea));
+      core.position.set(.04, .02, .08);
+      core.scale.set(rail ? .42 : .36, rail ? .058 : .13, .13);
+      const tail = new T.Group();
+      root.add(tail);
+      root.userData.tail = tail;
+      const plume = mesh(tail, crystal, flat(color));
+      plume.position.x = -.52;
+      plume.scale.set(.55, rail ? .10 : .18, .08);
+      const streak = mesh(tail, crystal, flat(0xfbffff));
+      streak.position.set(-.41, 0, .075);
+      streak.scale.set(.42, rail ? .035 : .072, .06);
     } else if (type === 'repair') {
-      shell.scale.set(.34, .16, .26);
-      core.scale.set(.19, .21, .18);
+      const hull = mesh(root, orb, flat(color));
+      hull.scale.set(.31, .17, .21);
+      for (const s of [-1, 1]) {
+        const rotor = mesh(root, loop, flat(0xffeafa));
+        rotor.position.set(s * .24, .08, .03);
+        rotor.scale.set(.18, .07, .09);
+      }
+      const light = mesh(root, crystal, flat(0xc8ffad));
+      light.position.y = -.16;
+      light.scale.set(.12, .18, .12);
     } else {
-      shell.scale.set(.46, .23, .23);
-      core.scale.set(.37, .14, .14);
+      const [rx, ry] = move?.radius || [.53, .42];
+      const rim = mesh(root, loop, flat(color));
+      rim.scale.set(rx, ry, .65);
+      const center = mesh(root, crystal, flat(color));
+      center.scale.set(rx * .37, ry * .56, .24);
+      root.userData.center = center;
+      for (let j = 0; j < 4; j++) {
+        const a = j * Math.PI / 2, bead = mesh(root, crystal, flat(0xfffaed));
+        bead.position.set(Math.cos(a) * rx, Math.sin(a) * ry, .02);
+        bead.scale.set(.115, .115, .10);
+      }
     }
     return root;
   }
@@ -249,11 +281,12 @@
     effects.push({node, vx, vy, life, age: 0, sx, sy, spin});
   }
   function eventVisual(e, data) {
+    combatEffects.event(e, data);
     const x = e.x / 100, y = -e.y / 100, f = data.fighters[e.fighter],
           color = f ? catalog.mechs[f.id].energy : '#fff6be';
     const big = e.kind === 'core_pop', pop = big || e.kind === 'part_pop', hit = e.kind === 'hit';
     if (hit || pop) {
-      const count = big ? 16 : pop ? 11 : 7, radius = big ? 1.4 : pop ? .85 : .55;
+      const count = big ? 16 : pop ? 11 : e.breaker ? 7 : 4, radius = big ? 1.4 : pop ? .85 : e.breaker ? .71 : .44;
       for (let i = 0; i < count; i++) {
         const angle = 2 * Math.PI * i / count + Math.random() * .28, speed = (3 + Math.random() * 4) * radius;
         effect(
@@ -264,14 +297,9 @@
             x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, angle, radius * (.35 + Math.random() * .55),
             .06, .19 + Math.random() * .20);
       }
-      effect(loop, pop ? '#ffdf6b' : '#f0fbff', x, y, 0, .15, 0, radius, radius, .20);
+      if (pop)
+        effect(loop, '#ffdf6b', x, y, 0, .15, 0, radius, radius, .20);
       shake = Math.max(shake, big ? .28 : pop ? .16 : e.breaker ? .10 : .04);
-    } else if (e.kind === 'attack_active' && f) {
-      const dir = f.facing, cx = e.hitX !== undefined ? e.hitX / 100 : x + dir * .72,
-            cy = e.hitY !== undefined ? -e.hitY / 100 : y;
-      effect(
-          arc, color, cx, cy, dir * .75, .25, dir < 0 ? Math.PI : 0, clamp((e.hitW || 120) / 124, .54, 1.45),
-          clamp((e.hitH || 90) / 108, .55, 1.32), e.breaker ? .18 : .12, -dir * 2);
     } else if (e.kind === 'snap' || e.kind === 'repair' || e.kind === 'respawn') {
       effect(loop, e.kind === 'repair' ? '#8cffa8' : color, x, y, 0, .8, 0, .84, .84, .32);
     } else if (e.kind === 'jump' || e.kind === 'dodge') {
@@ -324,16 +352,19 @@
       const unit = fighters[i], meta = catalog.mechs[f.id], x = f.x / 100, y = -f.y / 100, z = (i - 1.5) * .067;
       unit.root.position.set(x, y, z);
       unit.setLoadout(f.weapon[0] || null, f.shell[0] || null);
+      const motion = MechAttacks.sample(f);
       unit.pose({
         time: t,
         move: f.vx / meta.speed,
         airborne: !f.grounded,
-        attack: f.attack > 0 ? Math.sin(Math.PI * f.attack) : 0,
+        motion,
+        ...combatEffects.reaction(i, t, f.facing),
         hurt: f.hurt,
         facing: f.facing,
         dash: f.state === 'dodge',
         dead: f.dead
       });
+      combatEffects.updateFighter(i, f, motion, t);
       const marker = labels[i];
       marker.hidden = f.dead;
       if (!f.dead) {
@@ -358,14 +389,21 @@
         shadow.scale.set(.59 * k, .31 * k, 1);
       }
     });
+    combatEffects.update(t);
     syncEntities(loose, frame.parts, dropped, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100 + Math.sin(a[4] * 4.5) * .075, .25);
       node.rotation.y = a[4] * (a[5] ? 1.7 : 3.2);
     });
     syncEntities(shots, frame.shots, projectile, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100, .28);
-      if (a[1] === 'snare' || a[1] === 'field')
-        node.rotation.set(.15, a[6] * 3, a[6] * 4);
+      if (node.userData.tail) {
+        node.scale.x = a[4];
+        const rail = a[1] === 'rail';
+        node.userData.tail.scale.x = Math.min(rail ? 3.3 : 1.62, a[6] * (rail ? 22 : 12));
+      } else if (node.userData.center) {
+        node.userData.center.rotation.y = a[6] * 3.5;
+      } else if (a[1] === 'repair')
+        node.rotation.z = Math.sin(a[6] * 8) * .22;
     });
     for (let i = effects.length - 1; i >= 0; i--) {
       const e = effects[i];

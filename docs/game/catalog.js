@@ -445,5 +445,931 @@ window.MechCatalog = {
 			"sunlight": "#d9f9ff",
 			"ambient": "#bddbf0"
 		}
+	},
+	"moves": {
+		"nova_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.055,
+			"active": 0.075,
+			"recovery": 0.16,
+			"offset": [
+				0.82,
+				0.92
+			],
+			"size": [
+				1.45,
+				0.78
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"nova_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.18,
+			"active": 0.095,
+			"recovery": 0.25,
+			"offset": [
+				0.88,
+				0.9
+			],
+			"size": [
+				1.8,
+				1.18
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"nova_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.14,
+			"active": 0.09,
+			"recovery": 0.27,
+			"offset": [
+				0.42,
+				1.4
+			],
+			"size": [
+				1.4,
+				1.8
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"nova_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.2,
+			"active": 0.095,
+			"recovery": 0.28,
+			"offset": [
+				0.65,
+				0.45
+			],
+			"size": [
+				1.8,
+				1.4
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kuren_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.042,
+			"active": 0.065,
+			"recovery": 0.135,
+			"offset": [
+				0.75,
+				0.88
+			],
+			"size": [
+				1.25,
+				0.92
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kuren_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.145,
+			"active": 0.085,
+			"recovery": 0.23,
+			"offset": [
+				0.95,
+				0.8
+			],
+			"size": [
+				1.5,
+				1.1
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kuren_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.115,
+			"active": 0.09,
+			"recovery": 0.25,
+			"offset": [
+				0.4,
+				1.42
+			],
+			"size": [
+				1.2,
+				1.75
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kuren_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.16,
+			"active": 0.085,
+			"recovery": 0.24,
+			"offset": [
+				0.75,
+				0.45
+			],
+			"size": [
+				1.65,
+				1.25
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"terra_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.085,
+			"active": 0.09,
+			"recovery": 0.22,
+			"offset": [
+				1.0,
+				0.9
+			],
+			"size": [
+				1.8,
+				1.0
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"terra_clinch": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.235,
+			"active": 0.11,
+			"recovery": 0.34,
+			"offset": [
+				0.8,
+				0.9
+			],
+			"size": [
+				1.4,
+				1.45
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"terra_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.22,
+			"active": 0.11,
+			"recovery": 0.34,
+			"offset": [
+				0.6,
+				1.4
+			],
+			"size": [
+				1.8,
+				2.1
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"terra_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.255,
+			"active": 0.12,
+			"recovery": 0.35,
+			"offset": [
+				0.65,
+				0.4
+			],
+			"size": [
+				2.45,
+				1.45
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"momo_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.06,
+			"active": 0.075,
+			"recovery": 0.18,
+			"offset": [
+				1.02,
+				0.82
+			],
+			"size": [
+				1.9,
+				0.72
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"momo_snare": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "snare",
+			"breaker": true,
+			"startup": 0.17,
+			"active": 0.095,
+			"recovery": 0.28,
+			"offset": [
+				1.05,
+				0.65
+			],
+			"size": [
+				1.8,
+				1.05
+			],
+			"radius": [
+				0.55,
+				0.48
+			]
+		},
+		"momo_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.14,
+			"active": 0.1,
+			"recovery": 0.27,
+			"offset": [
+				0.5,
+				1.3
+			],
+			"size": [
+				1.6,
+				1.7
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"momo_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.185,
+			"active": 0.1,
+			"recovery": 0.29,
+			"offset": [
+				0.85,
+				0.4
+			],
+			"size": [
+				2.0,
+				1.3
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"shadow_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.045,
+			"active": 0.075,
+			"recovery": 0.155,
+			"offset": [
+				0.87,
+				0.79
+			],
+			"size": [
+				1.5,
+				0.85
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"shadow_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.19,
+			"active": 0.09,
+			"recovery": 0.27,
+			"offset": [
+				1.2,
+				0.72
+			],
+			"size": [
+				1.7,
+				1.15
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"shadow_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.14,
+			"active": 0.1,
+			"recovery": 0.29,
+			"offset": [
+				0.54,
+				1.39
+			],
+			"size": [
+				1.28,
+				1.95
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"shadow_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.205,
+			"active": 0.1,
+			"recovery": 0.27,
+			"offset": [
+				0.91,
+				0.4
+			],
+			"size": [
+				1.8,
+				1.22
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"lumi_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.07,
+			"active": 0.085,
+			"recovery": 0.2,
+			"offset": [
+				1.08,
+				0.92
+			],
+			"size": [
+				1.92,
+				0.85
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"lumi_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.225,
+			"active": 0.12,
+			"recovery": 0.3,
+			"offset": [
+				1.47,
+				0.89
+			],
+			"size": [
+				2.32,
+				1.28
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"lumi_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.185,
+			"active": 0.11,
+			"recovery": 0.29,
+			"offset": [
+				0.62,
+				1.45
+			],
+			"size": [
+				1.83,
+				2.02
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"lumi_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.24,
+			"active": 0.12,
+			"recovery": 0.31,
+			"offset": [
+				0.93,
+				0.39
+			],
+			"size": [
+				2.23,
+				1.25
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kai_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.065,
+			"active": 0.07,
+			"recovery": 0.18,
+			"offset": [
+				0.96,
+				0.91
+			],
+			"size": [
+				1.6,
+				0.8
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kai_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.24,
+			"active": 0.09,
+			"recovery": 0.36,
+			"offset": [
+				1.37,
+				0.86
+			],
+			"size": [
+				1.98,
+				1.0
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kai_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.2,
+			"active": 0.09,
+			"recovery": 0.35,
+			"offset": [
+				0.58,
+				1.45
+			],
+			"size": [
+				1.48,
+				2.11
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kai_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.265,
+			"active": 0.095,
+			"recovery": 0.34,
+			"offset": [
+				1.13,
+				0.42
+			],
+			"size": [
+				2.08,
+				1.25
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"zero_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.055,
+			"active": 0.08,
+			"recovery": 0.17,
+			"offset": [
+				0.94,
+				0.89
+			],
+			"size": [
+				1.62,
+				0.88
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"zero_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.18,
+			"active": 0.1,
+			"recovery": 0.27,
+			"offset": [
+				1.19,
+				0.82
+			],
+			"size": [
+				1.8,
+				1.2
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"zero_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.16,
+			"active": 0.095,
+			"recovery": 0.29,
+			"offset": [
+				0.58,
+				1.4
+			],
+			"size": [
+				1.51,
+				1.92
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"zero_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.205,
+			"active": 0.11,
+			"recovery": 0.29,
+			"offset": [
+				0.97,
+				0.4
+			],
+			"size": [
+				1.97,
+				1.24
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"zero_scope": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "rail",
+			"breaker": true,
+			"startup": 0.24,
+			"active": 0.06,
+			"recovery": 0.32,
+			"offset": [
+				1.45,
+				0.93
+			],
+			"size": [
+				1.5,
+				0.75
+			],
+			"radius": [
+				0.3,
+				0.2
+			]
+		},
+		"zero_sync": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "repair",
+			"breaker": true,
+			"startup": 0.22,
+			"active": 0.12,
+			"recovery": 0.31,
+			"offset": [
+				0.89,
+				0.92
+			],
+			"size": [
+				2.35,
+				1.5
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"arc_sweep": {
+			"kind": "special",
+			"weapon": "arc_blade",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.13,
+			"active": 0.17,
+			"recovery": 0.29,
+			"offset": [
+				1.4,
+				1.0
+			],
+			"size": [
+				2.8,
+				1.45
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"burst_rush": {
+			"kind": "special",
+			"weapon": "burst_knuckle",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.1,
+			"active": 0.2,
+			"recovery": 0.33,
+			"offset": [
+				1.05,
+				0.85
+			],
+			"size": [
+				1.9,
+				1.35
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"pile_shot": {
+			"kind": "special",
+			"weapon": "pile_cannon",
+			"delivery": "cannon",
+			"breaker": true,
+			"startup": 0.32,
+			"active": 0.06,
+			"recovery": 0.45,
+			"offset": [
+				1.5,
+				1.0
+			],
+			"size": [
+				1.5,
+				0.95
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"halo_pulse": {
+			"kind": "special",
+			"weapon": "halo_caster",
+			"delivery": "repair",
+			"breaker": false,
+			"startup": 0.2,
+			"active": 0.1,
+			"recovery": 0.26,
+			"offset": [
+				1.1,
+				0.9
+			],
+			"size": [
+				2.1,
+				1.3
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"phase_cut": {
+			"kind": "special",
+			"weapon": "phase_talon",
+			"delivery": "blink",
+			"breaker": true,
+			"startup": 0.23,
+			"active": 0.09,
+			"recovery": 0.31,
+			"offset": [
+				0.85,
+				0.82
+			],
+			"size": [
+				1.5,
+				1.32
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"prism_zone": {
+			"kind": "special",
+			"weapon": "prism_emitter",
+			"delivery": "field",
+			"breaker": true,
+			"startup": 0.24,
+			"active": 0.08,
+			"recovery": 0.34,
+			"offset": [
+				1.05,
+				0.95
+			],
+			"size": [
+				1.7,
+				1.7
+			],
+			"radius": [
+				0.88,
+				0.83
+			]
+		},
+		"rail_shot": {
+			"kind": "special",
+			"weapon": "rail_lance",
+			"delivery": "rail",
+			"breaker": true,
+			"startup": 0.62,
+			"active": 0.065,
+			"recovery": 0.52,
+			"offset": [
+				1.65,
+				0.98
+			],
+			"size": [
+				1.7,
+				0.75
+			],
+			"radius": [
+				0.38,
+				0.17
+			]
+		},
+		"drive_strike": {
+			"kind": "special",
+			"weapon": "switch_driver",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.16,
+			"active": 0.17,
+			"recovery": 0.28,
+			"offset": [
+				1.19,
+				0.85
+			],
+			"size": [
+				2.08,
+				1.28
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"drive_lift": {
+			"kind": "rise",
+			"weapon": "switch_driver",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.18,
+			"active": 0.12,
+			"recovery": 0.31,
+			"offset": [
+				0.63,
+				1.47
+			],
+			"size": [
+				1.83,
+				2.3
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"drive_guard": {
+			"kind": "slam",
+			"weapon": "switch_driver",
+			"delivery": "field",
+			"breaker": true,
+			"startup": 0.23,
+			"active": 0.1,
+			"recovery": 0.32,
+			"offset": [
+				0.85,
+				0.4
+			],
+			"size": [
+				2.0,
+				1.45
+			],
+			"radius": [
+				0.81,
+				0.65
+			]
+		}
 	}
 };

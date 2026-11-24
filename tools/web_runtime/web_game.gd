@@ -98,6 +98,10 @@ func _event(kind: StringName, data: Dictionary) -> void:
 			event["hitH"] = area.size.y
 	if data.get("part") is PartInstance: event["part"] = String(data.part.definition.id)
 	if data.has("stolen"): event["stolen"] = data.stolen
+	if data.get("fighter") is Fighter: event["facing"] = data.fighter.facing
+	if kind == &"phase_shift":
+		event["fromX"] = data.origin.x
+		event["fromY"] = data.origin.y
 	var where: Vector2 = data.get("position", Vector2.ZERO)
 	if not data.has("position") and data.get("fighter") is Fighter: where = data.fighter.position + Vector2(0, -90)
 	event["x"] = where.x
@@ -122,6 +126,7 @@ func _process(delta: float) -> void:
 			if salvage: nearby = String(salvage.part.definition.id)
 		frames.append({
 			"id": f.data.id, "device": device, "nearby": nearby,
+			"moveId": String(f.attack.id) if f.attack else "", "serial": f.attack_serial,
 			"x": snappedf(point.x, 0.1), "y": snappedf(point.y, 0.1),
 			"vx": snappedf(f.velocity.x, 1), "facing": f.facing, "state": f.state,
 			"grounded": f.grounded(), "attack": move_time, "hurt": minf(1.0, f.stun * 4.0),
@@ -136,7 +141,7 @@ func _process(delta: float) -> void:
 			loose.append([item.uid, item.definition.id, snappedf(item.entity.position.x, 0.1), snappedf(item.entity.position.y, 0.1), item.entity.age, item.entity.settled])
 	var shots: Array = []
 	for shot in session.projectiles:
-		shots.append([shot.uid, shot.type, shot.position.x, shot.position.y, shot.facing, shot.source.slot, shot.age])
+		shots.append([shot.uid, shot.type, shot.position.x, shot.position.y, shot.facing, shot.source.slot, shot.age, String(shot.attack.id)])
 	var offset := session.stage.ferry_offset
 	var frame := {
 		"fighters": frames, "parts": loose, "shots": shots, "ferry": [offset.x, offset.y],
