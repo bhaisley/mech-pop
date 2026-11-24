@@ -1,28 +1,107 @@
 (() => {
   'use strict';
-  const keys = {
-    KeyA: 'left',
-    ArrowLeft: 'left',
-    KeyD: 'right',
-    ArrowRight: 'right',
-    KeyW: 'up',
-    ArrowUp: 'up',
-    KeyS: 'down',
-    ArrowDown: 'down',
-    Space: 'jump',
-    KeyJ: 'light',
-    KeyK: 'heavy',
-    KeyL: 'special',
-    ShiftLeft: 'dodge',
-    ShiftRight: 'dodge',
-    KeyE: 'salvage'
+  const oneHanded = {
+    left: 'KeyA', right: 'KeyD', up: 'KeyW', down: 'KeyS', jump: 'Space',
+    light: 'KeyQ', heavy: 'KeyE', special: 'KeyR', dodge: 'Shift', salvage: 'KeyF'
   };
+  const presets = {
+    wasd: oneHanded,
+    classic: {...oneHanded, light: 'KeyJ', heavy: 'KeyK', special: 'KeyL', salvage: 'KeyE'}
+  };
+  const arrows = {left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', down: 'ArrowDown'};
+  const keyNames = {
+    ArrowLeft: '←', ArrowRight: '→', ArrowUp: '↑', ArrowDown: '↓', Shift: 'Shift', Space: 'Space',
+    Enter: 'Enter', Backspace: 'Backspace', Delete: 'Delete', Insert: 'Insert', Home: 'Home', End: 'End',
+    PageUp: 'Page Up', PageDown: 'Page Down', Minus: '−', Equal: '=', BracketLeft: '[', BracketRight: ']',
+    Backslash: '\\', Semicolon: ';', Quote: "'", Backquote: '`', Comma: ',', Period: '.', Slash: '/',
+    IntlBackslash: 'Intl \\', NumpadAdd: 'Num +', NumpadSubtract: 'Num −', NumpadMultiply: 'Num ×',
+    NumpadDivide: 'Num /', NumpadDecimal: 'Num .', NumpadEnter: 'Num Enter'
+  };
+  const storageKey = 'mechpop.keyboard.v1';
   const actions = ['jump', 'light', 'heavy', 'special', 'dodge', 'salvage'];
   const padButtons = [0, 2, 3, 1, 4, 5];
-  const held = new Set(), states = new Map();
+  const held = new Set(), states = new Map(), keys = new Map();
+  let layout = 'wasd', custom = null;
   let onPause = () => {}, onMenu = () => {}, onLost = () => {}, inFight = () => false;
   let stickPointer = null;
   const stick = document.querySelector('#stick');
+
+  function keyName(code) {
+    if (typeof code !== 'string')
+      return '';
+    if (/^(Key[A-Z]|Digit[0-9])$/.test(code))
+      return code.slice(-1);
+    if (/^Numpad[0-9]$/.test(code))
+      return 'Num ' + code.slice(-1);
+    return Object.hasOwn(keyNames, code) ? keyNames[code] : '';
+  }
+  function validBindings(map) {
+    if (!map || typeof map !== 'object')
+      return false;
+    const codes = Object.keys(oneHanded).map(id => map[id]);
+    return Object.keys(map).length === codes.length && codes.every(keyName) && new Set(codes).size === codes.length;
+  }
+  function bindings() {
+    return layout === 'custom' ? custom : presets[layout];
+  }
+  function applyKeyboard() {
+    keys.clear();
+    for (const [id, code] of Object.entries(arrows))
+      keys.set(code, id);
+    // An explicit arrow binding takes precedence over the directional shortcut.
+    for (const [id, code] of Object.entries(bindings())) {
+      if (code === 'Shift') {
+        keys.set('ShiftLeft', id);
+        keys.set('ShiftRight', id);
+      } else
+        keys.set(code, id);
+    }
+    held.clear();
+    states.delete(-1);
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    if (validBindings(saved?.custom))
+      custom = saved.custom;
+    if (Object.hasOwn(presets, saved?.layout) || (saved?.layout === 'custom' && custom))
+      layout = saved.layout;
+  } catch {
+    // Storage can be unavailable in a private or embedded browser.
+  }
+  applyKeyboard();
+  function selectLayout(next) {
+    if (!Object.hasOwn(presets, next) && !(next === 'custom' && custom))
+      return false;
+    layout = next;
+    applyKeyboard();
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({layout, custom}));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  function bindKey(id, eventCode) {
+    const code = /^Shift(Left|Right)$/.test(eventCode) ? 'Shift' : eventCode;
+    if (!Object.hasOwn(oneHanded, id) || !keyName(code))
+      return null;
+    const current = bindings(), previous = current[id];
+    if (code === previous)
+      return {changed: false};
+    const other = Object.keys(current).find(action => action !== id && current[action] === code);
+    custom = {...current, [id]: code};
+    if (other)
+      custom[other] = previous;
+    return {changed: true, other, saved: selectLayout('custom')};
+  }
+  const keyboard = {
+    get layout() { return layout; },
+    get hasCustom() { return custom !== null; },
+    label: id => keyName(bindings()[id]),
+    alternate: id => arrows[id] !== bindings()[id] && keys.get(arrows[id]) === id ? keyName(arrows[id]) : '',
+    selectLayout,
+    bindKey
+  };
   function state(device) {
     if (!states.has(device))
       states.set(device, {x: 0, y: 0, jump: false, edges: 0, buttons: []});
@@ -46,7 +125,7 @@
     document.querySelectorAll('.touch-actions .on').forEach(el => el.classList.remove('on'));
   }
   function keyboardAxes() {
-    const down = action => [...held].some(code => keys[code] === action);
+    const down = action => [...held].some(code => keys.get(code) === action);
     const s = state(-1);
     s.x = Number(down('right')) - Number(down('left'));
     s.y = Number(down('down')) - Number(down('up'));
@@ -61,11 +140,11 @@
         onPause();
       return;
     }
-    const action = keys[e.code];
+    const action = keys.get(e.code);
     if (!action)
       return;
     e.preventDefault();
-    if (!held.has(e.code)) {
+    if (!e.repeat && !held.has(e.code)) {
       held.add(e.code);
       edge(state(-1), action);
       keyboardAxes();
@@ -185,6 +264,7 @@
     return bits;
   }
   window.MechControls = {
+    keyboard,
     clear,
     read,
     pads,

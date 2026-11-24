@@ -10,6 +10,8 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 Choose a mech, pick an arena and press **Launch match**. The first player uses the keyboard on desktop and on-screen controls on a touchscreen. The other three slots start as bots. Select a player tab to assign a controller or change its mech.
 
+The **One-handed WASD** layout puts combat under your left hand. Move with **A/D**, aim with **W/S**, jump with **Space**, and use **Q** for a light attack, **E** for a breaker and **R** for your weapon special. **Shift** dodges and **F** salvages. Open **Controls** in the hangar or pause menu to rebind a key or select the **Classic** layout. Your browser remembers your choice.
+
 [![Nova on the Three.js turntable with the eight-mech roster and match settings](docs/media/browser-hangar.webp)](https://bhaisley.github.io/mech-pop/)
 
 All eight mechs have articulated Three.js models based on the concept poster. Nova carries a curved energy blade, Terra a broad pile cannon and Momo a ring-shaped caster. All sixteen weapon arms and shells detach, land in the arena and fit the mech that salvages them. The original combat simulation, bots and room protocol run in WebAssembly.

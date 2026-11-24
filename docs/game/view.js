@@ -368,8 +368,11 @@
       const marker = labels[i];
       marker.hidden = f.dead;
       if (!f.dead) {
-        const button = f.device === -1 ? 'E' : f.device === -4 ? 'Tap' : 'RB';
-        const caption = 'P' + (i + 1) + (f.nearby ? ' · ' + button + ' Salvage' : '');
+        let caption = 'P' + (i + 1);
+        if (f.nearby) {
+          const button = f.device === -1 ? MechControls.keyboard.label('salvage') : f.device === -4 ? 'Tap' : 'RB';
+          caption += ' · ' + button + ' Salvage';
+        }
         if (marker.textContent !== caption)
           marker.textContent = caption;
         vector.set(x, y + meta.height / 100 + .22, z).project(camera);

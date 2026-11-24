@@ -1107,6 +1107,80 @@ dialog::backdrop {
   border-bottom: 1px solid #cbd0c8;
 }
 
+dialog[data-view=help] {
+  width: min(535px, 94vw);
+}
+
+.keyboard-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.keyboard-layout label {
+  font: 700 18px var(--cond);
+}
+
+.keyboard-layout select {
+  max-width: 62%;
+  padding: 5px 8px;
+  border: 1px solid #9da6a2;
+  border-radius: 3px;
+  background: white;
+  color: var(--ink);
+}
+
+#dialog-body .binding-status {
+  min-height: 1.45em;
+  margin: 8px 0 10px;
+  color: #455661;
+}
+
+#dialog-body .bindings td {
+  padding: 3px 4px;
+}
+
+.binding-key {
+  min-width: 39px;
+  min-height: 25px;
+  padding: 2px 7px;
+  border: 1px solid #77858a;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: #fffefa;
+  font: 700 15px var(--cond);
+}
+
+.binding-key:hover,.binding-key[aria-pressed=true] {
+  border-color: var(--ink);
+  background: var(--yellow);
+}
+
+.bindings small:not(:empty) {
+  margin-left: 6px;
+  color: #54616b;
+  white-space: nowrap;
+}
+
+.match-guide {
+  margin-top: 12px;
+}
+
+.match-guide summary {
+  cursor: pointer;
+  font: 700 16px var(--cond);
+}
+
+@media (max-width: 480px) {
+  dialog[data-view=help] {
+    padding: 15px;
+  }
+  .bindings td:nth-child(2) {
+    white-space: nowrap;
+  }
+}
+
 .field-label {
   display: block;
   font: 700 12px var(--cond);

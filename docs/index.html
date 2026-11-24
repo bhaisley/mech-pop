@@ -7,17 +7,17 @@
   <meta name="description" content="Play MECH★POP. Pick one of eight mechs, break off your rival’s gear, and steal it in a four-player arena brawl.">
   <title>MECH★POP — Play in your browser</title>
   <link rel="icon" href="game/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="game/style.css">
+  <link rel="stylesheet" href="game/style.css?v=3">
   <script defer src="game/vendor/three.min.js"></script>
   <script defer src="game/catalog.js?v=2"></script>
   <script defer src="game/attack-motion.js?v=2"></script>
   <script defer src="game/models.js?v=2"></script>
   <script defer src="game/combat-effects.js?v=2"></script>
   <script defer src="game/arenas.js"></script>
-  <script defer src="game/controls.js"></script>
+  <script defer src="game/controls.js?v=3"></script>
   <script defer src="game/audio.js"></script>
-  <script defer src="game/view.js?v=2"></script>
-  <script defer src="game/game.js?v=2"></script>
+  <script defer src="game/view.js?v=3"></script>
+  <script defer src="game/game.js?v=3"></script>
 </head>
 <body data-screen="hangar">
   <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -68,7 +68,7 @@
     <div id="hud"></div>
     <div id="touch" hidden><div class="stick" id="stick" aria-label="Move and aim"><i></i></div><div class="touch-actions"><button data-act="dodge">Dash</button><button data-act="special">Special</button><button data-act="salvage">Salvage</button><button data-act="light">Light</button><button data-act="heavy">Break</button><button data-act="jump">Jump</button></div></div>
   </section>
-  <dialog id="modal"><div class="dialog-head"><h2 id="modal-title"></h2><button id="close-dialog" class="plain icon" aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div id="dialog-body"></div></dialog>
+  <dialog id="modal" aria-labelledby="modal-title"><div class="dialog-head"><h2 id="modal-title"></h2><button id="close-dialog" class="plain icon" aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div id="dialog-body"></div></dialog>
   <div id="notice" role="status" aria-live="polite"></div>
   <canvas id="simulation" width="2" height="2" aria-hidden="true" tabindex="-1"></canvas>
   <noscript>Turn on JavaScript to play MECH★POP.</noscript>

@@ -44,6 +44,7 @@
   }
   function show(type, title) {
     dialogType = type;
+    dialog.dataset.view = type;
     text('modal-title', title);
     body.replaceChildren();
     $('close-dialog').hidden = ['loading', 'results', 'lobby', 'lost'].includes(type);
@@ -61,6 +62,10 @@
   function closeDialog() {
     if (dialogType === 'pause') {
       resume();
+      return;
+    }
+    if (dialogType === 'help' && screen === 'battle') {
+      showPauseMenu();
       return;
     }
     if (['loading', 'results', 'lobby', 'lost'].includes(dialogType))
@@ -91,26 +96,117 @@
     document.addEventListener(type, () => sound.unlock(), {once: true, capture: true});
   function help() {
     show('help', 'Controls');
-    const t = node('table');
-    for (const row
-             of [['Action', 'Keyboard', 'Controller'], ['Move / aim', 'WASD or arrows', 'Stick / D-pad'],
-                 ['Jump / double jump', 'Space', 'A / Cross'], ['Light attack', 'J', 'X / Square'],
-                 ['Directional breaker', 'K + direction', 'Y / Triangle'], ['Weapon special', 'L', 'B / Circle'],
-                 ['Dodge / air boost', 'Shift', 'Left shoulder'], ['Salvage / swap', 'E', 'Right shoulder'],
-                 ['Pause', 'Esc', 'Start / Options']]) {
-      const tr = t.insertRow();
-      for (const cell of row)
-        tr.append(node(t.rows.length === 1 ? 'th' : 'td', cell));
+    const keyboard = controls.keyboard;
+    const layoutRow = node('div', undefined, 'keyboard-layout'), label = node('label', 'Keyboard layout');
+    const select = node('select');
+    select.id = label.htmlFor = 'keyboard-layout';
+    option(select, 'One-handed WASD', 'wasd');
+    option(select, 'Classic · J K L', 'classic');
+    layoutRow.append(label, select);
+    const hint = 'Select a key, then press its replacement. Assigned keys swap.';
+    const message = node('p', hint, 'binding-status');
+    message.setAttribute('role', 'status');
+    const table = node('table', undefined, 'bindings');
+    const header = table.createTHead().insertRow();
+    for (const title of ['Action', 'Keyboard', 'Controller'])
+      header.append(node('th', title));
+    const rows = table.createTBody(), buttons = new Map();
+    let listening = '';
+    function refresh() {
+      if (keyboard.hasCustom && !select.querySelector('option[value="custom"]'))
+        option(select, 'Custom', 'custom');
+      select.value = keyboard.layout;
+      for (const [id, {name, button, alias}] of buttons) {
+        const key = keyboard.label(id), active = id === listening, alt = keyboard.alternate(id);
+        button.textContent = active ? 'Press key…' : key;
+        button.setAttribute('aria-pressed', String(active));
+        button.setAttribute('aria-label', 'Change ' + name.toLowerCase() + ' key, ' + key);
+        alias.textContent = alt ? 'or ' + alt : '';
+      }
     }
-    body.append(
-        t,
-        node(
-            'p',
-            'Wear down armor with light attacks, then land a breaker. Stand near a loose part and salvage it. A Core Pop earns a point. Damage breaks score ties.'),
-        node(
-            'p',
-            'For couch play, select a player tab and assign a connected controller. Press a controller button to make it available. Choose Touch for on-screen controls.'),
-        action('Back to hangar', closeDialog));
+    function endCapture(note = hint) {
+      listening = '';
+      message.textContent = note;
+      refresh();
+    }
+    for (const [id, name, pad] of [
+      ['left', 'Move left', 'Stick / D-pad'], ['right', 'Move right'], ['up', 'Aim up'], ['down', 'Aim down'],
+      ['jump', 'Jump / double jump', 'A / Cross'], ['light', 'Light attack', 'X / Square'],
+      ['heavy', 'Directional breaker', 'Y / Triangle'], ['special', 'Weapon special', 'B / Circle'],
+      ['dodge', 'Dodge / air boost', 'Left shoulder'], ['salvage', 'Salvage / swap', 'Right shoulder']
+    ]) {
+      const row = rows.insertRow(), button = node('button', '', 'binding-key'), alias = node('small');
+      row.append(node('td', name));
+      row.insertCell().append(button, alias);
+      if (pad) {
+        const controller = row.insertCell();
+        controller.textContent = pad;
+        if (id === 'left')
+          controller.rowSpan = 4;
+      }
+      buttons.set(id, {name, button, alias});
+      button.type = 'button';
+      button.onclick = () => {
+        button.focus();
+        if (listening === id) {
+          endCapture();
+          return;
+        }
+        listening = id;
+        message.textContent = 'Press a key for ' + name.toLowerCase() + '. Esc cancels.';
+        refresh();
+      };
+      button.onblur = () => {
+        if (listening === id)
+          endCapture();
+      };
+    }
+    const pauseRow = rows.insertRow();
+    for (const title of ['Pause', 'Esc', 'Start / Options'])
+      pauseRow.append(node('td', title));
+    table.addEventListener('keydown', e => {
+      if (!listening)
+        return;
+      if (e.code === 'Tab') {
+        endCapture();
+        return;
+      }
+      if (e.ctrlKey || e.altKey || e.metaKey || e.isComposing) {
+        message.textContent = 'Press a single key. Esc cancels.';
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.repeat)
+        return;
+      if (e.code === 'Escape') {
+        endCapture();
+        return;
+      }
+      const id = listening, change = keyboard.bindKey(id, e.code);
+      if (!change) {
+        message.textContent = 'Try a letter, number, arrow, Space or Shift. Esc cancels.';
+        return;
+      }
+      let note = buttons.get(id).name + ' uses ' + keyboard.label(id) + '.';
+      if (change.other)
+        note += ' ' + buttons.get(change.other).name + ' moved to ' + keyboard.label(change.other) + '.';
+      if (change.changed && !change.saved)
+        note += ' Available for this session.';
+      endCapture(note);
+    });
+    select.onchange = () => {
+      const saved = keyboard.selectLayout(select.value);
+      endCapture(select.selectedOptions[0].text + (saved ? ' selected.' : ' selected for this session.'));
+    };
+    const guide = node('details', undefined, 'match-guide');
+    guide.append(node('summary', 'How to play'),
+        node('p', 'Hold an aim direction as you press the breaker for an uppercut or a slam. Wear down armor with light attacks, then land a breaker. Salvage loose parts to equip them. A Core Pop earns a point. Damage breaks score ties.'),
+        node('p', 'For couch play, select a player tab and assign a connected controller. Press a controller button to make it available. Choose Touch for on-screen controls.'));
+    body.append(layoutRow, message, table, guide,
+        action(screen === 'battle' ? 'Back to match menu' : 'Back to hangar', closeDialog));
+    refresh();
+    select.focus();
   }
   $('help-button').onclick = help;
   function deviceName(id, short = false) {
@@ -386,10 +482,15 @@
     controls.clear();
     dispatch('pause', {value: true});
     sound.pause();
+    showPauseMenu();
+  }
+  function showPauseMenu() {
     show('pause', online ? 'Match menu' : 'Paused');
     if (online)
       body.append(node('p', 'The room keeps playing while your controls are paused.'));
-    body.append(action('Resume match', resume, true), action('Return to hangar', returnHangar));
+    const resumeButton = action('Resume match', resume, true);
+    body.append(resumeButton, action('Controls', help), action('Return to hangar', returnHangar));
+    resumeButton.focus();
   }
   function resume() {
     dismiss();
@@ -740,7 +841,7 @@
       }
     }
     if (command === 'confirm') {
-      if (document.activeElement instanceof HTMLButtonElement)
+      if (document.activeElement?.matches('button,summary'))
         document.activeElement.click();
       return;
     }
@@ -753,7 +854,7 @@
       active.dispatchEvent(new Event('change'));
       return;
     }
-    const focusables = [...host.querySelectorAll('button:not(:disabled),select:not(:disabled),input')].filter(
+    const focusables = [...host.querySelectorAll('button:not(:disabled),select:not(:disabled),input,summary')].filter(
         el => el.getClientRects().length);
     if (!focusables.includes(active)) {
       (focusables[0] || $('start')).focus();
@@ -803,7 +904,7 @@
         pause();
       controls.clear();
       sound.pause();
-    } else if (!finished && dialogType !== 'pause')
+    } else if (!finished && (screen !== 'battle' || !dialog.open))
       sound.resume();
   });
   window.addEventListener('blur', () => {
