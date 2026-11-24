@@ -248,13 +248,14 @@ func _peer_connected(id: int) -> void:
 		# Cold startup can briefly lower ENet's unreliable packet throttle.
 		# Recover on a one-second window, before the state-silence timeout.
 		(peer as ENetMultiplayerPeer).get_peer(id).throttle_configure(1000, 32, 2)
-	if websocket_transport and peer is WebSocketMultiplayerPeer and (authority or id == 1):
+	if websocket_transport and not OS.has_feature("web") and peer is WebSocketMultiplayerPeer and (authority or id == 1):
 		peer.get_peer(id).set_no_delay(true)
 	if active and authority: awaiting_hello[id] = clock
 
 func _connected() -> void:
 	if not active or authority: return
-	if websocket_transport: (peer as WebSocketMultiplayerPeer).get_peer(1).set_no_delay(true)
+	if websocket_transport and not OS.has_feature("web"):
+		(peer as WebSocketMultiplayerPeer).get_peer(1).set_no_delay(true)
 	_hello.rpc_id(1, PROTOCOL, content_fingerprint(), {"players": local_devices.size(), "name": player_name.substr(0, 24), "room": room_code, "resume": resume_token})
 
 @rpc("any_peer", "call_remote", "reliable", 0)

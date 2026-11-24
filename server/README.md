@@ -38,6 +38,12 @@ The optional systemd example assumes a dedicated `mechpop` user, `/opt/mech-pop`
 
 In the game choose **Play with Friends → Internet**, enter `https://your-approved-host`, create a room, and share the six-character code. Friends use the same server address. The first connected party leads the room and can select the map, configure bots and launch once parties are ready. Local Wi-Fi mode continues to use direct ENet connections independently of this service.
 
+## Browser clients
+
+Use the gateway from this checkout to play from the [GitHub Pages game](https://bhaisley.github.io/mech-pop/). Choose **Private room**, enter the gateway’s HTTPS origin, then create a room or join with a code. The room leader can choose the arena, configure bots and launch after each party is ready. Browser and native build 16 clients use the same protocol and content fingerprint.
+
+The gateway accepts the official game origin `https://bhaisley.github.io` by default. When serving the game locally or from another host, pass its exact origin with `--browser-origin`, for example `--browser-origin http://127.0.0.1:8000`. Use the updated gateway with the build 16 game pack or app. The GitHub Pages site hosts the client. Operators supply the room service.
+
 ## Limits and acceptance
 
 Rooms require knowledge of their code; there are no accounts, public listing or ranked matches. Room creation is limited to six requests per minute per direct gateway source, with 90 room lookups/upgrades per minute. Forwarding headers are not trusted, so a reverse proxy shares those limits across its clients. HTTP bodies are bounded at 2 KiB, game WebSocket messages at 256 KiB and each bridge direction at 2 MB/s. Room names never become shell commands or filesystem paths supplied by clients. This is a small private-play service, not a public matchmaking platform.

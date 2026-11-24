@@ -4,6 +4,8 @@ The runtime contains project-specific game code/art/audio plus the Godot engine 
 
 | Item | Exact source / version | Use and terms |
 | --- | --- | --- |
+| Three.js | r160, bundled in `game/vendor/three.min.js` | Browser renderer, MIT. [Included notice](game/vendor/THREE-LICENSE.txt) |
+| Godot Web single-threaded release template | 4.7.2.stable.official.ed1daf0bf | Browser simulation runtime. [Included engine and dependency notices](game/runtime/GODOT_NOTICES.txt) |
 | Godot Standard and macOS templates | 4.7.2.stable.official.ed1daf0bf | Bundled runtime. MIT plus bundled dependency notices, extracted from the pinned binary into `third_party/GODOT_NOTICES.txt`. [Official license](https://godotengine.org/license/) |
 | Engine libraries, including SDL input support | The inventory returned by this exact Godot runtime | Bundled as part of Godot, with their individual licenses in the same notices file. No separate unversioned SDL package was added. |
 | Barlow SemiBold; Barlow Condensed Bold and Black Italic | Google Fonts `ofl/barlow` and `ofl/barlowcondensed`; Jeremy Tribby | Bundled original TTF files, unchanged, SIL Open Font License 1.1. Notices in `ui/fonts/OFL.txt` and `third_party/Barlow-OFL.txt`. [Barlow](https://github.com/google/fonts/tree/main/ofl/barlow), [Barlow Condensed](https://github.com/google/fonts/tree/main/ofl/barlowcondensed) |

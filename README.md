@@ -4,7 +4,17 @@
 
 A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL → REBUILD → POP**. Knock a weapon loose, grab it, and turn it against its former owner. The mech you start with isn't the mech you finish with.
 
-**[Download the Mac preview](https://github.com/bhaisley/mech-pop/releases/tag/v0.2.0-preview.16)** · [Build from source](docs/BUILD.md) · [Controls](docs/CONTROLS.md) · [Multiplayer](docs/NETWORKING.md)
+**[Play MECH★POP in your browser](https://bhaisley.github.io/mech-pop/)** · [Download the Mac preview](https://github.com/bhaisley/mech-pop/releases/tag/v0.2.0-preview.16) · [Build from source](docs/BUILD.md)
+
+## Browser edition
+
+Choose a mech, pick an arena and press **Launch match**. The first player uses the keyboard on desktop and on-screen controls on a touchscreen. The other three slots start as bots. Select a player tab to assign a controller or change its mech.
+
+[![Nova on the Three.js turntable with the eight-mech roster and match settings](docs/media/browser-hangar.webp)](https://bhaisley.github.io/mech-pop/)
+
+All eight mechs have articulated Three.js models based on the concept poster. Nova carries a curved energy blade, Terra a broad pile cannon and Momo a ring-shaped caster. All sixteen weapon arms and shells detach, land in the arena and fit the mech that salvages them. The original combat simulation, bots and room protocol run in WebAssembly.
+
+The browser edition includes all five arenas, their music and local four-player matches. For network play, **Private room** connects to a running room server. [Browser gameplay screenshot](docs/media/browser-battle.webp) · [Browser assets and credits](docs/game/assets/CREDITS.md) · [Room server setup](server/README.md)
 
 ## The original concept
 
@@ -12,7 +22,7 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 The original concept that started the project. It shows the broader creative vision; the playable preview's features and platforms are described below.
 
-## 30 seconds of gameplay
+## 30 seconds of native gameplay
 
 <!-- GAMEPLAY_VIDEO -->
 
@@ -49,7 +59,7 @@ These are unretouched game renders. [Junk Fields screenshot](docs/media/junk-fie
 
 Build **0.2.0 preview / 16** is a work in progress. Internet play requires a running room server; a permanent public service is not provided. Additional touch, controller reconnection and listening checks remain open. See [testing and known limits](docs/TESTING.md).
 
-## Play
+## Native preview
 
 Download the Mac ZIP from [Releases](https://github.com/bhaisley/mech-pop/releases), extract it, and open **MECH POP 0.2.0.app**. Offline play includes its engine, characters, arenas and audio.
 
@@ -92,6 +102,6 @@ The repository includes GDScript source, authored Blender models, runtime assets
 
 ## Made with
 
-**Godot** for the game, **Blender** for the mech models, **SuperCollider** for original sound effects, **MiniMax-Music3** for generated music, **ImageGen** for the stage mattes and construction reference, and **FFmpeg** for audio/video finishing. Tool and asset credits are recorded in the [dependency and asset inventory](docs/THIRD_PARTY_LICENSES.md); notices are included in `third_party/`.
+**Three.js** draws the browser edition. **Godot** runs the shared combat simulation and native game. The project uses **Blender** for the native mech models, **SuperCollider** for original sound effects, **MiniMax-Music3** for music, **ImageGen** for the stage mattes and construction reference, and **FFmpeg** for audio and video finishing. [Dependency and asset inventory](docs/THIRD_PARTY_LICENSES.md)
 
 No open-source license has been assigned to the original game code or assets. Third-party components retain their own licenses.

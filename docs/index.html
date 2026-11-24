@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121923">
+  <meta name="description" content="Play MECH★POP. Pick one of eight mechs, break off your rival’s gear, and steal it in a four-player arena brawl.">
+  <title>MECH★POP — Play in your browser</title>
+  <link rel="icon" href="game/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="game/style.css">
+  <script defer src="game/vendor/three.min.js"></script>
+  <script defer src="game/catalog.js"></script>
+  <script defer src="game/models.js"></script>
+  <script defer src="game/arenas.js"></script>
+  <script defer src="game/controls.js"></script>
+  <script defer src="game/audio.js"></script>
+  <script defer src="game/view.js"></script>
+  <script defer src="game/game.js"></script>
+</head>
+<body data-screen="hangar">
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 14 8-14 8z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pad" viewBox="0 0 24 24"><path d="M7 7h10c2 0 3 2 4 6l.5 3c.5 2.5-1.8 3.5-3.4 2L15 15H9l-3.1 3c-1.6 1.5-3.9.5-3.4-2l.5-3c1-4 2-6 4-6Z"/><path d="M7.5 9.5v4m-2-2h4m5.7 1.5h.1m2.1-2.8h.1"/></symbol>
+    <symbol id="i-audio" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zm13-1c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zm13 0 6 6m0-6-6 6"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M3 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="4"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M5 8a8 8 0 1 1-1 7m1-12v5h5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="m9 15 6-6m-4-3 2-2a5 5 0 0 1 7 7l-3 3m-4 4-2 2a5 5 0 0 1-7-7l3-3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14m0-14L5 19"/></symbol>
+    <symbol id="i-weapon" viewBox="0 0 24 24"><path d="m5 20 4-5m-3-3 6 6m-3-4L18 3l3-1-1 5-9 9"/></symbol>
+    <symbol id="i-shell" viewBox="0 0 24 24"><path d="m12 2 8 4v6c0 4-4 8-8 10-4-2-8-6-8-10V6z"/><path d="m7 9 5 4 5-4"/></symbol>
+  </defs></svg>
+  <header class="topbar">
+    <a class="wordmark" aria-label="MECH POP hangar" href="./">MECH<span>★</span><b>POP</b></a>
+    <div class="nav-tools"><button id="help-button" class="plain"><svg><use href="#i-pad"/></svg><span>Controls</span></button><button class="plain icon" id="sound-button" aria-label="Mute sound" title="Mute sound"><svg><use href="#i-audio"/></svg></button></div>
+  </header>
+  <main id="hangar" aria-label="Mech hangar">
+    <div class="hangar-heading"><h1>Mech hangar<span>.</span></h1><div class="slot-tabs" aria-label="Player to configure" id="slot-tabs"></div></div>
+    <div class="setup-grid">
+      <section id="showcase" aria-label="Selected mech">
+        <div class="showcase-pattern"></div><span class="ghost-name" aria-hidden="true" id="ghost-name">NOVA</span>
+        <div id="model-mount" tabindex="0" aria-label="3D mech preview. Drag or use left and right arrows to rotate."></div>
+        <div class="fighter-caption"><div class="class-label"><span id="chassis-number">01 / 08</span><i></i><span id="mech-role">Balanced</span></div><h2 id="mech-name">Nova</h2><p id="mech-description">Quick blade arcs. Clean movement. A little bit of everything.</p></div>
+        <div class="loadout"><span><svg><use href="#i-weapon"/></svg><b id="weapon-name">Arc Blade</b></span><span><svg><use href="#i-shell"/></svg><b id="shell-name">Fin Plate</b></span></div>
+        <span class="rotate-hint"><svg><use href="#i-rotate"/></svg> Drag to rotate</span>
+      </section>
+      <section class="setup-panel" aria-label="Match settings">
+        <div class="match-heading"><span class="mode-mark" aria-hidden="true">★</span><div><small>Match mode</small><h2>Pop Rush</h2></div><span class="duration" id="duration-label">3:00</span></div>
+        <p class="mode-copy">Break armor. Steal parts. Score Core Pops before time runs out.</p>
+        <div class="arena-label"><label>Arena</label><span id="stage-number">01 / 05</span></div>
+        <div class="arena-picker"><img id="stage-thumb" src="game/assets/stages/skyport.webp" alt=""><div class="stage-name" id="stage-name">SkyPort</div><button id="prev-stage" class="arrow" aria-label="Previous arena"><svg><use href="#i-prev"/></svg></button><button id="next-stage" class="arrow" aria-label="Next arena"><svg><use href="#i-next"/></svg></button></div>
+        <div class="settings-line"><label id="input-label" for="input-device">P1 input</label><select id="input-device" aria-labelledby="input-label"></select></div>
+        <div class="settings-line"><label for="difficulty">Bot level</label><select id="difficulty"><option value="0">Rookie</option><option value="1" selected>Arcade</option><option value="2">Ace</option></select></div>
+        <button id="start" class="primary"><svg><use href="#i-play"/></svg><span>Launch match</span><svg class="far"><use href="#i-arrow"/></svg></button>
+        <button id="room-button" class="room-button"><svg><use href="#i-link"/></svg>Private room</button>
+      </section>
+    </div>
+    <section class="roster-wrap" aria-label="Character selection"><div class="section-label"><h2>Choose your mech</h2><span id="roster-player">Player 1</span></div><div id="roster" class="roster"></div></section>
+    <footer><span>Fight <b>›</b> Break <b>›</b> Steal <b>›</b> Rebuild</span><a href="https://github.com/bhaisley/mech-pop" target="_blank" rel="noopener">Source & credits ↗</a></footer>
+  </main>
+  <section id="battle" hidden aria-label="Pop Rush arena">
+    <div id="field"><div id="arena-matte"></div><div id="battle-mount"></div><div id="field-labels"></div><div class="battle-strip"><span id="arena-title"></span><b id="clock">3:00</b><button id="pause" class="plain icon" aria-label="Pause match"><svg><use href="#i-pause"/></svg></button></div><div id="countdown" hidden></div><div id="announcement" role="status"></div></div>
+    <div id="hud"></div>
+    <div id="touch" hidden><div class="stick" id="stick" aria-label="Move and aim"><i></i></div><div class="touch-actions"><button data-act="dodge">Dash</button><button data-act="special">Special</button><button data-act="salvage">Salvage</button><button data-act="light">Light</button><button data-act="heavy">Break</button><button data-act="jump">Jump</button></div></div>
+  </section>
+  <dialog id="modal"><div class="dialog-head"><h2 id="modal-title"></h2><button id="close-dialog" class="plain icon" aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div id="dialog-body"></div></dialog>
+  <div id="notice" role="status" aria-live="polite"></div>
+  <canvas id="simulation" width="2" height="2" aria-hidden="true" tabindex="-1"></canvas>
+  <noscript>Turn on JavaScript to play MECH★POP.</noscript>
+</body></html>

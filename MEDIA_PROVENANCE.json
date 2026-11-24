@@ -43,6 +43,18 @@
       "sha256": "aa050700b11b405a8eef338b0a8f1130c919dfb69678ce55ee669f200f4f230d",
       "description": "Native Godot gameplay render of Reactor Ring with four bots.",
       "retouched": false
+    },
+    {
+      "file": "docs/media/browser-hangar.webp",
+      "sha256": "bd8080278fe519971e47daeadd197c714c995b76cd4cdb0e71297e12558e8209",
+      "description": "Chrome capture of the Three.js hangar with the playable Nova model and eight fighter portraits.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/browser-battle.webp",
+      "sha256": "01547dd8b8189074692967c7861dfaa793ae5941f23f7faf3bada4f31f618a0c",
+      "description": "Chrome capture of a four-bot Three.js match on Neon Alley with Nova, Kuren, Terra and Momo.",
+      "retouched": false
     }
   ],
   "videos": [

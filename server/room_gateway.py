@@ -17,6 +17,36 @@ from aiohttp import ClientSession, ClientTimeout, WSMsgType, web
 
 ROOT = Path(__file__).resolve().parents[1]
 ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+PAGES_ORIGIN = "https://bhaisley.github.io"
+
+
+def browser_access(origins):
+    """Allow the game page to call the same room API as native clients."""
+    @web.middleware
+    async def middleware(request, handler):
+        origin = request.headers.get("Origin")
+        if not origin:
+            return await handler(request)
+        if origin not in origins:
+            raise web.HTTPForbidden()
+        if request.method == "OPTIONS":
+            response = web.Response(status=204)
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+            response.headers["Access-Control-Max-Age"] = "600"
+        else:
+            try:
+                response = await handler(request)
+            except web.HTTPException as error:
+                error.headers["Access-Control-Allow-Origin"] = origin
+                error.headers["Vary"] = "Origin"
+                raise
+        if not response.prepared:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Vary"] = "Origin"
+        return response
+
+    return middleware
 
 
 @dataclass
@@ -251,6 +281,8 @@ def main():
     parser.add_argument("--embedded", action="store_true", help="Native export loads its bundled game pack")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=24880)
+    parser.add_argument("--browser-origin", action="append", default=[PAGES_ORIGIN],
+                        help="Additional browser game origin, e.g. http://localhost:8000")
     parser.add_argument("--first-game-port", type=int, default=24900)
     parser.add_argument("--max-rooms", type=int, choices=range(1, 17), default=4)
     parser.add_argument("--idle-seconds", type=float, default=300)
@@ -267,7 +299,7 @@ def main():
         if len(characters) != 4 or any(character not in ["nova", "kuren", "terra", "momo", "shadow", "lumi", "kai", "zero"] for character in characters):
             parser.error("The test roster must contain four existing character IDs")
     gateway = Gateway(args)
-    app = web.Application(client_max_size=2048)
+    app = web.Application(client_max_size=2048, middlewares=[browser_access(set(args.browser_origin))])
     app.add_routes([web.get("/health", gateway.health), web.post("/rooms", gateway.create), web.get("/rooms/{code}", gateway.lookup), web.get("/rooms/{code}/play", gateway.play)])
     app.on_startup.append(gateway.start)
     app.on_cleanup.append(gateway.stop)

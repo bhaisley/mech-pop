@@ -4,12 +4,35 @@ The public source snapshot is the **0.2.0 preview, build 16**. Runtime code and 
 
 ## Requirements
 
+The browser game is ready to serve from this checkout. The following toolchain is for native development and regenerating the browser simulation.
+
 - Godot **4.7.2 Standard** and its matching export templates.
 - Python **3.11+** for the room server and network tools; install `server/requirements.txt` in a virtual environment.
 - Xcode and an Apple development team for a physical iPad export.
 - Blender, SuperCollider and the audio tools are needed only to regenerate their source assets. They are not needed to run the game.
 
-## Open and run
+## Run the browser game
+
+Serve the `docs` directory from the repository root.
+
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
+```
+
+Open [the local game](http://127.0.0.1:8000/) in a browser with WebGL, WebAssembly and gzip stream decompression. Three.js r160, the JavaScript game, art, audio and fonts are served from the same origin. Launching the first match downloads the compressed simulation. GitHub Pages serves this directory from the `main` branch.
+
+The hangar, inputs, Three.js models, arena geometry and HUD live in `docs/game/`. Edits to those JavaScript and CSS files take effect on reload. The simulation uses the native files in `scripts/combat`, `scripts/ai`, `scripts/network`, `scripts/data` and the roster and stage resources.
+
+After a simulation or roster change, rebuild the web pack and catalog with Godot **4.7.2 Standard** and the matching official single-threaded web release template.
+
+```sh
+python3 tools/build_web_runtime.py --godot godot \
+  --template /path/to/4.7.2.stable/web_nothreads_release.zip
+```
+
+The builder checks the engine version and template checksum, stages a physics-only project in a temporary directory and exports `docs/game/runtime/` and `docs/game/catalog.js`. Commit the regenerated files with their source changes. The browser draws each game frame with Three.js.
+
+## Run the native game
 
 From the repository root:
 

@@ -17,6 +17,14 @@ This is a **0.2.0 preview, build 16**, with eight fighters, sixteen interchangea
 | Physical Mac selector test | User confirms P1 fights as a bot while Controller 1 operates P2 |
 | Physical iPad selector test | User confirms switching among Touch, Bot and Xbox controller inputs |
 
+## Three.js browser edition
+
+Chrome played a full three-minute match and a rematch through the hangar. The full round recorded eight armor breaks, 23 equipment attachments and 26 Core Pops. Each of the five arenas launched with its moving platform, and all eight models appeared in the selector. The equipment check covered all 648 combinations of eight chassis, nine arm states and nine shell states, including empty sockets.
+
+Phone-sized Chrome viewports covered portrait and landscape layouts, touch movement and action buttons. Simulated Gamepad API input covered movement, attacks, pause and resume. Physical mobile browser and controller testing remains open.
+
+Two browser clients created and joined a private room through the build 16 native authority on loopback. They selected a mech and arena, readied, finished a shortened round with matching final state digests and launched a rematch.
+
 ## Earlier native and hardware coverage
 
 - Build 10 completed full Mac–iPad LAN matches and rematches in both host directions with matching final state and scores.
