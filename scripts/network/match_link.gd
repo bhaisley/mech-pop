@@ -25,6 +25,8 @@ var session: MatchSession
 var router: PlayerInputRouter
 var peer: MultiplayerPeer
 var websocket_transport: bool = false
+var friend_duel: bool = false
+var set_wins: Array[int] = [0, 0]
 var local_devices: Array[int] = [PlayerInputRouter.KEYBOARD]
 var seats: Array[Dictionary] = []
 var peers: Dictionary = {}
@@ -129,13 +131,40 @@ func host(listen_port: int = DEFAULT_PORT, devices: Array[int] = [PlayerInputRou
 	multiplayer.multiplayer_peer = peer
 	active = true
 	mode = &"lobby"
-	seats.clear()
-	for slot in range(4):
-		seats.append({"slot": slot, "peer": 1 if slot < devices.size() else 0, "character": String(starting_characters[slot]), "name": player_name if slot < devices.size() else "BOT", "ready": true, "connected": true, "reserved_until": 0.0})
-	_publish_lobby()
+	_open_seats(4)
 	_set_status("Room open. Waiting for friends.")
 	print("NETWORK_HOST ", JSON.stringify({"port": port, "dedicated": dedicated, "protocol": PROTOCOL, "transport": "WebSocket" if websocket else "ENet"}))
 	return OK
+
+func _open_seats(count: int) -> void:
+	seats.clear()
+	for slot in range(count):
+		var local := slot < local_devices.size()
+		seats.append({"slot": slot, "peer": 1 if local else 0, "character": String(starting_characters[slot]), "name": player_name if local else "BOT", "ready": not friend_duel, "connected": true, "reserved_until": 0.0})
+	_publish_lobby()
+
+## One browser runs the same authority used by the dedicated room server.
+func open_friend(transport: WebRTCMultiplayerPeer, hosting: bool, device: int, code: String, character: StringName, arena: StringName) -> void:
+	close()
+	friend_duel = true
+	authority = hosting
+	dedicated = false
+	websocket_transport = false
+	room_code = code
+	local_devices = [device]
+	selected_stage = arena
+	peer = transport
+	active = true
+	mode = &"lobby" if hosting else &"connecting"
+	connection_clock = 0.0
+	packet_clock = 0.0
+	state_packet_clock = 0.0
+	multiplayer.multiplayer_peer = peer
+	if hosting:
+		_open_seats(2)
+		_set_character(1, 0, String(character))
+	else:
+		_set_status("Connecting to your friend…")
 
 func join(host_address: String, host_port: int = DEFAULT_PORT, devices: Array[int] = [PlayerInputRouter.KEYBOARD], code: String = "") -> Error:
 	close()
@@ -171,6 +200,8 @@ func join(host_address: String, host_port: int = DEFAULT_PORT, devices: Array[in
 
 func close() -> void:
 	active = false
+	friend_duel = false
+	set_wins = [0, 0]
 	authority = false
 	loading = false
 	mode = &"offline"
@@ -233,9 +264,9 @@ func own_slots() -> Array[int]:
 	return result
 
 func _sync_router() -> void:
-	if router == null or seats.size() != 4: return
+	if router == null or seats.is_empty(): return
 	var local_index: int = 0
-	for slot in range(4):
+	for slot in range(seats.size()):
 		var seat: Dictionary = seats[slot]
 		if owns(slot):
 			router.devices[slot] = local_devices[local_index] if local_index < local_devices.size() else PlayerInputRouter.BOT
@@ -274,14 +305,14 @@ func _hello(version: int, fingerprint: String, details: Dictionary) -> void:
 		_reject_peer(sender, "Invalid player details.")
 		return
 	var available: Array[int] = []
-	for slot in range(4):
+	for slot in range(seats.size()):
 		if seats[slot].peer == 0: available.append(slot)
 	# A resume token reclaims only this party's disconnected slots.
 	for old_id in peers.keys():
 		var old: Dictionary = peers[old_id]
 		if not old.connected and old.token == details.resume and clock < old.reserved_until:
 			var reserved: Array[int] = []
-			for slot in range(4):
+			for slot in range(seats.size()):
 				if seats[slot].peer == old_id: reserved.append(slot)
 			if reserved.size() != details.players:
 				_reject_peer(sender, "Reconnect with the same number of local players, or wait 20 seconds for the old slots to reopen.")
@@ -320,24 +351,32 @@ func _refused(message: String) -> void:
 
 func _connect_failed() -> void:
 	if not active: return
+	var message := "Could not reach your friend. Open a fresh invite or try a server-backed private room." if friend_duel else "Could not reach the room. Check Wi-Fi, address and local-network access."
 	close()
-	_set_status("Could not reach the room. Check Wi-Fi, address and local-network access.")
+	_set_status(message)
 	lobby_changed.emit()
 
-func _server_disconnected() -> void:
+func _server_disconnected(message: String = "Connection lost. Return to the room to reconnect.") -> void:
 	if not active or authority: return
+	if friend_duel: message = "The connection to the host ended. Ask your friend for a new duel invite."
 	if session: session.paused = true
 	close()
-	_set_status("Connection lost. Return to the room to reconnect.")
+	_set_status(message)
 	lobby_changed.emit()
 
 func _peer_disconnected(id: int) -> void:
 	if not active or not authority: return
 	awaiting_hello.erase(id)
 	if not peers.has(id): return
+	if friend_duel:
+		if session: session.simulation_enabled = false
+		close()
+		_set_status("Your friend left the room. The set has ended.")
+		lobby_changed.emit()
+		return
 	peers[id].connected = false
 	peers[id].reserved_until = clock + RECONNECT_SECONDS
-	for slot in range(4):
+	for slot in range(seats.size()):
 		if seats[slot].peer == id:
 			seats[slot].connected = false
 			seats[slot].ready = false
@@ -354,9 +393,9 @@ func _publish_lobby() -> void:
 
 @rpc("authority", "call_remote", "reliable", 0)
 func _lobby(state: Array, phase: String, arena: String, leader: int) -> void:
-	if authority or not active or state.size() != 4: return
+	if authority or not active or state.size() != (2 if friend_duel else 4): return
 	if not StageCatalog.IDS.has(StringName(arena)) or leader < 0: return
-	for index in range(4):
+	for index in range(state.size()):
 		var seat: Variant = state[index]
 		if not seat is Dictionary or seat.get("slot") != index or not seat.get("peer") is int or seat.peer < 0 or not Roster.IDS.has(StringName(str(seat.get("character", "")))): return
 		if not seat.get("connected") is bool or not seat.get("ready") is bool or not seat.get("name") is String or seat.name.length() > 24: return
@@ -385,6 +424,8 @@ func _set_peer_ready(id: int, ready: bool) -> void:
 	for seat in seats:
 		if seat.peer == id: seat.ready = ready
 	_publish_lobby()
+	if friend_duel and ready and seats.all(func(s: Dictionary) -> bool: return s.peer != 0 and s.connected and s.ready):
+		request_start()
 
 func choose_character(slot: int, id: StringName) -> void:
 	if not active or not can_choose(slot) or not Roster.IDS.has(id): return
@@ -396,7 +437,7 @@ func _character_request(slot: int, id: String) -> void:
 	if active and authority: _set_character(multiplayer.get_remote_sender_id(), slot, id)
 
 func _set_character(sender: int, slot: int, id: String) -> void:
-	if mode not in [&"lobby", &"results"] or slot < 0 or slot > 3 or not Roster.IDS.has(StringName(id)): return
+	if mode not in [&"lobby", &"results"] or slot < 0 or slot >= seats.size() or not Roster.IDS.has(StringName(id)): return
 	if seats[slot].peer != sender and not (seats[slot].peer == 0 and sender == leader_peer()): return
 	seats[slot].character = id
 	seats[slot].ready = seats[slot].peer == 0
@@ -454,10 +495,15 @@ func request_start(force: bool = false) -> bool:
 		if not force and seat.peer != 0 and seat.connected and not seat.ready:
 			_set_status("Waiting for every player to ready up.")
 			return false
+	if friend_duel:
+		if seats.size() != 2 or seats.any(func(s: Dictionary) -> bool: return s.peer == 0 or not s.connected or not s.ready): return false
+		if set_wins.max() == 2: set_wins = [0, 0]
 	round_number += 1
 	var characters: Array[String] = []
 	for seat in seats: characters.append(seat.character)
-	configuration = {"round": round_number, "characters": characters, "duration": test_duration, "difficulty": 1, "stage": String(selected_stage)}
+	configuration = {"round": round_number, "characters": characters, "duration": 90.0 if friend_duel else test_duration, "difficulty": 1, "stage": String(selected_stage)}
+	if friend_duel:
+		configuration["set_wins"] = set_wins.duplicate()
 	mode = &"match"
 	loading = true
 	for id in peers:
@@ -471,9 +517,12 @@ func request_start(force: bool = false) -> bool:
 func _begin_round(config: Dictionary) -> void:
 	if authority or not active: return
 	if not StageCatalog.IDS.has(StringName(str(config.get("stage", "")))): return
-	if not config.get("round") is int or config.round < round_number or not config.get("characters") is Array or config.characters.size() != 4 or not MatchWire.number(config.get("duration")) or config.duration < 1.0 or config.duration > 1800.0: return
+	if not config.get("round") is int or config.round < round_number or not config.get("characters") is Array or config.characters.size() != (2 if friend_duel else 4) or not MatchWire.number(config.get("duration")) or config.duration < 1.0 or config.duration > 1800.0: return
 	for id in config.characters:
 		if not Roster.IDS.has(StringName(str(id))): return
+	if friend_duel:
+		if not valid_set_wins(config.get("set_wins")): return
+		set_wins.assign(config.set_wins)
 	round_number = config.round
 	configuration = config.duplicate(true)
 	mode = &"match"
@@ -497,7 +546,7 @@ func _start_round(config: Dictionary) -> void:
 	state_packet_clock = 0.0
 	packet_clock = 0.0
 	suspended_local = false
-	for slot in range(4):
+	for slot in range(seats.size()):
 		input_buffers[slot] = NetworkInputBuffer.new()
 		local_history[slot] = []
 	if router: router.clear_state()
@@ -569,7 +618,7 @@ func _inputs(round_id: int, batch: Array) -> void:
 		return
 	var seen: Dictionary = {}
 	for entry in batch:
-		if not entry is Dictionary or not entry.get("slot") is int or entry.slot < 0 or entry.slot > 3 or seats[entry.slot].peer != sender or seen.has(entry.slot) or not entry.get("frames") is Array:
+		if not entry is Dictionary or not entry.get("slot") is int or entry.slot < 0 or entry.slot >= seats.size() or seats[entry.slot].peer != sender or seen.has(entry.slot) or not entry.get("frames") is Array:
 			metrics.rejected_messages += 1
 			return
 		seen[entry.slot] = true
@@ -590,9 +639,10 @@ func _tick_completed() -> void:
 func _send_snapshot(target: int = 0, terminal: bool = false) -> void:
 	if session == null: return
 	var ack: Array[int] = []
-	for slot in range(4): ack.append(input_buffers[slot].consumed if input_buffers.has(slot) else 0)
+	for slot in range(seats.size()): ack.append(input_buffers[slot].consumed if input_buffers.has(slot) else 0)
 	var state: Dictionary = MatchWire.capture(session)
 	var envelope: Dictionary = {"state": state, "acks": ack, "terminal": terminal, "loading": loading}
+	if friend_duel and terminal: envelope["set_wins"] = set_wins.duplicate()
 	var raw: PackedByteArray = var_to_bytes(envelope)
 	var bytes := PackedByteArray()
 	bytes.resize(4)
@@ -662,10 +712,11 @@ func _accept_packet(round_id: int, packet: PackedByteArray) -> void:
 	var decoded: PackedByteArray = packet.slice(4).decompress(raw_size, FileAccess.COMPRESSION_ZSTD)
 	if decoded.is_empty(): return
 	var envelope: Variant = bytes_to_var(decoded)
-	if not envelope is Dictionary or not envelope.get("state") is Dictionary or not envelope.get("acks") is Array or envelope.acks.size() != 4 or not envelope.get("terminal") is bool or not envelope.get("loading") is bool: return
+	if not envelope is Dictionary or not envelope.get("state") is Dictionary or not envelope.get("acks") is Array or envelope.acks.size() != seats.size() or not envelope.get("terminal") is bool or not envelope.get("loading") is bool: return
 	for ack in envelope.acks:
 		if not ack is int or ack < 0 or ack > 2147483647: return
-	if not MatchWire.valid(envelope.state):
+	if friend_duel and envelope.terminal and not valid_set_wins(envelope.get("set_wins")): return
+	if not MatchWire.valid(envelope.state, seats.size()):
 		metrics.rejected_messages += 1
 		return
 	var tick: int = envelope.state.tick
@@ -727,6 +778,7 @@ func _apply_pending() -> void:
 		fighter.network_visual_ready = true
 	_flush_effects()
 	if envelope.terminal and last_reported_round != round_number:
+		if friend_duel: set_wins.assign(envelope.set_wins)
 		final_digest = MatchWire.digest(envelope.state)
 		mode = &"results"
 		last_reported_round = round_number
@@ -747,7 +799,7 @@ func _collect_event(kind: StringName, payload: Dictionary) -> void:
 func _effects(round_id: int, batch: Array) -> void:
 	if not active or authority or round_id != round_number or batch.size() > 128: return
 	for event in batch:
-		if event is Dictionary and event.get("id") is int and event.id > last_event and MatchWire.valid_event(event) and pending_events.size() < 512:
+		if event is Dictionary and event.get("id") is int and event.id > last_event and MatchWire.valid_event(event, seats.size()) and pending_events.size() < 512:
 			pending_events.append(event)
 	if session and latest_snapshot_tick >= 0: _flush_effects()
 
@@ -759,8 +811,14 @@ func _flush_effects() -> void:
 		session.combat_event.emit(StringName(event.kind), payload)
 	pending_events.clear()
 
+static func valid_set_wins(value: Variant) -> bool:
+	return value is Array and value.size() == 2 and value[0] is int and value[1] is int and value.min() >= 0 and value.max() <= 2 and value != [2, 2]
+
 func _match_finished() -> void:
-	if not authority or session == null: return
+	if not authority or session == null or mode != &"match": return
+	if friend_duel:
+		var leaders := session.winners()
+		if leaders.size() == 1: set_wins[leaders[0]] += 1
 	mode = &"results"
 	result_clock = 0.0
 	final_digest = MatchWire.digest(MatchWire.capture(session))
@@ -815,6 +873,14 @@ func _transport_connected(id: int) -> bool:
 	if peer is WebSocketMultiplayerPeer:
 		var connection: WebSocketPeer = (peer as WebSocketMultiplayerPeer).get_peer(id)
 		return connection != null and connection.get_ready_state() == WebSocketPeer.STATE_OPEN
+	if peer is WebRTCMultiplayerPeer:
+		var rtc := peer as WebRTCMultiplayerPeer
+		if not rtc.has_peer(id): return false
+		var remote := rtc.get_peer(id)
+		if not remote.connected: return false
+		for channel: WebRTCDataChannel in remote.channels:
+			if channel.get_ready_state() != WebRTCDataChannel.STATE_OPEN: return false
+		return true
 	return peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
 
 func _process(delta: float) -> void:
@@ -860,15 +926,14 @@ func _process(delta: float) -> void:
 			result_clock += delta
 			if result_clock > 2.0: request_start(true)
 	else:
-		if mode == &"connecting" and connection_clock > 12.0:
+		if mode == &"connecting" and connection_clock > (24.0 if friend_duel else 12.0):
 			_connect_failed()
 			return
 		if mode in [&"match", &"results"] and packet_clock > 8.0 and final_digest.is_empty():
 			_server_disconnected()
 			return
 		if mode == &"match" and not loading and state_packet_clock > 3.0 and final_digest.is_empty():
-			_server_disconnected()
-			_set_status("Match updates stalled. Rejoin within 20 seconds to reclaim your players.")
+			_server_disconnected("Match updates stalled. Rejoin within 20 seconds to reclaim your players.")
 			return
 		var now: int = Time.get_ticks_msec()
 		if peer and peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and now - last_ping_msec > 1000:

@@ -7,17 +7,17 @@
   <meta name="description" content="Play MECH★POP. Pick one of eight mechs, break off your rival’s gear, and steal it in a four-player arena brawl.">
   <title>MECH★POP — Play in your browser</title>
   <link rel="icon" href="game/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="game/style.css?v=5">
+  <link rel="stylesheet" href="game/style.css?v=6">
   <script defer src="game/vendor/three.min.js"></script>
   <script defer src="game/catalog.js?v=4"></script>
   <script defer src="game/attack-motion.js?v=2"></script>
   <script defer src="game/models.js?v=2"></script>
   <script defer src="game/combat-effects.js?v=4"></script>
   <script defer src="game/arenas.js?v=4"></script>
-  <script defer src="game/controls.js?v=5"></script>
+  <script defer src="game/controls.js?v=6"></script>
   <script defer src="game/audio.js?v=4"></script>
-  <script defer src="game/view.js?v=5"></script>
-  <script defer src="game/game.js?v=5"></script>
+  <script defer src="game/view.js?v=6"></script>
+  <script defer src="game/game.js?v=6"></script>
 </head>
 <body data-screen="hangar">
   <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -57,6 +57,7 @@
         <div class="settings-line"><label id="input-label" for="input-device">P1 input</label><select id="input-device" aria-labelledby="input-label"></select></div>
         <div class="settings-line"><label for="difficulty">Bot level</label><select id="difficulty"><option value="0">Rookie</option><option value="1" selected>Arcade</option><option value="2">Ace</option></select></div>
         <button id="start" class="primary"><svg><use href="#i-play"/></svg><span>Launch match</span><svg class="far"><use href="#i-arrow"/></svg></button>
+        <button id="friend-button" class="friend-button"><svg><use href="#i-link"/></svg>Play with a friend</button>
         <div class="hangar-actions">
           <button id="duel-button" class="room-button" title="Learn to steal and fire Terra’s Pile Cannon in a 1v1"><svg><use href="#i-weapon"/></svg>Practice duel</button>
           <button id="room-button" class="room-button"><svg><use href="#i-link"/></svg>Private room</button>
@@ -64,10 +65,10 @@
       </section>
     </div>
     <section class="roster-wrap" aria-label="Character selection"><div class="section-label"><h2>Choose your mech</h2><span id="roster-player">Player 1</span></div><div id="roster" class="roster"></div></section>
-    <footer><a href="https://github.com/bhaisley/mech-pop/releases/tag/v0.3.0-web" target="_blank" rel="noopener">v0.3.0 · Cannon Duel ↗</a><a href="https://github.com/bhaisley/mech-pop" target="_blank" rel="noopener">Source & credits ↗</a></footer>
+    <footer><a href="https://github.com/bhaisley/mech-pop/releases/tag/v0.4.0-web" target="_blank" rel="noopener">v0.4.0 · Friend Duels ↗</a><a href="https://github.com/bhaisley/mech-pop" target="_blank" rel="noopener">Source & credits ↗</a></footer>
   </main>
   <section id="battle" hidden aria-label="Battle arena">
-    <div id="field"><div id="arena-matte"></div><div id="battle-mount"></div><div id="field-labels"></div><div class="battle-strip"><span id="arena-title"></span><b id="clock">3:00</b><button id="pause" class="plain icon" aria-label="Pause match"><svg><use href="#i-pause"/></svg></button></div><div id="countdown" hidden></div><div id="announcement" role="status"></div>
+    <div id="field"><div id="arena-matte"></div><div id="battle-mount"></div><div id="field-labels"></div><div class="battle-strip"><span id="arena-title"></span><span id="set-score" hidden></span><b id="clock">3:00</b><button id="pause" class="plain icon" aria-label="Pause match"><svg><use href="#i-pause"/></svg></button></div><div id="countdown" hidden></div><div id="announcement" role="status"></div>
       <ol id="score-feed" aria-label="Recent points" aria-live="polite" aria-relevant="additions"></ol>
       <div id="duel-guide" role="status" hidden><b id="duel-step"></b><span id="duel-hint"></span></div>
     </div>

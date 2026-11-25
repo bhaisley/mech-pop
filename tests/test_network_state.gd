@@ -20,6 +20,7 @@ func _run() -> void:
 	var router := PlayerInputRouter.new()
 	root.add_child(router)
 	router.devices = [-2, -2, -2, -2]
+	_test_duel_rounds(router)
 	host = MatchSession.new()
 	replica = MatchSession.new()
 	root.add_child(host)
@@ -130,6 +131,48 @@ func _roundtrip(label: String) -> void:
 	check(MatchWire.restore(replica, wire), label + ": snapshot accepted")
 	check(MatchWire.digest(MatchWire.capture(replica)) == MatchWire.digest(wire), label + ": state identical after decode")
 	check(replica.parts.conservation_errors().is_empty(), label + ": equipment ownership conserved")
+
+func _test_duel_rounds(router: PlayerInputRouter) -> void:
+	var game := MatchSession.new()
+	var copy := MatchSession.new()
+	var roster: Array[StringName] = [&"kai", &"zero"]
+	for match_game in [game, copy]:
+		root.add_child(match_game)
+		match_game.setup(router, roster, {"skip_intro": true})
+		match_game.simulation_enabled = false
+	var wire := MatchWire.capture(game)
+	check(MatchWire.valid(wire, 2) and MatchWire.restore(copy, wire), "two actual fighters round-trip")
+	check(not MatchWire.valid(wire, 4), "four-seat rooms only accept four-fighter state")
+	var invalid := wire.duplicate(true)
+	invalid.parts[0].original_owner = 3
+	check(not MatchWire.restore(copy, invalid), "duel ownership cannot refer to an absent fighter")
+	check(not MatchWire.valid_event({"kind":"core_pop", "payload":{"fighter":{"fighter":1}, "credited":2, "position":Vector2.ZERO}}, 2), "duel KO credit must refer to a playing seat")
+	var room := MatchLink.new()
+	root.add_child(room)
+	room.active = true
+	room.friend_duel = true
+	room.authority = true
+	room._open_seats(2)
+	room.session = game
+	check(not room.request_start(true), "an empty duel seat never becomes a bot")
+	room.mode = &"match"
+	room._match_finished()
+	check(room.set_wins == [0, 0], "a drawn round awards no set point")
+	game.fighters[0].score = 1
+	room.mode = &"match"
+	room._match_finished()
+	room._match_finished()
+	check(room.set_wins == [1, 0], "a round awards only one set point even on repeated finish")
+	room._set_character(1, 0, "shadow")
+	check(room.set_wins == [1, 0], "a chassis change preserves the seat's set score")
+	room.mode = &"match"
+	room._match_finished()
+	check(room.set_wins == [2, 0], "two round wins finish the set")
+	check(MatchLink.valid_set_wins([2, 1]) and not MatchLink.valid_set_wins([2, 2]) and not MatchLink.valid_set_wins([3, 0]), "only attainable set scores cross the wire")
+	room.close()
+	room.free()
+	game.free()
+	copy.free()
 
 func _test_inputs() -> void:
 	var diagonal := FighterCommand.new()

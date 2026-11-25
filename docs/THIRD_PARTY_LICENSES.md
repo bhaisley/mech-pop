@@ -4,6 +4,7 @@ The runtime contains project-specific game code/art/audio plus the Godot engine 
 
 | Item | Exact source / version | Use and terms |
 | --- | --- | --- |
+| PeerServer Cloud | Hosted signaling and the ICE servers configured by PeerJS | Introduces the two browsers for Friend Duels. The game uses Godot’s WebRTC interface. [Signaling service](https://peerjs.com/server/cloud) · [Upstream ICE configuration](https://github.com/peers/peerjs/blob/master/lib/util.ts) |
 | Three.js | r160, bundled in `game/vendor/three.min.js` | Browser renderer, MIT. [Included notice](game/vendor/THREE-LICENSE.txt) |
 | Godot Web single-threaded release template | 4.7.2.stable.official.ed1daf0bf | Browser simulation runtime. [Included engine and dependency notices](game/runtime/GODOT_NOTICES.txt) |
 | Godot Standard and macOS templates | 4.7.2.stable.official.ed1daf0bf | Bundled runtime. MIT plus bundled dependency notices, extracted from the pinned binary into `third_party/GODOT_NOTICES.txt`. [Official license](https://godotengine.org/license/) |
@@ -21,7 +22,7 @@ The runtime contains project-specific game code/art/audio plus the Godot engine 
 | Original code, models, UI and SFX | This repository | Created for MECH★POP. Source geometry, data, shaders, synthesis graphs and scripts retained. No license is assigned to original content without the user's direction. |
 | User-supplied concept poster and brief | Concept poster in `docs/media/original-concept.png` | Original product/art direction reference, published at the creator’s request. It is concept art, not a screenshot or a statement of current platform availability. Platform/studio marks in the concept are not reproduced in the runtime. |
 
-No Stable Audio model, external Foley library, marketplace asset pack, copied commercial-game character, borrowed song, proprietary engine or network service is required by the delivered app. Stable Audio 3 Small-SFX was researched but not installed or adopted.
+Local matches run on the player’s device. Friend Duels use the network services listed above. The project generated its own sound effects, characters and music. Stable Audio 3 Small-SFX was evaluated during development.
 
 ## Generated music provenance
 

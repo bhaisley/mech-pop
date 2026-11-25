@@ -14,11 +14,11 @@ func check(condition: bool, message: String) -> void:
 func _initialize() -> void:
 	_run.call_deferred()
 
-func _duel() -> CannonDuel:
+func _duel(trial: String = "") -> CannonDuel:
 	var duel := CannonDuel.new()
 	root.add_child(duel)
 	duel.simulation_enabled = false
-	duel.setup(router, [&"nova", &"terra"], {"stage": "skyport", "duration": 90.0, "skip_intro": true})
+	duel.setup(router, [&"nova", &"terra"], {"stage": "skyport", "duration": 90.0, "skip_intro": true, "pickup_trial": trial})
 	return duel
 
 func _run() -> void:
@@ -55,6 +55,23 @@ func _run() -> void:
 	duel._check_attempt()
 	check(duel.phase == &"results" and duel.objective != "done", "a ring-out cannot win the challenge")
 	duel.free()
+	for mode in ["nearest", "aim"]:
+		var trial := _duel(mode)
+		var pilot := trial.fighters[0]
+		var target := trial.fighters[1]
+		var shell := target.part(&"shell")
+		var wanted := trial.parts.break_part(target, &"weapon_arm", Vector2.ZERO)
+		for entry in trial.parts.loose: entry.age = 1.0
+		check(trial.parts.nearest(pilot).part == shell, "neutral aim selects the nearer shell in " + mode)
+		pilot.last_command.move = Vector2.RIGHT
+		var expected := wanted if mode == "aim" else shell
+		check(trial.parts.nearest(pilot).part == expected, "aiming toward the cannon obeys " + mode)
+		trial.parts.resolve_requests([pilot])
+		check(pilot.reserved_part == expected.uid, "the actual claim takes the highlighted instance in " + mode)
+		trial.parts.cancel_claim(pilot)
+		wanted.entity.position.x = pilot.position.x + 200.0
+		check(trial.parts.nearest(pilot).part == shell, "aim cannot extend pickup range in " + mode)
+		trial.free()
 	router.free()
 	print("CANNON DUEL: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

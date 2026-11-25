@@ -1,12 +1,16 @@
 extends Node
 
 const CannonDuel := preload("res://scripts/combat/cannon_duel.gd")
+const WebFriends := preload("res://web_friends.gd")
 const WebInput := preload("res://web_input.gd")
 var page: JavaScriptObject
 var callback: JavaScriptObject
 var router: PlayerInputRouter
 var link: MatchLink
+var friends: WebFriends
+var preferred_mech: StringName
 var session: MatchSession
+var session_online: bool = false
 var events: Array[Dictionary] = []
 
 func _ready() -> void:
@@ -19,6 +23,13 @@ func _ready() -> void:
 	link.name = "MatchLink"
 	link.router = router
 	add_child(link)
+	friends = WebFriends.new()
+	friends.link = link
+	add_child(friends)
+	friends.failed.connect(func(message: String) -> void:
+		link.close()
+		_clear_match()
+		page.friendError(message))
 	link.lobby_changed.connect(_lobby)
 	link.status_changed.connect(func(_message: String) -> void: _lobby())
 	link.start_match_requested.connect(func(config: Dictionary, _replica: bool) -> void: _begin(config))
@@ -31,11 +42,13 @@ func _receive(args: Array) -> void:
 	if not message is Dictionary: return
 	match message.get("action", ""):
 		"local":
+			friends.stop()
 			link.close()
 			for i in range(4):
 				router.devices[i] = int(message.devices[i])
 			_begin(message)
 		"leave":
+			friends.stop()
 			link.close()
 			_clear_match()
 			router.clear_state()
@@ -43,7 +56,13 @@ func _receive(args: Array) -> void:
 			if link.active: link.suspended_local = bool(message.value)
 			elif session: session.paused = bool(message.value)
 			router.clear_state()
+		"friend":
+			_clear_match()
+			link.close()
+			preferred_mech = StringName(message.character)
+			friends.start(bool(message.host), str(message.code), int(message.device), preferred_mech, StringName(message.stage))
 		"connect":
+			friends.stop()
 			_clear_match()
 			var devices: Array[int] = []
 			for value in message.devices:
@@ -62,6 +81,7 @@ func _clear_match() -> void:
 		remove_child(session)
 		session.queue_free()
 		session = null
+	session_online = false
 	events.clear()
 
 func _begin(config: Dictionary) -> void:
@@ -73,18 +93,23 @@ func _begin(config: Dictionary) -> void:
 	if duel:
 		roster = [&"nova", &"terra"]
 		config = config.merged({"stage": "skyport", "duration": 90.0}, true)
-	elif roster.size() != 4: return
+	elif roster.size() != (2 if link.friend_duel else 4): return
 	router.clear_state()
 	session = CannonDuel.new() if duel else MatchSession.new()
 	add_child(session)
+	session_online = link.active
 	session.setup(router, roster, config)
 	session.combat_event.connect(_event)
 	if link.active: link.bind_match(session)
-	page.started(JSON.stringify({"stage": config.stage, "characters": roster, "online": link.active, "duel": duel, "devices": router.devices.slice(0, roster.size())}))
+	page.started(JSON.stringify({"stage": config.stage, "characters": roster, "online": link.active, "duel": duel, "pickupTrial": session.pickup_trial if duel else "", "friend": link.friend_duel, "duration": session.duration, "devices": router.devices.slice(0, roster.size())}))
 
 func _lobby() -> void:
 	if not page: return
-	page.lobby(JSON.stringify({"active": link.active, "mode": link.mode, "status": link.status, "seats": link.seats, "own": link.own_slots() if link.active else [], "leader": link.can_manage_room() if link.active else false, "stage": link.selected_stage, "code": link.room_code}))
+	if link.friend_duel and not link.authority and preferred_mech != &"" and link.own_slots().size() == 1:
+		var chosen := preferred_mech
+		preferred_mech = &""
+		if link.seats[link.own_slots()[0]].character != String(chosen): link.choose_character(link.own_slots()[0], chosen)
+	page.lobby(JSON.stringify({"active": link.active, "mode": link.mode, "status": link.status, "seats": link.seats, "own": link.own_slots() if link.active else [], "leader": link.can_manage_room() if link.active else false, "stage": link.selected_stage, "code": link.room_code, "friend": link.friend_duel, "setWins": link.set_wins}))
 
 func _event(kind: StringName, data: Dictionary) -> void:
 	var event := {"kind": String(kind)}
@@ -124,7 +149,8 @@ func _part(fighter: Fighter, slot: StringName) -> Array:
 	return [String(item.definition.id), snappedf(item.condition, 0.1)] if item else ["", 0]
 
 func _process(delta: float) -> void:
-	if not session or not page: return
+	if not session or not page or (session_online and not link.active): return
+	if link.friend_duel and not link.authority and session.phase == &"results" and link.last_reported_round != link.round_number: return
 	var frames: Array = []
 	for f in session.fighters:
 		var point: Vector2 = f.visual_position(delta) if link.active else f.previous_position.lerp(f.position, Engine.get_physics_interpolation_fraction())
@@ -163,8 +189,13 @@ func _process(delta: float) -> void:
 		"countdown": session.countdown, "paused": session.paused, "events": events,
 		"winners": session.winners() if session.phase == &"results" else [],
 	}
+	if link.friend_duel: frame["setWins"] = link.set_wins
 	if session is CannonDuel:
 		frame["duelStep"] = session.objective
 		frame["duelReason"] = session.ended_reason
+		frame["pickupTrial"] = session.pickup_trial
+		frame["otherPickups"] = session.other_pickups
+		if not session.pickup_trial.is_empty() and session.completed_at >= 0.0:
+			frame["cannonHitAt"] = session.completed_at
 	page.frame(JSON.stringify(frame))
 	events.clear()

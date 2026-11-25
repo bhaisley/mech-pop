@@ -53,14 +53,15 @@ static func number(value: Variant) -> bool:
 static func vector(value: Variant) -> bool:
 	return value is Vector2 and value.is_finite() and value.length_squared() < 1.0e12
 
-static func slot_map(value: Variant) -> bool:
-	if not value is Dictionary or value.size() > 4: return false
+static func slot_map(value: Variant, count: int) -> bool:
+	if not value is Dictionary or value.size() > count: return false
 	for key in value:
-		if not key is int or key < 0 or key > 3: return false
+		if not key is int or key < 0 or key >= count: return false
 		if not (value[key] is bool or number(value[key])): return false
 	return true
 
-static func valid(state: Dictionary) -> bool:
+static func valid(state: Dictionary, count: int = 4) -> bool:
+	if count not in [2, 4]: return false
 	if state.get("version") != VERSION: return false
 	if attacks.is_empty(): prepare()
 	for key in ["tick", "next_part_uid", "tie_turn", "projectile_serial"]:
@@ -74,10 +75,10 @@ static func valid(state: Dictionary) -> bool:
 	if not state.get("events") is Dictionary or state.events.size() > 96: return false
 	for key in state.events:
 		if not (key is String or key is StringName) or String(key).length() > 48 or not state.events[key] is int or state.events[key] < 0: return false
-	if not state.get("fighters") is Array or state.fighters.size() != 4: return false
+	if not state.get("fighters") is Array or state.fighters.size() != count: return false
 	if not state.get("parts") is Array or state.parts.size() > MAX_PARTS: return false
 	if not state.get("projectiles") is Array or state.projectiles.size() > MAX_PROJECTILES: return false
-	for i in range(4):
+	for i in range(count):
 		var entry: Variant = state.fighters[i]
 		if not entry is Dictionary or entry.get("slot") != i or not Roster.IDS.has(StringName(str(entry.get("mech", "")))): return false
 		for key in FLOATS:
@@ -91,7 +92,7 @@ static func valid(state: Dictionary) -> bool:
 		if StringName(str(entry.get("state"))) not in STATES: return false
 		if entry.get("action_buffer") not in ["", "light", "heavy", "special"]: return false
 		if not entry.get("attack") is String or (entry.attack != "" and not attacks.has(entry.attack)): return false
-		if not slot_map(entry.get("attack_hits")) or not slot_map(entry.get("contributors")): return false
+		if not slot_map(entry.get("attack_hits"), count) or not slot_map(entry.get("contributors"), count): return false
 	var uids: Dictionary = {}
 	var owners: Dictionary = {}
 	var claims: Dictionary = {}
@@ -102,7 +103,7 @@ static func valid(state: Dictionary) -> bool:
 		uids[uid] = true
 		if not Roster.all_modules().has(StringName(str(entry.get("definition", "")))): return false
 		for key in ["carrier", "original_owner", "claimed_by"]:
-			if not entry.get(key) is int or entry[key] < -1 or entry[key] > 3: return false
+			if not entry.get(key) is int or entry[key] < -1 or entry[key] >= count: return false
 		if entry.original_owner < 0: return false
 		if not number(entry.get("condition")) or entry.condition < 0.0: return false
 		for key in ["fresh_coupler", "recalled"]:
@@ -131,19 +132,19 @@ static func valid(state: Dictionary) -> bool:
 	for entry in state.projectiles:
 		if not entry is Dictionary or not entry.get("uid") is int or entry.uid < 1 or uids.has(entry.uid): return false
 		uids[entry.uid] = true
-		if not entry.get("source") is int or entry.source < 0 or entry.source > 3: return false
+		if not entry.get("source") is int or entry.source < 0 or entry.source >= count: return false
 		if not attacks.has(entry.get("attack")) or entry.get("type") not in ["cannon", "snare", "repair", "field", "rail"]: return false
 		for key in ["position", "previous", "velocity"]:
 			if not vector(entry.get(key)): return false
 		for key in ["remaining", "age", "facing"]:
 			if not number(entry.get(key)): return false
-		if not entry.get("pulsed") is bool or not slot_map(entry.get("hits")): return false
+		if not entry.get("pulsed") is bool or not slot_map(entry.get("hits"), count): return false
 	return true
 
 static func restore(session: MatchSession, snapshot: Dictionary) -> bool:
-	if not valid(snapshot): return false
+	if not valid(snapshot, session.fighters.size()): return false
 	if String(session.stage.definition.id) != snapshot.stage_id: return false
-	for i in range(4):
+	for i in range(session.fighters.size()):
 		if String(session.fighters[i].data.id) != snapshot.fighters[i].mech: return false
 	for key in ["tick", "elapsed", "duration", "remaining", "countdown", "paused", "final_warning_sent", "projectile_serial"]:
 		session.set(key, snapshot[key])
@@ -154,7 +155,7 @@ static func restore(session: MatchSession, snapshot: Dictionary) -> bool:
 	session.stage.set_motion(snapshot.ferry_offset)
 	session.parts.next_uid = snapshot.next_part_uid
 	session.parts.tie_turn = snapshot.tie_turn
-	for i in range(4):
+	for i in range(session.fighters.size()):
 		var fighter: Fighter = session.fighters[i]
 		var entry: Dictionary = snapshot.fighters[i]
 		for property in FLOATS + INTS + BOOLS + ["position", "previous_position", "velocity", "buffered_direction"]:
@@ -231,7 +232,7 @@ static func event_from_wire(session: MatchSession, event: Dictionary) -> Diction
 	for key in event.get("payload", {}):
 		var value: Variant = event.payload[key]
 		if value is Dictionary:
-			if value.has("fighter") and value.fighter is int and value.fighter >= 0 and value.fighter < 4:
+			if value.has("fighter") and value.fighter is int and value.fighter >= 0 and value.fighter < session.fighters.size():
 				payload[key] = session.fighters[value.fighter]
 			elif value.has("attack") and attacks.has(value.attack): payload[key] = attacks[value.attack]
 			elif value.has("part") and value.has("definition") and Roster.all_modules().has(StringName(str(value.definition))):
@@ -244,7 +245,7 @@ static func event_from_wire(session: MatchSession, event: Dictionary) -> Diction
 		else: payload[key] = value
 	return payload
 
-static func valid_event(event: Dictionary) -> bool:
+static func valid_event(event: Dictionary, count: int = 4) -> bool:
 	var required: Dictionary = {
 		"hit": ["fighter", "source", "attack", "position", "armored"],
 		"part_pop": ["fighter", "part", "position"],
@@ -266,7 +267,7 @@ static func valid_event(event: Dictionary) -> bool:
 		var value: Variant = event.payload[key]
 		match String(key):
 			"fighter", "source":
-				if not value is Dictionary or not value.get("fighter") is int or value.fighter < 0 or value.fighter > 3: return false
+				if not value is Dictionary or not value.get("fighter") is int or value.fighter < 0 or value.fighter >= count: return false
 			"attack":
 				if not value is Dictionary or not attacks.has(value.get("attack")): return false
 			"part":
@@ -276,12 +277,12 @@ static func valid_event(event: Dictionary) -> bool:
 			"armored", "shielded", "stolen", "special", "air":
 				if not value is bool: return false
 			"credited":
-				if not value is int or value < -1 or value > 3: return false
+				if not value is int or value < -1 or value >= count: return false
 			"amount":
 				if not number(value): return false
 			"winners":
-				if not value is Array or value.size() > 4: return false
+				if not value is Array or value.size() > count: return false
 				for slot in value:
-					if not slot is int or slot < 0 or slot > 3: return false
+					if not slot is int or slot < 0 or slot >= count: return false
 			_: return false
 	return true

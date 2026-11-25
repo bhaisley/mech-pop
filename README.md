@@ -8,6 +8,10 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ## Browser edition
 
+**Friend Duels · v0.4.0.** Choose **Play with a friend** in the hangar, then **Copy invite**. Your friend opens the link, picks a mech and input, and chooses **Join duel**. The host picks one of eight arenas. When both players press **Ready up**, the round begins. The host’s browser runs the match, so keep the game tab visible. Each round lasts 90 seconds. Win two rounds to take the set. **Rematch** keeps the score, **Switch mech** lets you change chassis between rounds, and **New set** starts you both at 0–0.
+
+To compare pickup controls, open **Controls → How to play** and choose **Try nearest pickup** or **Try aimed pickup**. Both trials put Terra’s cannon and shell within reach. Look for the yellow outline, take the cannon and land a shot. Aimed pickup favors the direction you hold. Neutral input and regular matches use the nearest part. Each trial shows your time to hit and how many other parts you took.
+
 **Cannon Duel · v0.3.0.** Choose **Practice duel** in the hangar to play Nova against Terra on Skyport. Break his Pile Cannon, take it and land a shot with it. You have 90 seconds and can replay immediately.
 
 In any match, move close to a loose part to see its name and your pickup button. Your HUD shows what the equipped weapon does and when its special is ready. The score feed names the scorer and victim of each KO. Tied results show the core damage that decided the round.

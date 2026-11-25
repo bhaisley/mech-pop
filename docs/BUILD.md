@@ -1,6 +1,6 @@
 # Build MECH★POP
 
-The public source snapshot is the **0.2.0 preview, build 16**. Runtime code and production assets match the tested development build. Private signing data, raw device logs, machine-specific job receipts and local build caches are excluded.
+This checkout builds the **0.4.0 browser edition**. To reproduce the packaged **0.2.0 native preview, build 16**, use its release tag. [Native build 16](https://github.com/bhaisley/mech-pop/tree/v0.2.0-preview.16)
 
 ## Requirements
 
@@ -20,6 +20,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 ```
 
 Open [the local game](http://127.0.0.1:8000/) in a browser with WebGL, WebAssembly and gzip stream decompression. Three.js r160, the JavaScript game, art, audio and fonts are served from the same origin. Launching the first match downloads the compressed simulation. GitHub Pages serves this directory from the `main` branch.
+
+**Play with a friend** opens a two-player browser duel. Serve over HTTPS or loopback. The browsers use PeerServer Cloud to exchange WebRTC connection details and then communicate over data channels. The host runs the shared Godot simulation. **Private room** uses the separate gateway for four-seat matches. [PeerServer Cloud](https://peerjs.com/server/cloud) · [Room server setup](../server/README.md)
 
 The hangar, inputs, Three.js models, arena geometry and HUD live in `docs/game/`. Edits to those JavaScript and CSS files take effect on reload. The simulation uses the native files in `scripts/combat`, `scripts/ai`, `scripts/network`, `scripts/data` and the roster and stage resources.
 

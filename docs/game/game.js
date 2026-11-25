@@ -10,7 +10,7 @@
   let slot = 0, stage = 'skyport', screen = 'hangar', dialogType = '', generation = 0, noticeTimer;
   let api = null, boot = null, engine = null, version = null, resolveBoot, rejectBoot;
   let online = false, room = null, roomAction = false, request = null, roomServer = '', roomCode = '';
-  let duel = false, battleDevices = [], lastPoint = '';
+  let pickupTrial = '', friend = false, duel = false, battleDevices = [], lastPoint = '';
   const weaponActions = {
     arc_blade: 'Sweep blade', burst_knuckle: 'Rush punch', pile_cannon: 'Fire cannon',
     halo_caster: 'Repair gear', phase_talon: 'Blink strike', prism_emitter: 'Cast field',
@@ -76,6 +76,10 @@
     }
     if (['loading', 'results', 'lobby', 'lost'].includes(dialogType))
       return;
+    if (dialogType === 'friend-invite' || dialogType === 'friend-connect') {
+      returnHangar();
+      return;
+    }
     if (dialogType === 'room') {
       generation++;
       request?.abort();
@@ -209,6 +213,11 @@
     guide.append(node('summary', 'How to play'),
         node('p', 'Hold an aim direction as you press the breaker for an uppercut or a slam. Wear down armor with light attacks, then land a breaker. Salvage loose parts to equip them. Break an exposed core or send a rival out for +1. An uncredited KO costs you a point. Core damage breaks score ties.'),
         node('p', 'For couch play, select a player tab and assign a connected controller. Press a controller button to make it available. Choose Touch for on-screen controls.'));
+    if (screen === 'hangar' || duel) {
+      guide.append(node('p', 'Compare pickup controls in practice. Both trials drop a cannon and a shell together.'),
+          action('Try nearest pickup', () => launch(true, 'nearest')),
+          action('Try aimed pickup', () => launch(true, 'aim')));
+    }
     body.append(layoutRow, message, table, guide,
         action(screen === 'battle' ? 'Back to match menu' : 'Back to hangar', closeDialog));
     refresh();
@@ -359,7 +368,7 @@
                  });
                  // Cache the engine separately from the smaller game pack. Its
                  // move timeline must match the version of the renderer in HTML.
-                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=5', 'sim.pck')])
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=6', 'sim.pck')])
                      .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
@@ -387,7 +396,7 @@
     show('error', title);
     body.append(node('p', error.message || String(error)), action('Back', back || dismiss, true));
   }
-  async function launch(practice = false) {
+  async function launch(practice = false, trial = '') {
     if (!view) {
       errorDialog(
           '3D graphics unavailable',
@@ -408,6 +417,7 @@
           ?? (matchMedia('(pointer:coarse)').matches ? TOUCH : KEYBOARD);
       dispatch('local', {
         mode: practice ? 'cannon_duel' : 'pop_rush',
+        pickup_trial: trial,
         characters: practice ? ['nova', 'terra'] : roster.slice(),
         devices: practice ? [trainee, BOT, BOT, BOT] : devices.slice(),
         stage,
@@ -448,10 +458,13 @@
     screen = 'battle';
     online = config.online;
     duel = config.duel;
+    pickupTrial = config.pickupTrial || '';
+    friend = config.friend;
+    $('set-score').hidden = !friend;
     battleDevices = config.devices;
     lastPoint = '';
     $('score-feed').replaceChildren();
-    $('battle').classList.toggle('duel', duel);
+    $('battle').classList.toggle('duel', duel || friend);
     $('duel-guide').hidden = !duel;
     text('duel-step', '');
     text('duel-hint', '');
@@ -463,7 +476,7 @@
     $('battle').hidden = false;
     $('touch').hidden = !battleDevices.includes(TOUCH);
     text('arena-title', duel ? 'Cannon Duel' : stages[config.stage].name);
-    text('clock', duel ? '1:30' : '3:00');
+    text('clock', duel || friend ? '1:30' : '3:00');
     text('announcement', '');
     $('countdown').hidden = true;
     lastBanner = 0;
@@ -476,6 +489,9 @@
   }
   function returnHangar() {
     ++generation;
+    if (/^#(?:duel|room)=/.test(location.hash))
+      history.replaceState(null, '', location.pathname + location.search);
+    friend = false;
     roomAction = false;
     request?.abort();
     room = null;
@@ -520,7 +536,7 @@
     const resumeButton = action('Resume match', resume, true);
     body.append(resumeButton, action('Controls', help));
     if (duel)
-      body.append(action('Restart duel', () => launch(true)));
+      body.append(action('Restart duel', () => launch(true, pickupTrial)));
     body.append(action('Return to hangar', returnHangar));
     resumeButton.focus();
   }
@@ -543,14 +559,25 @@
       show('results', won ? 'Cannon hit!' : 'Try the duel again');
       body.append(node('p', won ? 'You broke off Terra’s Pile Cannon, equipped it and hit him with his own shot.'
                                 : frame.duelReason || 'Time ran out before the cannon hit.'),
-          action('Replay duel', () => launch(true), true), action('Launch Pop Rush', () => launch()),
+          action('Replay duel', () => launch(true, pickupTrial), true),
+          action(pickupTrial === 'aim' ? 'Try nearest pickup' : 'Try aimed pickup', () => launch(true, pickupTrial === 'aim' ? 'nearest' : 'aim')),
+          action('Launch Pop Rush', () => launch()),
           action('Return to hangar', returnHangar));
+      if (pickupTrial) {
+        const trial = pickupTrial === 'aim' ? 'Aimed pickup' : 'Nearest pickup';
+        const taken = frame.otherPickups + (frame.otherPickups === 1 ? ' other part taken' : ' other parts taken');
+        const hit = Number.isFinite(frame.cannonHitAt) ? ' · Cannon hit in ' + frame.cannonHitAt.toFixed(1) + 's' : '';
+        body.firstElementChild.after(node('p', trial + hit + ' · ' + taken));
+      }
       body.querySelector('button').focus();
       return;
     }
     const winners = frame.winners,
           lead = winners.length === 1 ? playerLabel(frame.fighters[winners[0]], winners[0]) + ' wins' : 'Draw';
-    show('results', lead);
+    const setWinner = friend ? frame.setWins.indexOf(2) : -1;
+    show('results', setWinner >= 0 ? playerLabel(frame.fighters[setWinner], setWinner) + ' wins the set' : lead);
+    if (friend)
+      body.append(node('p', 'First to two · ' + setScore(frame.setWins), 'set-tally'));
     const t = node('table', undefined, 'results-table'), head = t.insertRow();
     const topScore = Math.max(...frame.fighters.map(f => f.score));
     const tied = frame.fighters.filter(f => f.score === topScore).length > 1;
@@ -574,7 +601,17 @@
     }
     if (lastPoint)
       body.append(node('p', 'Last point · ' + lastPoint));
-    if (online)
+    if (friend) {
+      const next = action(setWinner >= 0 ? 'New set' : 'Rematch', () => {
+        showLobby(room);
+        dispatch('ready', {value: true});
+      }, true);
+      body.append(next, action('Switch mech', () => {
+        showLobby(room);
+        body.querySelector('select[aria-label="Player ' + (room.own[0] + 1) + ' mech"]')?.focus();
+      }));
+      next.focus();
+    } else if (online)
       body.append(action('Room lobby', () => {
         showLobby(room);
       }, true));
@@ -626,7 +663,8 @@
         break;
       case 'take':
         step = '2 / 3 · Take the Pile Cannon';
-        hint = 'Move beside the loose cannon and press ' + key('salvage') + '.';
+        hint = pickupTrial === 'aim' ? 'Aim toward the cannon to outline it, then press ' + key('salvage') + '.'
+                                   : 'Move beside the loose cannon and press ' + key('salvage') + '.';
         break;
       case 'fire':
         step = '3 / 3 · Land a cannon shot';
@@ -754,6 +792,8 @@
         feed.firstElementChild.remove();
       if (duel)
         duelGuide(frame);
+      if (friend)
+        text('set-score', setScore(frame.setWins));
       const seconds = Math.ceil(frame.remaining);
       text('clock', Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0'));
       frame.fighters.forEach((f, i) => {
@@ -769,15 +809,119 @@
     if (frame.phase === 'results' && !finished)
       results(frame);
   }
-  function roomForm() {
+  function setScore(wins) {
+    return 'P1 ' + wins[0] + ' – ' + wins[1] + ' P2';
+  }
+  function friendDevice() {
+    return devices[slot] !== BOT ? devices[slot] : devices.find(d => d !== BOT)
+        ?? (matchMedia('(pointer:coarse)').matches ? TOUCH : KEYBOARD);
+  }
+  function friendError(message) {
+    show('lost', 'Duel unavailable');
+    body.append(node('p', message), action('Return to hangar', returnHangar, true));
+  }
+  async function openFriend(host, code, device, character) {
+    if (!view || !window.RTCPeerConnection) {
+      friendError('Friend duels require WebGL and WebRTC in this browser.');
+      return;
+    }
+    const ticket = ++generation;
+    sound.unlock();
+    show('friend-connect', host ? 'Opening friend duel' : 'Joining friend duel');
+    body.append(node('p', 'Connecting to the room…'), action('Cancel', returnHangar));
+    $('close-dialog').hidden = true;
+    try {
+      await loadRuntime();
+      if (ticket === generation)
+        dispatch('friend', {host, code, device, character, stage});
+    } catch (error) {
+      if (ticket === generation) friendError(error.message);
+    }
+  }
+  function invited() {
+    if (screen !== 'hangar') return;
+    const params = new URLSearchParams(location.hash.slice(1));
+    const code = params.get('duel');
+    if (code === null) {
+      if (params.has('room')) {
+        try {
+          const origin = roomOrigin(params.get('server') || '').origin;
+          const room = params.get('room');
+          if (!/^[A-HJ-NP-Z2-9]{6}$/.test(room)) throw Error('Incomplete room code.');
+          roomForm({origin, room});
+        } catch {
+          errorDialog('Invalid room invite', Error('Ask the host to copy the full room invite.'), returnHangar);
+        }
+      }
+      return;
+    }
+    if (!/^[a-f0-9]{32}$/.test(code)) {
+      friendError('This invite is incomplete. Ask the host to copy the full link.');
+      return;
+    }
+    show('friend-invite', 'Join friend duel');
+    body.append(node('p', 'Two players. First to win two rounds takes the set.'));
+    const mech = node('select'), input = node('select');
+    mech.setAttribute('aria-label', 'Your mech');
+    input.setAttribute('aria-label', 'Your input');
+    const mechLabel = node('label', 'Your mech', 'field-label'), inputLabel = node('label', 'Your input', 'field-label');
+    for (const id of ids) option(mech, mechs[id].name, id);
+    mech.value = roster[slot];
+    function inputs() {
+      const saved = input.value || String(friendDevice());
+      input.replaceChildren();
+      for (const id of [KEYBOARD, TOUCH, ...controls.pads().map(pad => pad.index)])
+        option(input, deviceName(id), id);
+      input.value = [...input.options].some(o => o.value === saved) ? saved : String(KEYBOARD);
+    }
+    inputs();
+    input.onfocus = inputs;
+    input.id = 'invite-input';
+    mechLabel.append(mech);
+    inputLabel.append(input);
+    body.append(mechLabel, inputLabel, action('Join duel', () => openFriend(false, code, Number(input.value), mech.value), true),
+        action('Return to hangar', returnHangar));
+  }
+  function inviteField(lobby) {
+    const url = new URL(location.pathname, location.origin);
+    url.hash = new URLSearchParams(lobby.friend ? {duel: lobby.code} : {room: lobby.code, server: roomServer}).toString();
+    const field = node('input'), label = node('label', lobby.friend ? 'Friend invite' : 'Room invite', 'field-label');
+    field.readOnly = true;
+    field.value = url.href;
+    field.onfocus = () => field.select();
+    label.append(field);
+    const copy = action('Copy invite', async () => {
+      try {
+        await navigator.clipboard.writeText(field.value);
+        copy.textContent = 'Invite copied';
+      } catch {
+        field.focus();
+        field.select();
+        copy.textContent = 'Copy the selected link';
+      }
+    });
+    body.append(label, copy);
+  }
+  $('friend-button').onclick = () => openFriend(true, Array.from(crypto.getRandomValues(new Uint8Array(16)),
+      b => b.toString(16).padStart(2, '0')).join(''), friendDevice(), roster[slot]);
+  window.addEventListener('hashchange', invited);
+  function roomOrigin(value) {
+    const url = new URL(value.trim());
+    const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    if ((url.protocol !== 'https:' && !(loopback && url.protocol === 'http:')) || url.username ||
+        url.password || url.pathname !== '/' || url.search || url.hash)
+      throw Error('Enter the HTTPS origin of the room server.');
+    return url;
+  }
+  function roomForm(invite = null) {
     if (!view) {
       launch();
       return;
     }
-    show('room', 'Private room');
+    show('room', invite ? 'Join private room' : 'Private room');
     body.append(node(
         'p',
-        'Use the HTTPS address of a running MECH★POP room server. Create a room or enter a friend’s six-character code.'));
+        invite ? 'Join the host’s room using the server shown below.' : 'Use the HTTPS address of a running MECH★POP room server. Create a room or enter a friend’s six-character code.'));
     function input(label, value, placeholder) {
       const wrap = node('label', label, 'field-label'), input = node('input');
       input.value = value;
@@ -787,10 +931,10 @@
       body.append(wrap);
       return input;
     }
-    const server = input('Room server', roomServer, 'https://rooms.example.com');
+    const server = input('Room server', invite?.origin || roomServer, 'https://rooms.example.com');
     server.type = 'url';
     server.autocomplete = 'url';
-    const code = input('Room code', roomCode, 'Code to join');
+    const code = input('Room code', invite?.room || roomCode, 'Code to join');
     code.maxLength = 6;
     code.autocapitalize = 'characters';
     code.autocomplete = 'off';
@@ -799,7 +943,8 @@
     const row = node('div', undefined, 'button-row');
     const create = action('Create room', () => connect(true), true),
           join = action('Join room', () => connect(false));
-    row.append(create, join);
+    if (!invite) row.append(create);
+    row.append(join);
     body.append(row, message);
     async function connect(newRoom) {
       if (roomAction)
@@ -807,11 +952,7 @@
       const ticket = ++generation;
       roomCode = code.value.trim().toUpperCase();
       try {
-        const url = new URL(server.value.trim());
-        const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
-        if ((url.protocol !== 'https:' && !(loopback && url.protocol === 'http:')) || url.username ||
-            url.password || url.pathname !== '/' || url.search || url.hash)
-          throw Error('Enter the HTTPS origin of the room server.');
+        const url = roomOrigin(server.value);
         if (!newRoom && !/^[A-HJ-NP-Z2-9]{6}$/.test(roomCode))
           throw Error('Enter the six-character code from the room leader.');
         roomAction = true;
@@ -847,7 +988,7 @@
         }
         if (ticket !== generation)
           return;
-        if (!/^[A-HJ-NP-Z2-9]{6}$/.test(data.code) || data.fingerprint !== version.fingerprint ||
+        if (!/^[A-HJ-NP-Z2-9]{6}$/.test(data.code) || (!newRoom && data.code !== roomCode) || data.fingerprint !== version.fingerprint ||
             data.protocol !== version.protocol)
           throw Error('Room server returned an incompatible game version.');
         try {
@@ -875,26 +1016,36 @@
       }
     }
   }
-  $('room-button').onclick = roomForm;
+  $('room-button').onclick = () => roomForm();
   function showLobby(lobby) {
     if (!lobby?.active) {
       returnHangar();
       return;
     }
-    show('lobby', 'Room lobby');
-    body.append(node('div', lobby.code, 'room-code'));
+    if (lobby.friend && lobby.mode === 'connecting') return;
+    show('lobby', lobby.friend ? 'Friend duel' : 'Room lobby');
+    if (lobby.friend) {
+      body.append(node('p', 'First to two · 90-second rounds · ' + setScore(lobby.setWins), 'set-tally'));
+      if (lobby.leader && lobby.seats.some(s => s.peer === 0)) {
+        inviteField(lobby);
+        body.append(node('p', 'Keep this tab visible while you host the set.'));
+      }
+    } else {
+      body.append(node('div', lobby.code, 'room-code'));
+      if (lobby.own.length) inviteField(lobby);
+    }
     for (const seat of lobby.seats) {
       const row = node('p', undefined, 'lobby-line'), own = lobby.own.includes(seat.slot), bot = seat.peer === 0;
       row.append(node(
           'span',
           'P' + (seat.slot + 1) + ' · ' +
-              (bot     ? 'Bot' :
+              (bot     ? (lobby.friend ? 'Open seat' : 'Bot') :
                    own ? 'You' :
                          'Guest') +
               (bot            ? '' :
                    seat.ready ? ' ✓' :
                                 ' …')));
-      if (own || bot && lobby.leader) {
+      if (own || bot && lobby.leader && !lobby.friend) {
         const select = node('select');
         select.setAttribute('aria-label', 'Player ' + (seat.slot + 1) + ' mech');
         for (const id of ids)
@@ -903,7 +1054,7 @@
         select.onchange = () => dispatch('character', {slot: seat.slot, value: select.value});
         row.append(select);
       } else
-        row.append(node('b', mechs[seat.character]?.name || 'Connecting'));
+        row.append(node('b', lobby.friend && bot ? 'Waiting for friend' : mechs[seat.character]?.name || 'Connecting'));
       body.append(row);
     }
     const stageRow = node('p', undefined, 'lobby-line');
@@ -923,7 +1074,7 @@
       const ready = lobby.own.length > 0 && lobby.own.every(i => lobby.seats[i].ready);
       body.append(
           action(ready ? 'Ready ✓ · change' : 'Ready up', () => dispatch('ready', {value: !ready}), !ready));
-      if (lobby.leader) {
+      if (lobby.leader && !lobby.friend) {
         const go = action('Launch room match', () => dispatch('launch'), ready);
         go.disabled = !lobby.seats.every(s => s.peer === 0 || !s.connected || s.ready);
         body.append(go);
@@ -935,7 +1086,7 @@
   function lobbyMessage(json) {
     room = JSON.parse(json);
     if (!room.active) {
-      if (dialogType === 'lobby' || dialogType === 'room' || online) {
+      if (dialogType === 'lobby' || dialogType === 'room' || dialogType === 'friend-connect' || online) {
         const status = room.status;
         online = false;
         controls.clear();
@@ -956,6 +1107,7 @@
     },
     readInput: id => controls.read(id),
     clearInputs: () => controls.clear(),
+    friendError,
     started: json => begin(JSON.parse(json)),
     frame: receive,
     lobby: lobbyMessage
@@ -1051,6 +1203,7 @@
   view?.hangar(roster[0]);
   updateHangar();
   soundButton();
+  invited();
   if (!view)
     say('WebGL could not start. Enable graphics acceleration to play.');
   let previous = 0;

@@ -46,8 +46,8 @@
     },
     {
       "file": "docs/media/browser-hangar.webp",
-      "sha256": "bd8080278fe519971e47daeadd197c714c995b76cd4cdb0e71297e12558e8209",
-      "description": "Chrome capture of the Three.js hangar with the playable Nova model and eight fighter portraits.",
+      "sha256": "3eb1a3bb33b7ef865706db6c6b41e986d6e7fc26d2878ab389286cfe7e790ebf",
+      "description": "Chrome capture of the 0.4.0 Friend Duels hangar with Nova, the eight-mech roster and the invite button.",
       "retouched": false
     },
     {

@@ -158,7 +158,7 @@
     effects = [];
     frame = null;
     mode = 'battle';
-    duel = config.duel;
+    duel = config.duel || config.friend;
     preview.visible = false;
     battle.visible = true;
     mount(battleMount);
@@ -221,6 +221,7 @@
         map.delete(uid);
       }
   }
+  const pickupOutline = new T.MeshBasicMaterial({color: 0xffe478, side: T.BackSide});
   function dropped(item) {
     const root = new T.Group(), part = MechModels.part(item[1]);
     root.add(part);
@@ -228,6 +229,14 @@
     part.rotation.set(.08, .55, .3);
     const bounds = new T.Box3().setFromObject(part);
     part.position.set(-(bounds.min.x + bounds.max.x) / 2, .19 - bounds.min.y, -(bounds.min.z + bounds.max.z) / 2);
+    if (frame.pickupTrial) {
+      const outline = part.clone();
+      outline.traverse(child => { if (child.isMesh) child.material = pickupOutline; });
+      outline.scale.multiplyScalar(1.10);
+      outline.visible = false;
+      root.add(outline);
+      root.userData.outline = outline;
+    }
     const halo = mesh(root, loop, flat(catalog.parts[item[1]].energy));
     halo.scale.setScalar(.42);
     halo.rotation.x = Math.PI / 2;
@@ -448,6 +457,8 @@
     syncEntities(loose, frame.parts, dropped, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100 + Math.sin(a[4] * 4.5) * .075, .25);
       node.rotation.y = a[4] * (a[5] ? 1.7 : 3.2);
+      if (node.userData.outline)
+        node.userData.outline.visible = frame.fighters.some(f => f.nearbyUid === a[0]);
     });
     syncEntities(shots, frame.shots, projectile, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100, .28);

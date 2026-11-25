@@ -1,6 +1,8 @@
 extends MatchSession
 ## A two-fighter local exercise on Skyport's main deck.
 
+var pickup_trial: String = ""
+var other_pickups: int = 0
 var objective: String = "break"
 var cannon: PartInstance
 var stole_cannon: bool = false
@@ -10,6 +12,8 @@ var ended_reason: String = ""
 
 func setup(router: PlayerInputRouter, selections: Array[StringName], config: Dictionary = {}) -> void:
 	super.setup(router, selections, config)
+	pickup_trial = str(config.get("pickup_trial", ""))
+	parts.aimed_salvage = pickup_trial == "aim"
 	var nova := fighters[0]
 	var terra := fighters[1]
 	nova.reset_at(Vector2(-100, -3))
@@ -49,7 +53,10 @@ func _track_objective(kind: StringName, data: Dictionary) -> void:
 		&"part_pop":
 			if data.part == cannon and data.fighter == fighters[1]:
 				objective = "take"
+				if pickup_trial in ["aim", "nearest"]: _place_trial_parts()
 		&"snap":
+			if objective == "take" and data.fighter == fighters[0] and data.part != cannon:
+				other_pickups += 1
 			if objective == "take" and data.part == cannon and data.fighter == fighters[0]:
 				objective = "fire"
 				stole_cannon = true
@@ -60,6 +67,17 @@ func _track_objective(kind: StringName, data: Dictionary) -> void:
 				completed_at = elapsed
 		&"core_pop":
 			ended_reason = "A mech was knocked out before the cannon hit."
+
+func _place_trial_parts() -> void:
+	# Both variants use the same two real modules, positions and claim rules.
+	var shell := parts.break_part(fighters[1], &"shell", Vector2.ZERO)
+	if not shell: return
+	var center := Vector2(clampf(fighters[0].position.x, -850.0, 850.0), stage.platform_rect(0).position.y - 16.0)
+	var forward := fighters[0].facing
+	cannon.entity.position = center + Vector2(forward * 102.0, 0)
+	cannon.entity.velocity = Vector2.ZERO
+	shell.entity.position = center - Vector2(forward * 12.0, 0)
+	shell.entity.lifetime = remaining
 
 func _check_attempt() -> void:
 	if phase != &"fight": return

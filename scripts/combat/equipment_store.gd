@@ -3,6 +3,7 @@ extends Node
 
 const MAX_LOOSE: int = 8
 const PICKUP_RANGE: float = 150.0
+var aimed_salvage: bool = false
 var session: Node
 var instances: Dictionary = {}
 var loose: Array[SalvageBody] = []
@@ -58,13 +59,21 @@ func _drop(fighter: Fighter, item: PartInstance, impulse: Vector2, reason: Strin
 
 func nearest(fighter: Fighter) -> SalvageBody:
 	var closest: SalvageBody = null
-	var best_distance: float = PICKUP_RANGE
+	var best_cost: float = INF
+	var origin := fighter.position + Vector2(0.0, -fighter.data.height * 0.35)
+	var aim := Vector2.ZERO
+	if aimed_salvage and fighter.last_command.move.length_squared() >= 0.25:
+		aim = fighter.last_command.move.normalized()
 	for body in loose:
-		if body.part.state != &"loose" or body.age < 0.15:
-			continue
-		var distance: float = (fighter.position + Vector2(0.0, -fighter.data.height * 0.35)).distance_to(body.position)
-		if distance < best_distance:
-			best_distance = distance
+		if body.part.state != &"loose" or body.age < 0.15: continue
+		var offset := body.position - origin
+		var distance := offset.length()
+		if distance >= PICKUP_RANGE: continue
+		# A neutral stick keeps nearest-part selection. A deliberate aim favors
+		# the reachable item in that direction; physical reach never changes.
+		var cost := distance - PICKUP_RANGE * maxf(0.0, aim.dot(offset.normalized()))
+		if cost < best_cost:
+			best_cost = cost
 			closest = body
 	return closest
 

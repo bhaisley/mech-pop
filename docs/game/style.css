@@ -1821,3 +1821,35 @@ dialog[data-view=help] {
   .duel #announcement { top: auto; bottom: 10%; }
   #battle:has(#touch:not([hidden])) .hud-special { font-size: 10px; }
 }
+
+.friend-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+  min-height: 34px;
+  margin-top: 7px;
+  border: 1px solid #253747;
+  border-radius: 3px;
+  background: #263b4f;
+  color: #fff;
+  font: 700 16px var(--cond);
+  text-transform: uppercase;
+}
+.friend-button:hover { background: #355a72; }
+.friend-button svg { width: 17px; height: 17px; }
+#dialog-body .field-label select { width: 100%; min-height: 37px; }
+#dialog-body .set-tally { font: 700 16px var(--cond); }
+.battle-strip #set-score {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  font: 700 clamp(12px,1.2vw,16px) var(--cond);
+  color: var(--yellow);
+  white-space: nowrap;
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .friend-button { min-height: 26px; margin-top: 3px; }
+}

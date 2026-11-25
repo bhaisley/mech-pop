@@ -2,6 +2,20 @@
 
 The **native 0.2.0 preview, build 16**, shipped with eight fighters, sixteen interchangeable equipment parts and five arenas. Its release tag preserves that native build’s source. The complete private development record also retains failed investigations and raw device diagnostics.
 
+## Friend Duels browser release 0.4.0
+
+- Two isolated Chrome profiles on one Mac followed a shared invite through the public signaling service. They readied distinct mechs, played two full 90-second rounds, changed chassis at 1–0 and finished 2–0. Both clients reported matching final simulations. Starting a new set reset both scores to zero.
+- An extra invitee received the full-or-expired message while the original pair kept playing. Leaving the duel took the other player to the disconnect screen. The four-seat gateway also passed a separate two-browser round and rematch through its prefilled invite.
+- Chrome covered the hangar at desktop, portrait and landscape sizes, copying an invite, and recovery from an incomplete link. One-handed WASD, a simulated controller and touch events each selected the outlined cannon from two loose parts, equipped it and landed a shot.
+- Godot passed 19 Cannon Duel checks, 72 network-state checks, 89 combat-system checks and 112 arena checks. They include drawn rounds, a single set point per won round, and two-seat snapshots.
+- The browser duel still needs a hands-on test across two Internet connections and on a physical controller. A relay-only WebRTC check on the test connection returned no relay candidate. Players on networks that require a relay may be unable to connect directly.
+
+### Five-player pickup comparison
+
+Give five new players the same task in **Controls → How to play**. Ask them to take Terra’s cannon and hit him with it. Have three try nearest pickup first and two try aimed pickup first, then switch. Include one-handed WASD and a physical controller. For each attempt, record the device and any coaching. The result screen gives the time of the first cannon hit and the number of other parts taken. After a normal round, ask who scored the last point and why.
+
+Use those observations to decide whether aimed pickup belongs in regular matches. Look for fewer unintended pickups and at least four of five players completing the task unaided. The five-player sessions are open.
+
 ## Cannon Duel browser release 0.3.0
 
 - Chrome completed the practice duel using the one-handed layout, rebound keys, simulated Gamepad API input and touch events in a phone-sized viewport. Each run broke Terra’s cannon, displayed the named pickup, stole it, missed a shot, waited for the ready cue, then landed the shot. Replay and return to four-player Pop Rush also passed.
