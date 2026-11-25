@@ -65,6 +65,7 @@
   let loose = new Map(), shots = new Map(), effects = [], frame = null, centerX = 0, centerY = 3.2, size = 13,
       shake = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const releases = new Map();
 
   function mount(destination) {
     destination.append(renderer.domElement);
@@ -137,6 +138,7 @@
     pickupLabels = [];
     fieldLabels.replaceChildren();
     loose.clear();
+    releases.clear();
     shots.clear();
     effects = [];
     frame = null;
@@ -154,6 +156,7 @@
     battle.clear();
     fieldLabels.replaceChildren();
     loose.clear();
+    releases.clear();
     shots.clear();
     effects = [];
     frame = null;
@@ -194,7 +197,12 @@
       hint.style.setProperty('--slot', colors[i]);
       hint.hidden = true;
       fieldLabels.append(hint);
-      return hint;
+      const leader = document.createElement('span');
+      leader.className = 'pickup-leader';
+      leader.style.setProperty('--slot', colors[i]);
+      leader.hidden = true;
+      fieldLabels.append(leader);
+      return {hint, leader};
     });
     centerX = 0;
     centerY = 3.1;
@@ -222,26 +230,78 @@
       }
   }
   const pickupOutline = new T.MeshBasicMaterial({color: 0xffe478, side: T.BackSide});
+  const restRotation = new T.Quaternion().setFromEuler(new T.Euler(.08,.55,.30));
+  const yawRotation = new T.Quaternion(), tumbleAngles = new T.Euler(0,0,0,'YXZ');
+  const mountPosition = new T.Vector3(), mountRotation = new T.Quaternion(), mountScale = new T.Vector3();
+  function worldPose(node) {
+    node.updateWorldMatrix(true, false);
+    const pose = new T.Object3D();
+    node.matrixWorld.decompose(pose.position, pose.quaternion, pose.scale);
+    return pose;
+  }
+  function blendPose(piece, position, rotation, scale, amount) {
+    piece.position.lerp(position, amount);
+    piece.quaternion.slerp(rotation, amount);
+    const sign = Math.sign(amount < .5 ? piece.scale.x : scale.x);
+    piece.scale.x = sign*T.MathUtils.lerp(Math.abs(piece.scale.x),Math.abs(scale.x),amount);
+    piece.scale.y = T.MathUtils.lerp(piece.scale.y,scale.y,amount);
+    piece.scale.z = T.MathUtils.lerp(piece.scale.z,scale.z,amount);
+  }
   function dropped(item) {
-    const root = new T.Group(), part = MechModels.part(item[1]);
-    root.add(part);
+    const root = new T.Group(), piece = new T.Group(), part = MechModels.part(item[1]);
+    root.add(piece);
+    piece.add(part);
     part.scale.setScalar(.86);
-    part.rotation.set(.08, .55, .3);
+    part.quaternion.copy(restRotation);
     const bounds = new T.Box3().setFromObject(part);
-    part.position.set(-(bounds.min.x + bounds.max.x) / 2, .19 - bounds.min.y, -(bounds.min.z + bounds.max.z) / 2);
-    if (frame.pickupTrial) {
-      const outline = part.clone();
-      outline.traverse(child => { if (child.isMesh) child.material = pickupOutline; });
-      outline.scale.multiplyScalar(1.10);
-      outline.visible = false;
-      root.add(outline);
-      root.userData.outline = outline;
-    }
+    const offset = new T.Vector3(-(bounds.min.x+bounds.max.x)/2, .13-bounds.min.y, -(bounds.min.z+bounds.max.z)/2);
+    part.scale.setScalar(1);
+    part.quaternion.identity();
+    const outline = new T.Mesh(part.children[1].geometry, pickupOutline);
+    outline.scale.setScalar(1.12);
+    piece.add(outline);
     const halo = mesh(root, loop, flat(catalog.parts[item[1]].energy));
-    halo.scale.setScalar(.42);
     halo.rotation.x = Math.PI / 2;
-    halo.position.y = .10;
+    root.userData = {piece, offset, outline, halo, claimant: -1, fall: null};
     return root;
+  }
+  function drawPart(node, item) {
+    const [uid, id, x, y, age, settled, claimant] = item;
+    const state = node.userData, {piece, offset, outline, halo} = state;
+    const targeted = frame.fighters.some(f => f.nearbyUid === uid);
+    if (state.claimant >= 0 && claimant < 0)
+      state.fall = {pose:worldPose(piece), time:frame.time};
+    state.claimant = claimant;
+    const spin = age*(settled ? 1.2 : 3.6);
+    yawRotation.setFromEuler(tumbleAngles.set(0, spin, settled || reducedMotion ? 0 : Math.sin(age*7)*.45, 'YXZ'));
+    piece.position.copy(offset).applyQuaternion(yawRotation);
+    piece.position.x += x/100;
+    piece.position.y += -y/100 + (settled && !reducedMotion ? Math.sin(age*4)*.035 : 0);
+    piece.position.z += .25;
+    piece.quaternion.copy(yawRotation).multiply(restRotation);
+    piece.scale.setScalar(.86);
+    const release = releases.get(uid);
+    if (release && frame.time-release.time < .16)
+      blendPose(piece, release.pose.position, release.pose.quaternion, release.pose.scale,
+          1-T.MathUtils.smoothstep(frame.time-release.time,0,.16));
+    const pilot = frame.fighters[claimant];
+    if (pilot && pilot.claimUid === uid) {
+      const mount = fighters[claimant].mountFor(catalog.parts[id].slot);
+      mount.updateWorldMatrix(true,false);
+      mount.matrixWorld.decompose(mountPosition,mountRotation,mountScale);
+      blendPose(piece,mountPosition,mountRotation,mountScale,T.MathUtils.smoothstep(pilot.claimProgress,0,1));
+      state.fall = null;
+    } else if (state.fall) {
+      const ageSinceHit = frame.time-state.fall.time, pose = state.fall.pose;
+      if (ageSinceHit < .12)
+        blendPose(piece,pose.position,pose.quaternion,pose.scale,1-T.MathUtils.smoothstep(ageSinceHit,0,.12));
+      else state.fall = null;
+    }
+    outline.visible = targeted || claimant >= 0;
+    halo.visible = claimant < 0;
+    halo.position.set(x/100,-y/100+.09,.25);
+    halo.material = flat(targeted ? '#ffe478' : catalog.parts[id].energy);
+    halo.scale.setScalar(targeted ? .51 : .38);
   }
   function projectile(item) {
     const [, type, , , , owner, , moveId] = item;
@@ -299,15 +359,43 @@
     node.scale.set(sx, sy, .15);
     effects.push({node, vx, vy, life, age: 0, sx, sy, spin, gravity});
   }
+  function shedArmor(unit, x, y) {
+    const plates = reducedMotion ? unit.popPlates.slice(0,2) : unit.popPlates;
+    plates.forEach((source, j) => {
+      if (effects.length >= 96) return;
+      const pose = worldPose(source), node = source.clone(), side = j % 2 ? 1 : -1;
+      node.position.copy(pose.position);
+      node.position.x += x-unit.root.position.x;
+      node.position.y += y-unit.root.position.y-1;
+      node.quaternion.copy(pose.quaternion);
+      node.scale.copy(pose.scale);
+      battle.add(node);
+      effects.push({node, plateScale:pose.scale, vx:side*(2.25+j*.45), vy:2.7+j*.53, spin:side*(2.4+j),
+        gravity:12, life:reducedMotion ? .34 : .62, age:0});
+    });
+  }
   function eventVisual(e, data) {
     const f = data.fighters[e.fighter], color = f ? catalog.mechs[f.id].energy : '#fff6be';
     let x = e.x / 100, y = -e.y / 100;
+    if (e.kind === 'fumble')
+      fighters[e.fighter].fumbleAt = data.time;
+    if (e.kind === 'part_loose' && fighters[e.fighter] && catalog.parts[e.part]) {
+      const pose = worldPose(fighters[e.fighter].mountFor(catalog.parts[e.part].slot));
+      releases.set(e.partUid, {pose, time:data.time});
+    }
+    if (e.kind === 'part_pop' && releases.has(e.partUid)) {
+      const {pose} = releases.get(e.partUid);
+      x = pose.position.x;
+      y = pose.position.y;
+      e = {...e, x:x*100, y:-y*100};
+    }
     if (e.kind === 'core_pop') {
       // Keep a ring-out visible at the edge nearest the actual blast position.
       const halfWidth = size * width / Math.max(1, height) * .47;
       x = clamp(x, centerX - halfWidth, centerX + halfWidth);
       y = clamp(y, centerY - size*.40, centerY + size*.40);
       e = {...e, x: x*100, y: -y*100};
+      shedArmor(fighters[e.fighter],x,y);
     }
     combatEffects.event(e, data);
     if (e.kind === 'hit') {
@@ -326,11 +414,11 @@
       if (!e.armored)
         shake = Math.max(shake, e.breaker ? .10 : .035);
     } else if (e.kind === 'part_pop' || e.kind === 'core_pop') {
-      const ko = e.kind === 'core_pop', count = reducedMotion ? 6 : ko ? 22 : 12;
+      const ko = e.kind === 'core_pop', count = reducedMotion ? 3 : ko ? 10 : 7;
       const tint = ko ? color : catalog.parts[e.part]?.energy || '#ffe066';
       for (let i = 0; i < count; i++) {
         const a = i/count*2*Math.PI + Math.random()*.24;
-        const shell = i%3 === 0, speed = (ko ? 6 : 3.6)*(.63+Math.random()*.70);
+        const shell = !ko && i%3 === 0, speed = (ko ? 6 : 3.6)*(.63+Math.random()*.70);
         const flight = shell ? (ko ? .70 : .45) : .23+Math.random()*.24;
         effect(shell ? box : crystal, shell ? (i%2 ? '#334355' : catalog.mechs[f.id].color) :
             i%2 ? tint : '#fff3aa', x,y, Math.cos(a)*speed, Math.sin(a)*speed+(shell ? 1.5 : 0),
@@ -395,6 +483,52 @@
     const wobble = reducedMotion ? 0 : shake;
     lens(size, centerX + Math.sin(frame.time * 103) * wobble, centerY + Math.cos(frame.time * 117) * wobble, .13);
   }
+  function fieldPoint(x, y) {
+    vector.set(x/100,-y/100,.25).project(camera);
+    return {x:(vector.x+1)*width/2, y:(1-vector.y)*height/2};
+  }
+  function placePickupLabels() {
+    // Keep a full label outside the action. Only a thin leader enters the scrum.
+    const occupied = [];
+    const pixels = height/size;
+    for (const f of frame.fighters) {
+      if (f.dead) continue;
+      const p = fieldPoint(f.x,f.y), h = catalog.mechs[f.id].height/100*pixels;
+      occupied.push({l:p.x-h*.55, r:p.x+h*.55, t:p.y-h-8, b:p.y+5});
+    }
+    frame.fighters.forEach((f,i) => {
+      const {hint,leader} = pickupLabels[i], item = frame.parts.find(p => p[0] === f.nearbyUid);
+      hint.hidden = leader.hidden = !item;
+      if (!item) return;
+      const shared = frame.fighters.some((other,j) => i !== j && other.nearbyUid === f.nearbyUid);
+      const caption = (shared ? 'P'+(i+1)+' · ' : '') + MechControls.actionLabel(f.device,'salvage') + ' · Take ' + catalog.parts[item[1]].name;
+      if (hint.textContent !== caption) hint.textContent = caption;
+      const p = fieldPoint(item[2],item[3]-28), w = hint.offsetWidth, h = hint.offsetHeight;
+      const candidates = [[p.x+12,p.y-h/2],[p.x-w-12,p.y-h/2]];
+      for (const box of occupied) {
+        candidates.push([box.r+5,p.y-h/2], [box.l-w-5,p.y-h/2], [p.x-w/2,box.t-h-5], [p.x-w/2,box.b+5]);
+      }
+      let best, cost = Infinity;
+      for (const [x,y] of candidates) {
+        const l = clamp(x,3,Math.max(3,width-w-3)), t = clamp(y,3,Math.max(3,height-h-3));
+        const ax = clamp(p.x,l,l+w), ay = clamp(p.y,t,t+h);
+        let value = Math.hypot(ax-p.x,ay-p.y);
+        for (const box of occupied)
+          value += 8*Math.max(0,Math.min(l+w,box.r)-Math.max(l,box.l))*Math.max(0,Math.min(t+h,box.b)-Math.max(t,box.t));
+        if (value < cost) { cost = value; best = {l,r:l+w,t,b:t+h,ax,ay}; }
+      }
+      hint.style.left = best.l+'px';
+      hint.style.top = best.t+'px';
+      leader.style.left = best.ax+'px';
+      leader.style.top = best.ay+'px';
+      leader.style.width = Math.hypot(p.x-best.ax,p.y-best.ay)+'px';
+      leader.style.transform = 'rotate('+Math.atan2(p.y-best.ay,p.x-best.ax)+'rad)';
+      occupied.push(best);
+    });
+  }
+  function wear(tuple) {
+    return tuple[0] ? 1-T.MathUtils.smoothstep(tuple[1]/catalog.parts[tuple[0]].max,0,.59) : 0;
+  }
   function drawBattle(dt) {
     if (!frame)
       return;
@@ -415,6 +549,9 @@
         hurt: f.hurt,
         facing: f.facing,
         dash: f.state === 'dodge',
+        dt: frame.paused ? 0 : dt, vy:f.vy, hovering:f.state === 'hover', hoverLeft:f.hoverLeft,
+        cancelReady:f.cancelReady, weaponWear:wear(f.weapon), shellWear:wear(f.shell), claim:f.claimProgress,
+        fumble:unit.fumbleAt === undefined ? 0 : 1-T.MathUtils.smoothstep(t-unit.fumbleAt,0,.20), reducedMotion,
         dead: f.dead
       });
       combatEffects.updateFighter(i, f, motion, t);
@@ -425,21 +562,6 @@
         marker.style.left = ((vector.x + 1) * 50) + '%';
         marker.style.top = ((1 - vector.y) * 50) + '%';
         marker.style.opacity = f.safe ? '.7' : '1';
-      }
-      const hint = pickupLabels[i];
-      const item = f.nearby && frame.parts.find(p => p[0] === f.nearbyUid);
-      hint.hidden = !item;
-      if (item) {
-        const sameTarget = frame.fighters.filter(p => p.nearbyUid === f.nearbyUid);
-        const seat = sameTarget.length > 1 ? 'P' + (i + 1) + ' · ' : '';
-        const name = catalog.parts[item[1]].name;
-        const caption = seat + MechControls.actionLabel(f.device, 'salvage') + ' · Take ' + name;
-        if (hint.textContent !== caption)
-          hint.textContent = caption;
-        vector.set(item[2] / 100, -item[3] / 100 + .85, .25).project(camera);
-        const row = sameTarget.indexOf(f);
-        hint.style.left = clamp((vector.x + 1) * width / 2, hint.offsetWidth / 2 + 3, width - hint.offsetWidth / 2 - 3) + 'px';
-        hint.style.top = clamp((1 - vector.y) * height / 2 - row * (hint.offsetHeight + 2), hint.offsetHeight + 3, height - 3) + 'px';
       }
       const shadow = shadows[i];
       let below = -Infinity;
@@ -454,12 +576,10 @@
       }
     });
     combatEffects.update(t);
-    syncEntities(loose, frame.parts, dropped, (node, a) => {
-      node.position.set(a[2] / 100, -a[3] / 100 + Math.sin(a[4] * 4.5) * .075, .25);
-      node.rotation.y = a[4] * (a[5] ? 1.7 : 3.2);
-      if (node.userData.outline)
-        node.userData.outline.visible = frame.fighters.some(f => f.nearbyUid === a[0]);
-    });
+    for (const [uid, release] of releases)
+      if (frame.time-release.time > .40) releases.delete(uid);
+    syncEntities(loose, frame.parts, dropped, drawPart);
+    placePickupLabels();
     syncEntities(shots, frame.shots, projectile, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100, .28);
       if (node.userData.tail) {
@@ -484,7 +604,10 @@
       e.node.position.x += e.vx * step;
       e.node.position.y += e.vy * step;
       e.node.rotation.z += e.spin * step;
-      e.node.scale.set(e.sx * (.75 + k * .25), e.sy * k, .15);
+      if (e.plateScale) {
+        e.node.rotation.y += e.spin*.6*step;
+        e.node.scale.copy(e.plateScale).multiplyScalar(T.MathUtils.smoothstep(k,0,.48));
+      } else e.node.scale.set(e.sx * (.75 + k * .25), e.sy * k, .15);
     }
   }
   function draw(time, delta) {

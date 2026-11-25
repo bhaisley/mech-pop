@@ -10,7 +10,7 @@
   let slot = 0, stage = 'skyport', screen = 'hangar', dialogType = '', generation = 0, noticeTimer;
   let api = null, boot = null, engine = null, version = null, resolveBoot, rejectBoot;
   let online = false, room = null, roomAction = false, request = null, roomServer = '', roomCode = '';
-  let pickupTrial = '', friend = false, duel = false, battleDevices = [], lastPoint = '';
+  let pickupTrial = '', contested = false, friend = false, duel = false, battleDevices = [], lastPoint = '';
   const weaponActions = {
     arc_blade: 'Sweep blade', burst_knuckle: 'Rush punch', pile_cannon: 'Fire cannon',
     halo_caster: 'Repair gear', phase_talon: 'Blink strike', prism_emitter: 'Cast field',
@@ -211,7 +211,7 @@
     };
     const guide = node('details', undefined, 'match-guide');
     guide.append(node('summary', 'How to play'),
-        node('p', 'Hold an aim direction as you press the breaker for an uppercut or a slam. Wear down armor with light attacks, then land a breaker. Salvage loose parts to equip them. Break an exposed core or send a rival out for +1. An uncredited KO costs you a point. Core damage breaks score ties.'),
+        node('p', 'Watch for a rattling mount. An upward breaker launches the part high, a level breaker sends it forward, and a downward slam drops it close. Press salvage beside the part to pull it in. A hit can interrupt the catch. Break an exposed core or send a rival out for +1. An uncredited KO costs you a point. Core damage breaks score ties.'),
         node('p', 'For couch play, select a player tab and assign a connected controller. Press a controller button to make it available. Choose Touch for on-screen controls.'));
     if (screen === 'hangar' || duel) {
       guide.append(node('p', 'Compare pickup controls in practice. Both trials drop a cannon and a shell together.'),
@@ -368,7 +368,7 @@
                  });
                  // Cache the engine separately from the smaller game pack. Its
                  // move timeline must match the version of the renderer in HTML.
-                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=6', 'sim.pck')])
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=7', 'sim.pck')])
                      .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
@@ -396,7 +396,7 @@
     show('error', title);
     body.append(node('p', error.message || String(error)), action('Back', back || dismiss, true));
   }
-  async function launch(practice = false, trial = '') {
+  async function launch(practice = false, trial = '', scramble = false) {
     if (!view) {
       errorDialog(
           '3D graphics unavailable',
@@ -418,6 +418,7 @@
       dispatch('local', {
         mode: practice ? 'cannon_duel' : 'pop_rush',
         pickup_trial: trial,
+        contested: scramble,
         characters: practice ? ['nova', 'terra'] : roster.slice(),
         devices: practice ? [trainee, BOT, BOT, BOT] : devices.slice(),
         stage,
@@ -430,6 +431,7 @@
   }
   $('start').onclick = () => launch();
   $('duel-button').onclick = () => launch(true);
+  $('scramble-button').onclick = () => launch(true, '', true);
   function makeHud(chars) {
     $('hud').replaceChildren();
     return chars.map((id, i) => {
@@ -459,6 +461,7 @@
     online = config.online;
     duel = config.duel;
     pickupTrial = config.pickupTrial || '';
+    contested = Boolean(config.contested);
     friend = config.friend;
     $('set-score').hidden = !friend;
     battleDevices = config.devices;
@@ -475,7 +478,7 @@
     $('hangar').hidden = true;
     $('battle').hidden = false;
     $('touch').hidden = !battleDevices.includes(TOUCH);
-    text('arena-title', duel ? 'Cannon Duel' : stages[config.stage].name);
+    text('arena-title', contested ? 'Cannon Scramble' : duel ? 'Cannon Duel' : stages[config.stage].name);
     text('clock', duel || friend ? '1:30' : '3:00');
     text('announcement', '');
     $('countdown').hidden = true;
@@ -536,7 +539,7 @@
     const resumeButton = action('Resume match', resume, true);
     body.append(resumeButton, action('Controls', help));
     if (duel)
-      body.append(action('Restart duel', () => launch(true, pickupTrial)));
+      body.append(action('Restart duel', () => launch(true, pickupTrial, contested)));
     body.append(action('Return to hangar', returnHangar));
     resumeButton.focus();
   }
@@ -556,13 +559,17 @@
     sound.pause();
     if (duel) {
       const won = frame.duelStep === 'done';
-      show('results', won ? 'Cannon hit!' : 'Try the duel again');
+      show('results', won ? (contested ? 'Scramble won!' : 'Cannon hit!') : 'Try the duel again');
       body.append(node('p', won ? 'You broke off Terra’s Pile Cannon, equipped it and hit him with his own shot.'
                                 : frame.duelReason || 'Time ran out before the cannon hit.'),
-          action('Replay duel', () => launch(true, pickupTrial), true),
+          action('Replay duel', () => launch(true, pickupTrial, contested), !won || contested),
           action(pickupTrial === 'aim' ? 'Try nearest pickup' : 'Try aimed pickup', () => launch(true, pickupTrial === 'aim' ? 'nearest' : 'aim')),
           action('Launch Pop Rush', () => launch()),
           action('Return to hangar', returnHangar));
+      if (!contested && won)
+        body.firstElementChild.after(action('Rematch Terra', () => launch(true, '', true), true));
+      if (contested)
+        body.firstElementChild.after(node('p', 'Terra reclaimed the cannon ' + frame.reclaims + (frame.reclaims === 1 ? ' time.' : ' times.')));
       if (pickupTrial) {
         const trial = pickupTrial === 'aim' ? 'Aimed pickup' : 'Nearest pickup';
         const taken = frame.otherPickups + (frame.otherPickups === 1 ? ' other part taken' : ' other parts taken');
@@ -660,11 +667,16 @@
       case 'break':
         step = '1 / 3 · Break the cannon';
         hint = 'Get close to Terra. Face him and press ' + key('heavy') + ' without aiming up or down.';
+        if (contested) {
+          step = frame.reclaims ? 'Terra reclaimed it · Break the mount again' : '1 / 3 · Break the loose mount';
+          hint = 'Face Terra and press ' + key('heavy') + '. Aim up to loft the cannon, down to drop it close, or level to send it forward.';
+        }
         break;
       case 'take':
         step = '2 / 3 · Take the Pile Cannon';
         hint = pickupTrial === 'aim' ? 'Aim toward the cannon to outline it, then press ' + key('salvage') + '.'
                                    : 'Move beside the loose cannon and press ' + key('salvage') + '.';
+        if (contested) hint = 'Terra is after it. Press ' + key('salvage') + ' within reach, or hit him to interrupt his catch.';
         break;
       case 'fire':
         step = '3 / 3 · Land a cannon shot';

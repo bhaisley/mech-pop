@@ -7,7 +7,7 @@ const MAX_PROJECTILES: int = 24
 const FLOATS: Array[String] = ["facing", "core", "attack_time", "hitstop", "stun", "invulnerable", "dodge_time", "dodge_cooldown", "special_cooldown", "coyote", "drop_time", "hover_left", "jump_buffer", "action_buffer_time", "respawn_time", "attach_time", "credit_time", "combo_window", "snared", "repair_budget", "damage_done"]
 const INTS: Array[String] = ["attack_serial", "jumps_left", "reserved_part", "last_attacker", "combo_hits", "score", "pops", "steals", "parts_broken", "assists"]
 const BOOLS: Array[String] = ["attack_emitted", "attack_is_special", "attack_confirmed", "attack_motion_applied", "air_boost_left"]
-const STATES: Array[StringName] = [&"idle", &"air", &"run", &"dodge", &"attack", &"hurt", &"attach", &"ko"]
+const STATES: Array[StringName] = [&"idle", &"air", &"hover", &"run", &"dodge", &"attack", &"hurt", &"attach", &"ko"]
 static var attacks: Dictionary = {}
 
 static func prepare() -> void:
@@ -248,7 +248,7 @@ static func event_from_wire(session: MatchSession, event: Dictionary) -> Diction
 static func valid_event(event: Dictionary, count: int = 4) -> bool:
 	var required: Dictionary = {
 		"hit": ["fighter", "source", "attack", "position", "armored"],
-		"part_pop": ["fighter", "part", "position"],
+		"part_pop": ["fighter", "part", "position"], "fumble": ["fighter", "part", "position"],
 		"core_pop": ["fighter", "credited", "position"],
 		"snap": ["fighter", "part", "stolen"],
 		"attack_active": ["fighter", "attack", "special"],

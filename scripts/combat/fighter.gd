@@ -163,8 +163,7 @@ func step(command: FighterCommand, delta: float) -> void:
 		velocity.y += data.gravity * delta * 0.25
 		move_body()
 		return
-	var can_cancel: bool = attack == null or (data.id == &"kuren" and attack_confirmed)
-	if command.dodge and dodge_cooldown <= 0.0 and (on_ground or air_boost_left) and can_cancel:
+	if command.dodge and can_dodge():
 		_start_dodge(command, on_ground)
 		move_body()
 		return
@@ -210,10 +209,12 @@ func step(command: FighterCommand, delta: float) -> void:
 	if not command.jump_held and velocity.y < -500.0:
 		velocity.y = maxf(velocity.y, -500.0)
 	var gravity_scale: float = 1.0
+	var hovering := false
 	if command.move.y > 0.55 and velocity.y > 0.0:
 		gravity_scale = 1.7
 	elif data.id == &"momo" and command.jump_held and velocity.y > 0.0 and hover_left > 0.0:
-		hover_left -= delta
+		hover_left = maxf(0.0, hover_left - delta)
+		hovering = true
 		velocity.y = minf(velocity.y, 100.0)
 		gravity_scale = 0.12
 	velocity.y = minf(velocity.y + data.gravity * gravity_scale * delta, 1800.0)
@@ -226,6 +227,7 @@ func step(command: FighterCommand, delta: float) -> void:
 	if action_buffer_time > 0.0:
 		_start_buffered_attack()
 	state = &"attack" if attack else (&"air" if not on_ground else (&"run" if absf(velocity.x) > 40.0 else &"idle"))
+	if hovering and not attack and not on_ground: state = &"hover"
 	move_body()
 	if not on_ground and grounded():
 		session.broadcast(&"land", {"fighter": self})
@@ -273,6 +275,9 @@ func _start_buffered_attack() -> void:
 	invulnerable = 0.0
 	session.broadcast(&"attack_start", {"fighter": self, "attack": attack, "special": attack_is_special})
 
+func can_dodge() -> bool:
+	return alive() and hitstop <= 0.0 and stun <= 0.0 and reserved_part < 0 and dodge_time <= 0.0 and dodge_cooldown <= 0.0 and (grounded() or air_boost_left) and (attack == null or (data.id == &"kuren" and attack_confirmed))
+
 func _start_dodge(command: FighterCommand, grounded: bool) -> void:
 	if not grounded and not air_boost_left:
 		return
@@ -302,6 +307,13 @@ func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
 	if not equipment.has(preferred):
 		preferred = &"shell" if equipment.has(&"shell") else &"weapon_arm"
 	var component: PartInstance = part(preferred)
+	var wear: float = move.component_damage * session.component_wear_scale
+	# A breaker can catch an already failing coupler even when the other plate holds.
+	if move.breaker and component and component.condition > wear:
+		var other := part(&"shell" if preferred == &"weapon_arm" else &"weapon_arm")
+		if other and other.condition <= wear:
+			component = other
+			preferred = other.definition.slot
 	var shielded: bool = part(&"shell") != null
 	var core_damage: float = move.damage * (0.2 if shielded else (1.15 if part(&"weapon_arm") == null else 1.0)) * data.incoming_damage_scale
 	if was_armored:
@@ -313,9 +325,9 @@ func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
 	credit_time = 5.0
 	contributors[source.slot] = session.elapsed
 	if component:
-		component.condition = maxf(0.0, component.condition - move.component_damage * session.component_wear_scale)
+		component.condition = maxf(0.0, component.condition - wear)
 		if component.condition <= 0.0 and move.breaker:
-			session.parts.break_part(self, preferred, Vector2(direction * 430.0, -680.0))
+			session.parts.break_part(self, preferred, move.ejection_velocity(direction))
 			source.parts_broken += 1
 	combo_hits += 1
 	combo_window = 0.7

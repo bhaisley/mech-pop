@@ -3,6 +3,7 @@ extends Node
 
 const MAX_LOOSE: int = 8
 const PICKUP_RANGE: float = 150.0
+const CLAIM_TIME: float = 0.18
 var aimed_salvage: bool = false
 var session: Node
 var instances: Dictionary = {}
@@ -41,7 +42,7 @@ func _drop(fighter: Fighter, item: PartInstance, impulse: Vector2, reason: Strin
 	item.drop_reason = reason
 	var body := SalvageBody.new()
 	body.part = item
-	body.position = fighter.position + Vector2(fighter.facing * 45.0, -fighter.data.height * 0.57)
+	body.position = socket_position(fighter, item.definition.slot)
 	body.velocity = impulse
 	item.entity = body
 	session.add_child(body)
@@ -55,7 +56,11 @@ func _drop(fighter: Fighter, item: PartInstance, impulse: Vector2, reason: Strin
 		if candidate == null:
 			break
 		retire(candidate.part)
-	session.broadcast(&"part_loose", {"part": item})
+	session.broadcast(&"part_loose", {"fighter": fighter, "part": item})
+
+func socket_position(fighter: Fighter, slot: StringName) -> Vector2:
+	var arm := slot == &"weapon_arm"
+	return fighter.position + Vector2(fighter.facing * (45.0 if arm else 12.0), -fighter.data.height * (0.57 if arm else 0.51))
 
 func nearest(fighter: Fighter) -> SalvageBody:
 	var closest: SalvageBody = null
@@ -98,7 +103,7 @@ func resolve_requests(requesters: Array[Fighter]) -> void:
 		body.part.state = &"claimed"
 		body.part.claimed_by = fighter.slot
 		fighter.reserved_part = body.part.uid
-		fighter.attach_time = 0.18
+		fighter.attach_time = CLAIM_TIME
 		fighter.invulnerable = 0.0
 		tie_turn = (fighter.slot + 1) % 4
 		session.broadcast(&"attach_start", {"fighter": fighter, "part": body.part})
@@ -109,7 +114,9 @@ func cancel_claim(fighter: Fighter) -> void:
 		item.state = &"loose"
 		item.claimed_by = -1
 		if is_instance_valid(item.entity):
-			item.entity.velocity = Vector2(0, -180)
+			item.entity.velocity = Vector2(-fighter.facing * 135.0, -260.0)
+			item.entity.settled = false
+			session.broadcast(&"fumble", {"fighter": fighter, "part": item, "position": item.entity.position})
 	fighter.reserved_part = -1
 	fighter.attach_time = 0.0
 
@@ -138,6 +145,11 @@ func commit_claim(fighter: Fighter) -> void:
 func step(delta: float) -> void:
 	for body in loose.duplicate():
 		body.step(delta)
+		if body.part.state == &"claimed":
+			var pilot: Fighter = session.fighters[body.part.claimed_by]
+			# Keep the module at its actual point of interruption, including in midair.
+			var fraction := delta / maxf(delta, pilot.attach_time + delta)
+			body.position = body.position.lerp(socket_position(pilot, body.part.definition.slot), fraction)
 		if body.lifetime <= 0.0:
 			if body.part.state == &"claimed":
 				cancel_claim(session.fighters[body.part.claimed_by])

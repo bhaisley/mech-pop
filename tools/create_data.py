@@ -21,6 +21,10 @@ def resource(path, class_name, script, fields, attacks=None):
         text += '[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]\n'
     for key, values in attacks.items():
         text += f'\n[sub_resource type="Resource" id="{key}"]\nscript = ExtResource("2")\n'
+        if key.lower() in ('uppercut', 'up_attack'):
+            text += 'ejection = 1\n'
+        elif key.lower() in ('slam', 'down_attack'):
+            text += 'ejection = 2\n'
         text += '\n'.join(f'{k} = {godot(v)}' for k, v in values.items()) + '\n'
     text += '\n[resource]\nscript = ExtResource("1")\n'
     text += '\n'.join(f'{k} = {godot(v)}' for k, v in fields.items()) + '\n'

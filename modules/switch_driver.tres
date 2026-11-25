@@ -20,6 +20,7 @@ feedback = &"switch"
 
 [sub_resource type="Resource" id="up_attack"]
 script = ExtResource("2")
+ejection = 1
 id = &"drive_lift"
 startup = 0.18
 active = 0.12
@@ -34,6 +35,7 @@ feedback = &"switch"
 
 [sub_resource type="Resource" id="down_attack"]
 script = ExtResource("2")
+ejection = 2
 id = &"drive_guard"
 startup = 0.23
 active = 0.1

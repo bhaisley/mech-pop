@@ -101,7 +101,7 @@ func _begin(config: Dictionary) -> void:
 	session.setup(router, roster, config)
 	session.combat_event.connect(_event)
 	if link.active: link.bind_match(session)
-	page.started(JSON.stringify({"stage": config.stage, "characters": roster, "online": link.active, "duel": duel, "pickupTrial": session.pickup_trial if duel else "", "friend": link.friend_duel, "duration": session.duration, "devices": router.devices.slice(0, roster.size())}))
+	page.started(JSON.stringify({"stage": config.stage, "characters": roster, "online": link.active, "duel": duel, "contested": duel and session.contested, "pickupTrial": session.pickup_trial if duel else "", "friend": link.friend_duel, "duration": session.duration, "devices": router.devices.slice(0, roster.size())}))
 
 func _lobby() -> void:
 	if not page: return
@@ -126,7 +126,9 @@ func _event(kind: StringName, data: Dictionary) -> void:
 			event["hitY"] = area.get_center().y
 			event["hitW"] = area.size.x
 			event["hitH"] = area.size.y
-	if data.get("part") is PartInstance: event["part"] = String(data.part.definition.id)
+	if data.get("part") is PartInstance:
+		event["part"] = String(data.part.definition.id)
+		event["partUid"] = data.part.uid
 	for key in ["armored", "shielded"]:
 		if data.has(key): event[key] = data[key]
 	if data.has("stolen"): event["stolen"] = data.stolen
@@ -168,7 +170,10 @@ func _process(delta: float) -> void:
 			"id": f.data.id, "device": device, "nearby": nearby, "nearbyUid": nearby_uid,
 			"moveId": String(f.attack.id) if f.attack else "", "serial": f.attack_serial,
 			"x": snappedf(point.x, 0.1), "y": snappedf(point.y, 0.1),
-			"vx": snappedf(f.velocity.x, 1), "facing": f.facing, "state": f.state,
+			"vx": snappedf(f.velocity.x, 1), "vy": snappedf(f.velocity.y, 1), "facing": f.facing, "state": f.state,
+			"cancelReady": f.data.id == &"kuren" and f.attack != null and f.attack_confirmed and f.can_dodge(),
+			"hoverLeft": f.hover_left, "claimUid": f.reserved_part,
+			"claimProgress": clampf(1.0 - f.attach_time / EquipmentStore.CLAIM_TIME, 0.0, 1.0) if f.reserved_part >= 0 else 0.0,
 			"grounded": f.grounded(), "attack": move_time, "hurt": minf(1.0, f.stun * 4.0),
 			"dead": not f.alive(), "safe": f.invulnerable > 0.0, "core": snappedf(f.core, 0.1),
 			"weapon": _part(f, &"weapon_arm"), "shell": _part(f, &"shell"),
@@ -178,7 +183,7 @@ func _process(delta: float) -> void:
 	var loose: Array = []
 	for item in session.parts.instances.values():
 		if item.state in [&"loose", &"claimed"] and is_instance_valid(item.entity):
-			loose.append([item.uid, item.definition.id, snappedf(item.entity.position.x, 0.1), snappedf(item.entity.position.y, 0.1), item.entity.age, item.entity.settled])
+			loose.append([item.uid, item.definition.id, snappedf(item.entity.position.x, 0.1), snappedf(item.entity.position.y, 0.1), item.entity.age, item.entity.settled, item.claimed_by])
 	var shots: Array = []
 	for shot in session.projectiles:
 		shots.append([shot.uid, shot.type, shot.position.x, shot.position.y, shot.facing, shot.source.slot, shot.age, String(shot.attack.id)])
@@ -193,6 +198,7 @@ func _process(delta: float) -> void:
 	if session is CannonDuel:
 		frame["duelStep"] = session.objective
 		frame["duelReason"] = session.ended_reason
+		frame["reclaims"] = session.reclaims
 		frame["pickupTrial"] = session.pickup_trial
 		frame["otherPickups"] = session.other_pickups
 		if not session.pickup_trial.is_empty() and session.completed_at >= 0.0:

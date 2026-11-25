@@ -41,12 +41,32 @@ func _run() -> void:
 	_roundtrip("broken part with one loose body")
 	host.parts.resolve_requests([collector])
 	check(item.claimed_by == collector.slot, "real salvage claim begins")
+	collector.attach_time = EquipmentStore.CLAIM_TIME * 0.5
+	host.parts.step(1.0 / 120.0)
 	_roundtrip("in-flight salvage reservation")
+	var remote_body: SalvageBody = replica.parts.instances[item.uid].entity
+	check(remote_body.position.is_equal_approx(item.entity.position) and replica.fighters[3].reserved_part == item.uid, "guest sees the same moving cannon and claimant")
+	host.parts.cancel_claim(collector)
+	var fumble := MatchWire.event_to_wire(&"fumble", {"fighter": collector, "part": item, "position": item.entity.position})
+	check(MatchLink.EVENT_KINDS.has("fumble") and MatchWire.valid_event(fumble) and MatchWire.event_from_wire(replica, fumble).part.uid == item.uid, "replicated fumble cue identifies the dropped cannon")
+	_roundtrip("interrupted cannon at its in-flight position")
+	check(replica.parts.instances[item.uid].claimed_by == -1 and replica.fighters[3].reserved_part == -1, "both guest reservations clear on a fumble")
+	host.parts.resolve_requests([collector])
 	collector.attach_time = 0.0
 	host.parts.commit_claim(collector)
 	_roundtrip("stolen weapon and dropped previous arm")
 	check(replica.fighters[3].part(&"weapon_arm").definition.id == &"pile_cannon", "replica shows the actual stolen cannon")
 	check(replica.fighters[3].steals == 1, "authoritative steal count copied once")
+	collector.state = &"hover"
+	collector.hover_left = 0.12
+	var kuren := host.fighters[1]
+	kuren.attack = kuren.data.light
+	kuren.attack_confirmed = true
+	_roundtrip("late Momo hover and Kuren hit-confirm")
+	check(replica.fighters[3].state == &"hover" and is_equal_approx(replica.fighters[3].hover_left, 0.12), "guest sees Momo's remaining hover fuel")
+	check(replica.fighters[1].attack_confirmed and replica.fighters[1].can_dodge(), "guest sees Kuren's open cancel window")
+	kuren.attack = null
+	kuren.attack_confirmed = false
 	collector.attack = item.definition.attack
 	collector.attack_is_special = true
 	collector.attack_serial = 8

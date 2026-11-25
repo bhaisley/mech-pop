@@ -33,6 +33,7 @@ movement = 220.0
 
 [sub_resource type="Resource" id="Uppercut"]
 script = ExtResource("2")
+ejection = 1
 id = &"nova_uppercut"
 startup = 0.14
 active = 0.09
@@ -49,6 +50,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="Slam"]
 script = ExtResource("2")
+ejection = 2
 id = &"nova_slam"
 startup = 0.2
 active = 0.095

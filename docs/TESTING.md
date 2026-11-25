@@ -2,6 +2,14 @@
 
 The **native 0.2.0 preview, build 16**, shipped with eight fighters, sixteen interchangeable equipment parts and five arenas. Its release tag preserves that native build’s source. The complete private development record also retains failed investigations and raw device diagnostics.
 
+## Cannon Scramble browser release 0.5.0
+
+- In Chrome on Skyport, Nova slammed the cannon close and won with one-handed WASD. With standard Gamepad API input, Terra recovered his original cannon after a forward break, then Nova broke it off again, stole it and landed the winning shot in the same round. With touch input in a phone viewport, Nova uppercut the cannon, jumped to meet it, claimed it in midair and won.
+- A four-seat local match exercised Terra’s planted rear heel and compressing knees on a cannon discharge, Momo’s changing leg tuck as hover fuel ran down, and Kuren’s heel jets during a confirmed hit into a dodge. A real ring-out shed the chassis pieces. Separate renderer checks covered the eight strides, wrist retainers, exposed reactors and repeated catch poses.
+- Two Chrome profiles shared a Friend Duel invite, switched chassis between rounds, finished a first-to-two set and started a fresh set at 0–0. The four-seat gateway completed a round and rematch with two browsers and two bots. Original practice, the nearest/aimed pickup trials and desktop, portrait and landscape hangars also passed.
+- Godot passed 47 duel, 83 network-state, 89 combat-system, 112 arena and 535 expansion checks, including the 512 possible loadouts. These cover both facings, an interrupted in-flight claim and replication of the original part, hover fuel and cancel state.
+- Controller and touch inputs were simulated in Chrome on one Mac. Hands-on device testing and Friend Duels between separate internet connections remain open.
+
 ## Friend Duels browser release 0.4.0
 
 - Two isolated Chrome profiles on one Mac followed a shared invite through the public signaling service. They readied distinct mechs, played two full 90-second rounds, changed chassis at 1–0 and finished 2–0. Both clients reported matching final simulations. Starting a new set reset both scores to zero.

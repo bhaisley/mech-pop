@@ -34,6 +34,7 @@ movement = 130.0
 
 [sub_resource type="Resource" id="uppercut"]
 script = ExtResource("2")
+ejection = 1
 id = &"terra_uppercut"
 startup = 0.22
 active = 0.11
@@ -50,6 +51,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="slam"]
 script = ExtResource("2")
+ejection = 2
 id = &"terra_slam"
 startup = 0.255
 active = 0.12

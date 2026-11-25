@@ -8,6 +8,12 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ## Browser edition
 
+**Cannon Scramble · v0.5.0.** Choose **Rematch Terra** in the hangar or after winning the practice duel. On Skyport, Terra chases his Pile Cannon, can knock it out of your hands during a catch and can take it back. If he gets there first, break it off again. Win by hitting him with his own cannon.
+
+On the one-handed layout, **S + E** slams the part down close, **E** sends it forward, and **W + E** launches it for an aerial catch. Press **F** within reach of the outlined part. The loose mount opens before it breaks, and the cannon travels to the new pilot’s wrist during the 0.18-second catch. Face Terra and press **R** to fire.
+
+[See the Skyport cannon pickup](docs/media/cannon-scramble.webp)
+
 **Friend Duels · v0.4.0.** Choose **Play with a friend** in the hangar, then **Copy invite**. Your friend opens the link, picks a mech and input, and chooses **Join duel**. The host picks one of eight arenas. When both players press **Ready up**, the round begins. The host’s browser runs the match, so keep the game tab visible. Each round lasts 90 seconds. Win two rounds to take the set. **Rematch** keeps the score, **Switch mech** lets you change chassis between rounds, and **New set** starts you both at 0–0.
 
 To compare pickup controls, open **Controls → How to play** and choose **Try nearest pickup** or **Try aimed pickup**. Both trials put Terra’s cannon and shell within reach. Look for the yellow outline, take the cannon and land a shot. Aimed pickup favors the direction you hold. Neutral input and regular matches use the nearest part. Each trial shows your time to hit and how many other parts you took.

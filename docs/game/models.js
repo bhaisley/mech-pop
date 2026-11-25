@@ -96,24 +96,27 @@
   }
 
   // A fixed camera-space key keeps the face readable under every stage's light.
-  // Paint has a narrow bevel glint. Lenses retain their local emission in shadow.
+  // Broad enamel reflections stop at the matte seals and brushed-metal joints.
   const paint = new T.ShaderMaterial({
     uniforms: {impact: {value: 0}},
     vertexColors: true,
     vertexShader: `
       attribute float emission;
+      attribute float finish;
       varying vec3 pigment;
       varying vec3 nView;
       varying vec3 toEye;
       varying float lightPart;
+      varying float enamel;
       void main() {
         vec4 p = modelViewMatrix * vec4(position, 1.);
-        pigment = color; lightPart = emission;
+        pigment = color; lightPart = emission; enamel = finish;
         nView = normalMatrix * normal; toEye = -p.xyz;
         gl_Position = projectionMatrix * p;
       }`,
     fragmentShader: `
       uniform float impact;
+      varying float enamel;
       varying vec3 pigment;
       varying vec3 nView;
       varying vec3 toEye;
@@ -124,9 +127,10 @@
         float d = dot(n,sun);
         vec3 shade = mix(vec3(.32,.37,.52),vec3(.62,.70,.82),smoothstep(-.16,-.08,d));
         shade = mix(shade,vec3(.99,.99,1.02),smoothstep(.38,.46,d));
-        float shine = smoothstep(.90,.95,dot(n,normalize(sun+v))) * (.035 + .035*max(d,0.));
+        float h = dot(n,normalize(sun+v));
+        float shine = enamel * (.105*smoothstep(.73,.81,h) + .125*smoothstep(.93,.97,h));
         float rim = pow(1.-max(0.,dot(n,v)),3.);
-        vec3 base = pigment*shade*(.93+.085*max(0.,d)) + vec3(.70,.84,1.)*shine + pigment*rim*.15;
+        vec3 base = pigment*shade*(.76+.20*enamel+.08*max(0.,d)) + vec3(.76,.88,1.)*shine + pigment*rim*(.06+.14*enamel);
         base = mix(base, pigment*1.04, lightPart);
         gl_FragColor = vec4(mix(base, vec3(1.,.87,.60), impact),1.);
         #include <colorspace_fragment>
@@ -158,6 +162,7 @@
       this.outward = [];
       this.color = [];
       this.emission = [];
+      this.finish = [];
       this.indices = [];
     }
     add(geo, col, xyz = origin, scale = unit, rotation = origin, emission = 0) {
@@ -185,6 +190,7 @@
         geo.userData.inkNormals = keys.map(k => summed.get(k).normalize());
       }
       const base = this.pos.length / 3;
+      const finish = col === ink || col === joint ? 0 : col === iron || col === silver ? .32 : 1;
       for (let k = 0; k < pos.count; k++) {
         v0.fromBufferAttribute(pos, k).applyMatrix4(matrix);
         this.pos.push(v0.x, v0.y, v0.z);
@@ -194,6 +200,7 @@
         this.outward.push(v0.x, v0.y, v0.z);
         this.color.push(C.r, C.g, C.b);
         this.emission.push(emission);
+        this.finish.push(finish);
       }
       for (let i = 0; i < n; i++) {
         let at = i;
@@ -206,7 +213,7 @@
       const geo = new T.BufferGeometry();
       for (const [name, values, n] of [
                ['position', this.pos, 3], ['normal', this.normal, 3], ['inkNormal', this.outward, 3],
-               ['color', this.color, 3], ['emission', this.emission, 1]])
+               ['color', this.color, 3], ['emission', this.emission, 1], ['finish', this.finish, 1]])
         geo.setAttribute(name, new T.Float32BufferAttribute(values, n));
       geo.setIndex(this.indices);
       geo.computeBoundingSphere();
@@ -946,6 +953,34 @@
     rail_lance: [0, 0, 1.34],
     switch_driver: [0, 0, .88]
   };
+  // Steps per distance, stride angle, vertical travel, forward lean and leading knee.
+  const gaits = {
+    nova:   {pace: 13, stride: .71, lift: .042, lean: .11, tuck: .63},
+    kuren:  {pace: 17, stride: .91, lift: .022, lean: .32, tuck: .85},
+    terra:  {pace: 8,  stride: .49, lift: .068, lean: .09, tuck: .37},
+    momo:   {pace: 11, stride: .46, lift: .10,  lean: -.04,tuck: .88},
+    shadow: {pace: 16, stride: .84, lift: .016, lean: .39, tuck: 1.08},
+    lumi:   {pace: 10, stride: .63, lift: .067, lean: .02, tuck: .45},
+    kai:    {pace: 9,  stride: .98, lift: .038, lean: .19, tuck: .76},
+    zero:   {pace: 15, stride: .57, lift: .027, lean: .16, tuck: .52}
+  };
+  function retainer(side) {
+    return rigid('retainer/' + side, b => {
+      const x = side;
+      barrel(b, [x*.063,0,.01], [x*.17,0,.01], .075,.075, joint, 8);
+      plate(b, [[-.064,-.078],[.067,-.07],[.085,.031],[.039,.11],[-.054,.08]],
+          .065, silver, [x*.151,0,.079], origin, [x,1,1]);
+      plate(b, [[-.045,-.038],[.044,-.038],[.055,.022],[-.037,.044]], .015,
+          0xffc04b, [x*.151,0,.085], origin, [x,1,1], .004, .65);
+    });
+  }
+  function heelJet(id) {
+    return rigid(id + '/heel exhaust', b => {
+      const tail = id === 'kuren' ? [0,-.11,-.44] : [0,-.35,-.14];
+      barrel(b, [0,0,0], tail, .080,.006,palettes[id].light,6,.95);
+      barrel(b, [0,0,.015], tail.map(v => v*.59), .048,.005,ivory,6,1);
+    });
+  }
   function create(id = 'nova') {
     if (!palettes[id])
       throw new Error('Unknown MECH★POP chassis: ' + id);
@@ -978,13 +1013,16 @@
       zero: [.99, .945, 1.05]
     };
     helmetShell.scale.fromArray(proportions[id] || unit);
-    const arms = [], legs = [];
+    const arms = [], legs = [], popPlates = [];
+    const gait = gaits[id], heelPoint = new T.Vector3(), heelTarget = new T.Vector3();
+    let stridePhase = blinkPhase, plantedX = null;
     const bulk = id === 'terra' ? 1.12 : (id === 'momo' ? .94 : 1);
     let socket, armItem, shellItem, weaponId, shellId;
     const breast = group(upper, 0, .213, 0);
     for (const s of [-1, 1]) {
       const shoulderPivot = group(upper, s * .380 * bulk, .365, -.009);
       const cap = shoulder(id, s);
+      popPlates.push(cap);
       shoulderPivot.add(cap);
       if (id === 'terra')
         cap.scale.set(1.22, 1.10, 1.14);
@@ -996,9 +1034,25 @@
       const hip = group(body, s * .208 * bulk, .750, 0);
       hip.add(leg(id, s, false));
       const knee = group(hip, 0, -.310, .021);
-      knee.add(leg(id, s, true));
-      legs.push({s, hip, knee});
+      const shin = leg(id, s, true);
+      knee.add(shin);
+      if (s > 0) popPlates.push(shin);
+      const heel = group(knee, 0, -.425, -.083);
+      const jet = id === 'kuren' || id === 'momo' ? heelJet(id) : null;
+      if (jet) { heel.add(jet); jet.visible = false; }
+      legs.push({s, hip, knee, heel, jet});
     }
+    const jaws = [-1,1].map(side => {
+      const jaw = retainer(side);
+      socket.add(jaw);
+      return jaw;
+    });
+    const exposedCore = rigid('exposed reactor', b => {
+      for (const [w,h,z,c,em] of [[.20,.25,.17,ink,0],[.152,.20,.21,silver,0],
+          [.115,.156,.245,0xff3383,.94],[.049,.096,.28,0xfff1bd,1]])
+        plate(b, [[0,h],[w,0],[0,-h],[-w,0]], .027, c, [0,0,z], origin, unit, .008, em);
+    });
+    breast.add(exposedCore);
     function setLoadout(w = null, sh = null) {
       if (w !== weaponId) {
         if (armItem)
@@ -1007,7 +1061,7 @@
         if (armItem)
           socket.add(armItem);
         weaponId = w;
-        const hand = w ? socket : arms[1].elbow;
+        const hand = w ? armItem : arms[1].elbow;
         hand.add(grip, tip);
         grip.position.set(0, w ? 0 : -.16, w ? .20 : .07);
         tip.position.fromArray(weaponEnds[w] || [0, -.29, .18]);
@@ -1020,6 +1074,7 @@
           breast.add(shellItem);
         shellId = sh;
       }
+      exposedCore.visible = !shellId;
     }
     function pose({
       time = 0,
@@ -1033,30 +1088,34 @@
       facing = 1,
       preview = false,
       dash = 0,
+      dt = 0, vy = 0, hovering = false, hoverLeft = 0, cancelReady = false,
+      weaponWear = 0, shellWear = 0, claim = 0, fumble = 0, reducedMotion = false,
       dead = false
     } = {}) {
       const walk = Math.min(1, Math.abs(move)), flight = Number(Boolean(airborne)),
             lunge = Math.min(1, Number(dash) || 0);
       const hit = Math.min(1, Number(hurt) || 0), swing = Math.min(1, Number(attack) || 0);
-      const pace = time * (id === 'terra' ? 10 : 13), stride = Math.sin(pace) * walk;
+      stridePhase += gait.pace * walk * dt;
+      const stride = Math.sin(stridePhase) * walk;
       const breathing = Math.sin(time * 2.1) * .014;
       root.visible = !dead;
       armorPaint.uniforms.impact.value = impact;
       mirror.scale.x = facing < 0 ? -1 : 1;
       balance.position.x = 0;
+      balance.position.y = 0;
       balance.rotation.z = recoil * .32;
       upper.scale.set(1, 1, 1);
       const hero = preview ? 1 : 0;
       body.rotation.y = hero ? .46 + Math.sin(time * .42) * .10 : .94 + walk * .07;
-      body.rotation.x = .034 + walk * .115 + swing * .12 - hit * .095 + lunge * .20 +
+      body.rotation.x = .034 + walk * gait.lean + swing * .12 - hit * .095 + lunge * .20 +
           hero *
               (id === 'shadow'    ? .11 :
                    id === 'terra' ? .08 :
                                     0);
       body.scale.set(bulk, id === 'momo' ? .94 : (id === 'terra' ? 1.035 : 1), 1);
-      body.position.y = breathing + .026 * Math.abs(stride) - .022 * swing;
-      upper.rotation.y = -.09 - stride * .11 - swing * .37 + hit * .11;
-      upper.rotation.z = -.017 + swing * .09 - hit * .08;
+      body.position.y = breathing + gait.lift * Math.abs(stride) - .022 * swing;
+      upper.rotation.set(0, -.09 - stride * .11 - swing * .37 + hit * .11,
+          -.017 + swing * .09 - hit * .08);
       upper.position.y = .805 + breathing * .28 - (walk * .027);
       const cycle = (time + blinkPhase) % 4.9;
       const blink = hero && cycle > 4.72 ? Math.sin((cycle - 4.72) * Math.PI / .18) : 0;
@@ -1067,11 +1126,19 @@
       head.rotation.set(
           -.025 - body.rotation.x * .65 + hit * .17 + (id === 'kuren' || id === 'terra' ? .065 : 0),
           -.05 - upper.rotation.y * .60 + Math.sin(time * .7) * .014, headTilt - hit * .09);
-      for (const {s, hip, knee} of legs) {
+      const hoverTuck = hovering ? .32 + .68 * Math.min(1, hoverLeft / .25) : 0;
+      const descent = flight * Math.min(1, Math.max(0, vy) / 700);
+      if (id === 'shadow') upper.position.y -= .12*walk;
+      if (id === 'lumi') head.rotation.z += .092*stride;
+      for (const {s, hip, knee, jet} of legs) {
         hip.rotation.set(
-            -.14 + s * .08 + stride * s * .64 - flight * (s < 0 ? .60 : .13) - lunge * s * .33, s * .16,
+            -.14 + s * .08 + stride * s * gait.stride - flight * (s < 0 ? gait.tuck : .13) * (1 - descent*.7) - lunge * s * .33 - .65*hoverTuck, s * .16,
             s * (id === 'terra' ? .21 : .14));
-        knee.rotation.x = .13 + Math.max(0, -stride * s) * .52 + flight * (s < 0 ? .63 : .72) + lunge * .23;
+        knee.rotation.x = .13 + Math.max(0, -stride * s) * gait.stride + flight * (s < 0 ? .63 : .72)*(1-descent*.75) + lunge * .23 + hoverTuck*.89;
+        if (jet) {
+          jet.visible = id === 'kuren' ? cancelReady : hovering;
+          jet.scale.setScalar(id === 'kuren' ? 1.15 : .62 + hoverTuck*.5);
+        }
       }
       const thrust = [
         'pile_cannon', 'rail_lance', 'prism_emitter', 'burst_knuckle', 'switch_driver', 'halo_caster'
@@ -1090,6 +1157,12 @@
               idleAngle - swing * (thrust ? .1 : .80) - flight * .08, -.085 + swing * .34, .045 - swing * .38);
         } else {
           elbow.rotation.set(-.29 - Math.max(0, -stride * s) * .27 - swing * .29, s * -.05, s * .08);
+          if (!preview && s > 0) {
+            if (id === 'kuren' || id === 'shadow') shoulder.rotation.x += .76*walk;
+            if (id === 'momo' || id === 'lumi') shoulder.rotation.z += .47*walk + .45*hoverTuck;
+            if (id === 'kai') shoulder.rotation.y -= .52*walk;
+            if (id === 'zero') { shoulder.rotation.x -= .36; elbow.rotation.x -= .69; }
+          }
           if (hero && s > 0) {
             if (id === 'momo') {
               shoulder.rotation.z += 1.32;
@@ -1155,6 +1228,43 @@
           socket.quaternion.slerp(parentRotation.multiply(aim), weight);
         }
       }
+      const brace = id === 'terra' && !airborne && motion?.id === 'fire' ? motion.weight : 0;
+      if (brace) {
+        upper.position.y -= .13*brace;
+        upper.rotation.x += .23*motion.strike - .12*motion.wind;
+        for (const {s, hip, knee} of legs) {
+          hip.rotation.x -= (.36 + s*.17)*brace;
+          knee.rotation.x += .66*brace;
+        }
+        legs[0].heel.getWorldPosition(heelPoint);
+        if (plantedX === null) plantedX = heelPoint.x;
+        heelTarget.copy(heelPoint).x = plantedX;
+        mirror.worldToLocal(heelTarget);
+        mirror.worldToLocal(heelPoint);
+        balance.position.x += T.MathUtils.clamp(heelTarget.x - heelPoint.x, -.45, .45)*brace;
+        balance.position.y -= heelPoint.y*brace;
+      } else plantedX = null;
+      if (claim > 0 || fumble > 0) {
+        const reach = claim > 0 ? Math.sin(Math.PI*(.12+.88*claim)) : 0;
+        upper.rotation.x += .46*reach - .23*fumble;
+        upper.position.y -= .15*reach;
+        for (const {s, shoulder, elbow} of arms) {
+          shoulder.rotation.x -= (s > 0 ? 1.35 : .77)*reach;
+          shoulder.rotation.z += s*(.55*fumble-.19*reach);
+          elbow.rotation.x += .75*claim - .25*reach;
+        }
+      }
+      const vibration = reducedMotion ? 0 : Math.sin(time*31 + blinkPhase);
+      for (let j=0; j<jaws.length; j++)
+        jaws[j].position.x = (j ? 1 : -1)*(.13*weaponWear+.045*Math.sin(Math.PI*claim));
+      if (armItem) {
+        armItem.position.z = weaponWear*(.18+.035*vibration);
+        armItem.rotation.z = weaponWear*(.095+.085*vibration);
+      }
+      if (shellItem) {
+        shellItem.position.z = shellWear*(.15+.023*vibration);
+        shellItem.rotation.z = shellWear*(.065+.035*vibration);
+      }
     }
     tintable(root);
     setLoadout(palettes[id].weapon, palettes[id].shell);
@@ -1163,6 +1273,8 @@
       root,
       grip,
       tip,
+      popPlates,
+      mountFor: slot => slot === 'weapon_arm' ? armItem || socket : shellItem || breast,
       setLoadout,
       pose,
       dispose() {

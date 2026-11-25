@@ -46,14 +46,20 @@
     },
     {
       "file": "docs/media/browser-hangar.webp",
-      "sha256": "3eb1a3bb33b7ef865706db6c6b41e986d6e7fc26d2878ab389286cfe7e790ebf",
-      "description": "Chrome capture of the 0.4.0 Friend Duels hangar with Nova, the eight-mech roster and the invite button.",
+      "sha256": "5a437f9a4730d71dccd14eb14d820bc934e3a82b7185d7162fea22f1ce7fc282",
+      "description": "Chrome capture of the 0.5.0 hangar with the eight-mech roster and Rematch Terra.",
       "retouched": false
     },
     {
       "file": "docs/media/browser-battle.webp",
       "sha256": "01547dd8b8189074692967c7861dfaa793ae5941f23f7faf3bada4f31f618a0c",
       "description": "Chrome capture of a four-bot Three.js match on Neon Alley with Nova, Kuren, Terra and Momo.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/cannon-scramble.webp",
+      "sha256": "8d84da8767776d3b33b0eb088c25566c2cf8a79d8d9bdd46b219e686bce7e2c6",
+      "description": "Chrome capture of a playable Skyport rematch just after Nova slams Terra’s Pile Cannon onto the deck.",
       "retouched": false
     }
   ],

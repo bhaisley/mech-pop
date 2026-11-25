@@ -36,6 +36,7 @@ projectile_radius = Vector2(55, 48)
 
 [sub_resource type="Resource" id="uppercut"]
 script = ExtResource("2")
+ejection = 1
 id = &"momo_uppercut"
 startup = 0.14
 active = 0.1
@@ -51,6 +52,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="slam"]
 script = ExtResource("2")
+ejection = 2
 id = &"momo_slam"
 startup = 0.185
 active = 0.1

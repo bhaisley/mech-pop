@@ -32,6 +32,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="uppercut"]
 script = ExtResource("2")
+ejection = 1
 id = &"zero_uppercut"
 startup = 0.16
 active = 0.095
@@ -46,6 +47,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="slam"]
 script = ExtResource("2")
+ejection = 2
 id = &"zero_slam"
 startup = 0.205
 active = 0.11

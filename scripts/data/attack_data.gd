@@ -13,6 +13,8 @@ extends Resource
 @export var offset: Vector2 = Vector2(82.0, -92.0)
 @export var size: Vector2 = Vector2(145.0, 78.0)
 @export var breaker: bool = false
+enum Ejection { FORWARD, RISE, DROP }
+@export var ejection: Ejection = Ejection.FORWARD
 @export var target_slot: StringName = &"weapon_arm"
 @export var movement: float = 0.0
 @export var feedback: StringName = &"light"
@@ -25,6 +27,12 @@ extends Resource
 
 func total_time() -> float:
 	return startup + active + recovery
+
+func ejection_velocity(direction: float) -> Vector2:
+	match ejection:
+		Ejection.RISE: return Vector2(direction * 115.0, -1020.0)
+		Ejection.DROP: return Vector2(-direction * 105.0, 440.0)
+		_: return Vector2(direction * 690.0, -350.0)
 
 func is_active(time: float) -> bool:
 	return time >= startup and time < startup + active

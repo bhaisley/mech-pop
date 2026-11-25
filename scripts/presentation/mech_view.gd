@@ -97,7 +97,7 @@ func _process(delta: float) -> void:
 	rig.position.y = absf(stride) * (0.055 if running else 0.06)
 	rig.rotation.z = -fighter.velocity.x * fighter.facing / 8500.0
 	head.rotation.z = -rig.rotation.z * 0.5
-	if fighter.state == &"air":
+	if fighter.state in [&"air", &"hover"]:
 		left_leg.rotation.z = -0.38
 		right_leg.rotation.z = 0.32
 		left_arm.rotation.z = -0.55

@@ -111,13 +111,20 @@
   }
   function state(device) {
     if (!states.has(device))
-      states.set(device, {x: 0, y: 0, jump: false, edges: 0, buttons: []});
+      states.set(device, {x: 0, y: 0, jump: false, edges: 0, buttons: [], aimPriority: 0});
     return states.get(device);
   }
   function edge(s, action) {
     const n = actions.indexOf(action);
     if (n >= 0)
       s.edges |= 1 << n;
+    // Preserve a quick directional chord until the simulation consumes this press.
+    const priority = action === 'special' ? 3 : action === 'heavy' ? 2 : action === 'salvage' ? 1 : 0;
+    if (priority && priority >= s.aimPriority) {
+      s.aimPriority = priority;
+      s.pressX = s.x;
+      s.pressY = s.y;
+    }
   }
   function clear() {
     held.clear();
@@ -126,6 +133,7 @@
       s.y = 0;
       s.jump = false;
       s.edges = 0;
+      s.aimPriority = 0;
     }
     stickPointer = null;
     stick.firstElementChild.style.transform = '';
@@ -153,8 +161,8 @@
     e.preventDefault();
     if (!e.repeat && !held.has(e.code)) {
       held.add(e.code);
-      edge(state(-1), action);
       keyboardAxes();
+      edge(state(-1), action);
     }
   });
   window.addEventListener('keyup', e => {
@@ -266,8 +274,9 @@
   });
   function read(device) {
     const s = state(device), quant = v => Math.max(0, Math.min(254, Math.round((v + 1) * 127)));
-    const bits = quant(s.x) | (quant(s.y) << 8) | (Number(s.jump) << 16) | (s.edges << 17);
+    const bits = quant(s.aimPriority ? s.pressX : s.x) | (quant(s.aimPriority ? s.pressY : s.y) << 8) | (Number(s.jump) << 16) | (s.edges << 17);
     s.edges = 0;
+    s.aimPriority = 0;
     return bits;
   }
   window.MechControls = {

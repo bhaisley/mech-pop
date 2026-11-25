@@ -32,6 +32,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="uppercut"]
 script = ExtResource("2")
+ejection = 1
 id = &"kai_uppercut"
 startup = 0.2
 active = 0.09
@@ -47,6 +48,7 @@ feedback = &"heavy"
 
 [sub_resource type="Resource" id="slam"]
 script = ExtResource("2")
+ejection = 2
 id = &"kai_slam"
 startup = 0.265
 active = 0.095
