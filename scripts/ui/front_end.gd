@@ -371,28 +371,27 @@ func _input_picker() -> void:
 
 func _arena() -> void:
 	label("PICK YOUR PLAYGROUND", Vector2(72, 52), 76, Color.WHITE, 0, heading)
-	label("Five arenas. Five battle themes. A whole lot of loose parts.", Vector2(78, 151), 28, Color("a5c7dc"))
 	var selected: StringName = app.network.selected_stage if app.network.active else app.selected_stage
 	for index in range(StageCatalog.IDS.size()):
 		var id: StringName = StageCatalog.IDS[index]
 		var arena: StageData = StageCatalog.stage(id)
-		var x: float = 73 + index * 357
-		panel(Rect2(x, 233, 336, 622), Color("172b43"), arena.accent if id == selected else Color("34506b"))
+		var x: float = 73 + (index % 4) * 448
+		var y: float = 175 + floorf(float(index) / 4.0) * 354
+		panel(Rect2(x, y, 429, 335), Color("172b43"), arena.accent if id == selected else Color("34506b"))
 		if ResourceLoader.exists(arena.matte):
 			var thumbnail := TextureRect.new()
 			thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 			thumbnail.texture = load(arena.matte)
-			thumbnail.position = Vector2(x + 12, 245)
-			thumbnail.size = Vector2(312, 250)
+			thumbnail.position = Vector2(x + 10, y + 10)
+			thumbnail.size = Vector2(409, 139)
 			thumbnail.clip_contents = true
 			thumbnail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			canvas.add_child(thumbnail)
-			thumbnail.set_deferred("size", Vector2(312, 250))
-		label("%02d" % (index + 1), Vector2(x + 23, 509), 24, arena.accent, 0, bold)
-		label(arena.display_name, Vector2(x + 22, 550), 43, Color.WHITE, 295, heading)
-		label(arena.description, Vector2(x + 23, 631), 24, Color("afcadd"), 290)
-		arena_choices.append(button("SELECTED" if id == selected else "PLAY HERE  →", Rect2(x + 15, 769, 306, 63), func() -> void: app._choose_stage(id), id == selected, id == selected))
+			thumbnail.set_deferred("size", Vector2(409, 139))
+		label(arena.display_name, Vector2(x + 16, y + 151), 37, Color.WHITE, 401, heading)
+		label(arena.description, Vector2(x + 17, y + 202), 22, Color("afcadd"), 396)
+		arena_choices.append(button("SELECTED" if id == selected else "PLAY HERE  →", Rect2(x + 12, y + 271, 405, 53), func() -> void: app._choose_stage(id), id == selected, id == selected))
 	arena_choices.append(button("BACK", Rect2(74, 924, 266, 67), func() -> void: app._show(&"network" if app.network.active else &"select")))
 	label("STICK / D-PAD: CHOOSE ARENA     A / CROSS: SELECT     B / CIRCLE: BACK", Vector2(405, 946), 25, Color("a5c7dc"))
 
@@ -520,7 +519,7 @@ func _credits() -> void:
 	label("MADE WITH OPEN TOOLS", Vector2(80, 437), 33, Color("89d2e4"), 0, bold)
 	label("Godot Engine 4.7.2  /  MIT license\nBlender 4.5 LTS  /  original models and attachment rigs\nSuperCollider 3.14.1  /  original synthesized sound effects\nFFmpeg & NumPy  /  audio finishing and verification\nBarlow typefaces by Jeremy Tribby  /  SIL Open Font License 1.1", Vector2(85, 498), 28, Color("b4cedf"))
 	label("GENERATED ART & MUSIC", Vector2(1048, 435), 33, Color("89d2e4"), 0, bold)
-	label("Five arena mattes and Nova construction reference: ImageGen.\nMusic generated with MiniMax Music 3, then edited for this game.\nBuilt with MiniMax-Music3.\n\nPrompts, source files and license notices accompany the project.\nThe MiniMax Music 3 community license has additional\ncommercial conditions; see the included license inventory.", Vector2(1054, 498), 25, Color("b4cedf"), 770)
+	label("Eight arena mattes and the Nova reference use ImageGen.\nThree instrumental scores rendered with YuE2-3B by M-A-P.\nOriginal arena music generated with MiniMax Music 3.\nBuilt with MiniMax-Music3.\n\nPrompts, source files and license notices accompany the project.\nThe MiniMax Music 3 community license has additional\ncommercial conditions; see the included license inventory.", Vector2(1054, 498), 25, Color("b4cedf"), 770)
 	label("Thank you for playing. Now go steal something ridiculous.", Vector2(85, 806), 33, Color("e8f1f8"))
 	button("BACK TO THE HANGAR", Rect2(78, 918, 614, 73), app._back, true, true)
 

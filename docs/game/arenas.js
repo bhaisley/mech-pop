@@ -311,11 +311,64 @@
     }
   }
 
+  function pressureHull(b, w, d, h, main, ferry, c) {
+    // Watertight pontoons with a glazed inspection strip and pressure bands.
+    const n = main ? 6 : 2, span = w*.91/n;
+    for (let i = 0; i < n; i++) {
+      const x = (i-(n-1)/2)*span, depth = main ? .82 : .51, front = d*.39;
+      b.slab(x, 0, -h+.045, -h-depth, span*.97, d*.84, .3, c.metal, .15, .10);
+      b.fascia(x, -h-depth*.44, front+.012, span*.73, depth*.45, .14, c.ink);
+      for (let j = -1; j <= 1; j++)
+        b.fascia(x+j*span*.22, -h-depth*.43, front+.025, span*.17, depth*.27, .07, c.accent);
+      for (const side of [-1, 1])
+        b.slab(x+side*span*.40, 0, -h+.06, -h-depth*.88, .10, d*.9, .035, c.trim);
+    }
+    if (ferry)
+      for (const x of [-w*.32,w*.32])
+        b.lathe(x, 0, [[-h-.36,.32,.22,c.dark],[-h-.60,.41,.26,c.metal],[-h-.69,.36,.23,c.bulb]],12);
+  }
+
+  function castingBed(b, w, d, h, main, lift, c) {
+    const n = main ? 7 : 2, span = w*.94/n, drop = main ? .95 : .55;
+    b.slab(0, 0, -h+.01,-h-drop*.29,w*.96,d*.82,.15,c.dark,.04);
+    b.slab(0, 0, -h-drop*.77,-h-drop,w*.88,d*.66,.15,c.metal,.05);
+    for (let i = 0; i < n; i++) {
+      const x = (i-(n-1)/2)*span;
+      for (const side of [-1,1])
+        b.bar([x+side*span*.41,-h,d*.28],[x,-h-drop*.81,d*.28],.070,c.worn,5);
+      b.fascia(x, -h-drop*.46,d*.27,span*.43,drop*.33,.045,c.accent);
+      for (let k = -1; k <= 1; k++)
+        b.fascia(x+k*span*.13, -h-drop*.46,d*.28,span*.043,drop*.34,.013,c.ink,.24);
+    }
+    if (lift)
+      b.lathe(0,0,[[-h-.20,.71,.48,c.worn],[-h-.50,.62,.42,c.trim],[-h-.67,.45,.35,c.ink]],12);
+  }
+
+  function relayKeel(b, w, d, h, main, lift, c) {
+    const n = main ? 8 : 2, span = w*.90/n;
+    b.slab(0, 0, -h+.03,-h-.25,w*.93,d*.85,.22,c.pale,.11);
+    for (let i=0; i<n; i++) {
+      const x=(i-(n-1)/2)*span, depth=main ? .78+.23*(i%3) : .49;
+      b.slab(x,0,-h-.17,-h-.40,span*.81,d*.69,.16,c.dark,.07);
+      b.tri([x-span*.35,-h-.30,d*.30],[x+span*.33,-h-.30,d*.30],
+          [x+span*.11,-h-depth,d*.21],c.accent);
+      b.tri([x+span*.33,-h-.30,d*.30],[x+span*.28,-h-.31,-d*.21],
+          [x+span*.11,-h-depth,d*.21],c.worn);
+      b.fascia(x,-h-.27,d*.35,span*.55,.068,.025,c.trim);
+    }
+    if (lift)
+      for (const x of [-w*.31,w*.31])
+        b.bar([x,-h,-.40],[x,-h-.38,-.96],.095,c.metal,8);
+  }
+
   const keels = {
     skyport: skyKeel,
     neon_alley: neonKeel,
     junk_fields: scrapKeel,
     blossom_core: gardenKeel,
+    tideglass_station: pressureHull,
+    cinder_foundry: castingBed,
+    aurora_relay: relayKeel,
     reactor_ring: reactorKeel
   };
 
@@ -494,11 +547,78 @@
     };
   }
 
+  function surveySub(root, material, c) {
+    const b = new Builder();
+    b.slab(0,0,.28,-.28,2.85,.71,.28,c.trim,.13,.11);
+    b.slab(.12,0,.43,.18,1.3,.57,.18,c.pale,.09);
+    for (let j=-1; j<=1; j++)
+      b.fascia(j*.43,.05,.33,.28,.19,.07,c.dark);
+    b.bar([-1.32,0,0],[-1.57,0,0],.12,c.metal);
+    b.tri([-1.50,.02,.03],[-1.52,.51,0],[-1.30,.06,.02],c.accent);
+    b.tri([-1.50,-.02,.03],[-1.42,-.46,0],[-1.27,-.02,.02],c.accent);
+    const sub=b.mesh(material);
+    sub.name='survey-submersible';
+    root.add(sub);
+    return t => {
+      sub.position.set(((t*.61+12)%43)-21.5,6.8+.38*Math.sin(t*.31),-11);
+      sub.rotation.z=.046*Math.cos(t*.31);
+    };
+  }
+  function furnacePiston(root, material, c) {
+    const b = new Builder();
+    b.lathe(0,0,[[1,.31,.28,c.pale],[.91,.31,.28,c.trim],[.89,.27,.24,c.dark],
+      [.34,.27,.24,c.metal],[.33,.41,.32,c.ink],[0,.41,.32,c.worn]],12);
+    const rod=b.mesh(material);
+    rod.name='casting-piston';
+    rod.position.set(0,.02,-.44);
+    root.add(rod);
+    const vents=[];
+    for (let i=0;i<3;i++) {
+      const sparks=new Builder();
+      for (let j=0;j<6;j++) {
+        const x=(j%3-1)*.48+.15*Math.sin(i+j), y=j*.49;
+        sparks.tri([x,y,0],[x+.035,y+.19,0],[x+.08,y+.06,0],j%2 ? c.trim : c.accent,true);
+      }
+      const vent=sparks.mesh(material);
+      root.add(vent);
+      vents.push(vent);
+    }
+    return (t,rects) => {
+      rod.scale.y=Math.max(.12,-rects[5][1]/100-.84);
+      vents.forEach((vent,i) => vent.position.set(-7+i*7+.27*Math.sin(t*.6+i),((t*.75+i*.81)%3.3)-1.8,-5-i*.4));
+    };
+  }
+  function relayCable(root, material, c) {
+    const b=new Builder(), z=-1.02;
+    for (const dz of [0,-.12])
+      b.bar([-4.07,1.98,z+dz],[4.07,4.69,z+dz],.034,c.ink,6);
+    for(const side of [-1,1]) {
+      const x=side*4.07, y=side<0 ? 1.98 : 4.69;
+      b.bar([x,y-.57,z],[x,y+.05,z],.07,c.worn);
+      b.lathe(x,z,[[y+.14,.095,.09,c.trim],[y,.095,.09,c.pale]],8);
+    }
+    const cable=b.mesh(material);
+    cable.name='diagonal-haul-cable';
+    root.add(cable);
+    const carriage=new Builder();
+    carriage.slab(0,0,.07,-.12,.68,.30,.05,c.trim);
+    const wheel=carriage.mesh(material);
+    wheel.name='relay-carriage';
+    root.add(wheel);
+    return (t,rects) => {
+      const r=rects[5];
+      wheel.position.set((r[0]+r[2]/2)/100,-r[1]/100-.28,z);
+    };
+  }
+
   const scenery = {
     skyport: traffic,
     neon_alley: roadSignal,
     junk_fields: suspendedLoad,
     blossom_core: petals,
+    tideglass_station: surveySub,
+    cinder_foundry: furnacePiston,
+    aurora_relay: relayCable,
     reactor_ring: ringLights
   };
 
@@ -518,7 +638,7 @@
         const rect = platforms[i];
         decks[i].position.set((rect[0] + rect[2] / 2) / 100, -rect[1] / 100, 0);
       }
-      animate(time);
+      animate(time, platforms);
     }
     update(0);
     return {

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"aurora_relay"
+display_name = "AURORA RELAY"
+subtitle = "POLAR UPLINK"
+description = "Climb the staggered antenna decks or ride the diagonal cable lift."
+platforms = Array[Rect2]([Rect2(-1125, 0, 2250, 100), Rect2(-1180, -290, 470, 32), Rect2(-525, -495, 455, 32), Rect2(640, -355, 520, 32), Rect2(-165, -745, 350, 30), Rect2(-165, -362, 330, 32)])
+spawns = Array[Vector2]([Vector2(-805, -95), Vector2(815, -95), Vector2(-935, -400), Vector2(900, -465)])
+moving_index = 5
+moving_amplitude = Vector2(355, -118)
+moving_speed = 0.42
+music = "res://audio/music/aurora-relay.ogg"
+matte = "res://stages/aurora_relay/aurora-relay-matte.png"
+accent = Color(0.6, 1.0, 0.819608, 1)
+deck = Color(0.831373, 0.901961, 1.0, 1)
+dark = Color(0.223529, 0.211765, 0.313725, 1)
+trim = Color(0.909804, 0.545098, 0.792157, 1)
+sky_top = Color(0.141176, 0.156863, 0.282353, 1)
+sky_horizon = Color(0.4, 0.462745, 0.596078, 1)
+ambient = Color(0.792157, 0.866667, 1.0, 1)
+sunlight = Color(0.905882, 1.0, 0.972549, 1)

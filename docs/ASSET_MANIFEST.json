@@ -1,6 +1,6 @@
 {
   "version": "0.2.0-preview",
-  "asset_source_commit": "35b103e856c5d96088aeab836a2060eca382fc6b",
+  "asset_source_commit": "b5910b61f9e6debec799d28bb1bd94eaf919c06d",
   "assets": [
     {
       "path": "art_source/characters/nova/nova-construction-v001.png",
@@ -13,7 +13,7 @@
     },
     {
       "path": "art_source/models/arc_blade.blend",
-      "sha256": "7ef7cc1a8251f7c47e17e8878935b6718381597e8f729999beaf521c0961088b",
+      "sha256": "9f005efa6e716170fdbbb36d7ad4074b82558ff6d0885fd16a06ed5a2628082b",
       "bytes": 680853,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -22,7 +22,7 @@
     },
     {
       "path": "art_source/models/bulwark.blend",
-      "sha256": "1dbc3891480cd07f1a1738ebd93d549846dc8a506c9e6c8510c0fbe6f8e95769",
+      "sha256": "386c6dfb1eecb9f6d3a08a91989e7b8496b50bac362d187c79941818aec4e60b",
       "bytes": 1053940,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -31,7 +31,7 @@
     },
     {
       "path": "art_source/models/burst_knuckle.blend",
-      "sha256": "206e4fda61a09d974bec44c231a61cb6a4a163613bb9994888d754a368fee3aa",
+      "sha256": "c6c54d41d53e93f072ca582154af410aa498fc548f362a0ebc1600f310a84b72",
       "bytes": 957803,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -40,7 +40,7 @@
     },
     {
       "path": "art_source/models/fin_plate.blend",
-      "sha256": "05993ba069265e465ec8e836954defcb0c29a66987f144d2e16aef90071bdb3e",
+      "sha256": "605d2487edbb3ac0d21719bb5b28431d2306b6f400f3ef2d242e80b08b2b5421",
       "bytes": 1013338,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -49,7 +49,7 @@
     },
     {
       "path": "art_source/models/halo_caster.blend",
-      "sha256": "61fe13816247f5512daba94cad019c27daa98129a04eb4ee617789b59b48efb7",
+      "sha256": "36457dd8b513e0047d6f51bc24d756c1f0b147de90319c72fce4e68014ced8cb",
       "bytes": 1079966,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -58,7 +58,7 @@
     },
     {
       "path": "art_source/models/halo_shell.blend",
-      "sha256": "989f911da1e0e6de4304586928afb6888aba7d09a33dd35cde8f6d8770451f3f",
+      "sha256": "ae519fd21eafa1982cc4ddca923f94931bbfce64330700edb10e6adbb1eeb872",
       "bytes": 1111054,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -67,7 +67,7 @@
     },
     {
       "path": "art_source/models/kuren.blend",
-      "sha256": "ea737d7ec97f960d4380aaee033c8a1eb5942c71f22069d98f8e87f2ba6fe13c",
+      "sha256": "4bdf056f1e8c58e620344aa76f5e1c871d7c7183ce27d849353963250e720c1a",
       "bytes": 1349278,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -76,7 +76,7 @@
     },
     {
       "path": "art_source/models/momo.blend",
-      "sha256": "614bb493b7d08fe04eb65507806ad12ea1b982255c48c00406951342c24289fc",
+      "sha256": "2fafc8c4c0124819ddf41545046bc4fc3cc6dba22791d3989b9bd4d9a1f36f62",
       "bytes": 2226868,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -85,7 +85,7 @@
     },
     {
       "path": "art_source/models/nova.blend",
-      "sha256": "3b6142c5333b3a0d18439c477b211d3ba2088a6e537f6d166d9a3d6d5e2a5a90",
+      "sha256": "d9d5c051db660549a53c8567894e9e2d3f792ba9e342a76465b08af72bf21008",
       "bytes": 1496848,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -94,7 +94,7 @@
     },
     {
       "path": "art_source/models/pile_cannon.blend",
-      "sha256": "f1d8458fe448de0fc210bf56f1e670b1a3db6acc8deac32265b222858f532906",
+      "sha256": "39f27d27d2937234b729ce6734cdc6ebccd204ae13b2ae3df35aebc33216cb8a",
       "bytes": 887156,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -103,7 +103,7 @@
     },
     {
       "path": "art_source/models/terra.blend",
-      "sha256": "4ed9ef07462e407e3bacf434ca51eec00080a57ce98e852f58604530fd903195",
+      "sha256": "87da61ec2f8f7dae4a8ac57400436a5530c7f51a074c2f10e2656577d077e328",
       "bytes": 1507992,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
@@ -112,12 +112,21 @@
     },
     {
       "path": "art_source/models/vent_shell.blend",
-      "sha256": "ed4a9fc452214505550ec2c346266deb5fda7deb77067dc07f6560aed594428e",
+      "sha256": "884d4ff5097d56e42f514c9f2b83e73d80980ec9d0dc44c6011a72d50e978216",
       "bytes": 1041043,
       "provider": "Project-specific Blender geometry",
       "source": "tools/build_mechs.py",
       "terms": "Original game content",
       "runtime": false
+    },
+    {
+      "path": "audio/music/aurora-relay.ogg",
+      "provider": "YuE2-3B instrumental, edited for MECH POP",
+      "source": "audio/source/music/yue2/aurora_relay.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": true,
+      "sha256": "8130af1d6f32319ab26a4c690dda074e6698ae7803e49345ab1d922a3623238c",
+      "bytes": 1319780
     },
     {
       "path": "audio/music/blossom-core.ogg",
@@ -127,6 +136,15 @@
       "runtime": true,
       "sha256": "f3f6c043fd179a5ac3275ce41082e7c57dae44a7c8d96cb12b1ecb0526ff2431",
       "bytes": 2508581
+    },
+    {
+      "path": "audio/music/cinder-foundry.ogg",
+      "provider": "YuE2-3B instrumental, edited for MECH POP",
+      "source": "audio/source/music/yue2/cinder_foundry.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": true,
+      "sha256": "09afa3f56db81bd2c4660f1ff84d21136769e6b14db52786422b6a6ed7de64c8",
+      "bytes": 1330548
     },
     {
       "path": "audio/music/hangar.wav",
@@ -174,6 +192,15 @@
       "runtime": true
     },
     {
+      "path": "audio/music/tideglass-station.ogg",
+      "provider": "YuE2-3B instrumental, edited for MECH POP",
+      "source": "audio/source/music/yue2/tideglass_station.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": true,
+      "sha256": "2ea5fa08978ebf98cd08a00d51faded684347f04b9e69b238298e8605c09a2c1",
+      "bytes": 1643036
+    },
+    {
       "path": "audio/sfx/blade.wav",
       "sha256": "d3b41d89c222ce8ebf41ccc184072892be654cf448573be21225bdd99c5bdd2a",
       "bytes": 132908,
@@ -208,6 +235,438 @@
       "source": "audio/source/render_sfx.scd",
       "terms": "Original game content; no external samples",
       "runtime": true
+    },
+    {
+      "path": "audio/sfx/chassis/kai_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "10314f1b750421d7455080282bbf824bf596d30f7f19379fde1df2454f3f6416",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/kai_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d8004c85da1f580ca7d72dd970006a521fc57c8430cec852e7efad8f2d382196",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/kai_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "3ce72f06677c57d88d4a8292bf5f9574fc56a538072e7edd2697c3ead4bcc79d",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/kai_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "9da76bb57f5549315df86c4c289b4a50f50b891e197b03093d39fb985bd288eb",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/kai_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "bfaabd03f58f72c0fd92a15a8052e2c863064795fa156db88210512673a7bbac",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/kai_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0a7557599cb350b4794103f10f9cee3ee50e65c3b95d0641a01b6f091bcaa5db",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "8cfa80dab8f82d49bb5753ee917827e4921eba31a63365850d9bcfc8c26c73ae",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a01f2815a6bc829d3416c00ae5b049fa15885b21eeeb782ef011d9da091601b0",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "27cd1224463f58cbb02b78280123bc55ac791536542426dea99f73a838c117c7",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4d2ced796c29621884f51e656b412904234ceefff4e4b64e7caeaac429726adb",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "dc333a0acad0e1bb5bcbed0b81ddccf1a5e09fa39ff2b769cd7bd49645e7e6fd",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/kuren_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d71192a72c2dd788a73738ea9ccd843187afcd8f5287e13d30cf0cdfcd2f24a8",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "294526ec849eccaffcb1ec611f5e99e55039468f41dbe623b5cd7828b9abee61",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "6dff019c08fa1325641c13728ab5aa879d561754b8675ec19ed8708450f5f1e4",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a66c19590d77a9ab1a7c80e5800937adc93166b780a092251499399d27c750b0",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "238f8adf1bc068a5f54971cbc93bf383352b52c8307fb218883b7ecfb08dafa0",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4ce4cbc054c157dd99142858467524fff5a5ca3f8cd9d761a261bf40e70856bc",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/lumi_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ea9ec2ba2cf0d4faf9ca0a046f66e3d203f114566acd8d44e97bc47fb6c51273",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/momo_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "2db978d8691a7099107593ae7bbdaa2dc1122cb7a9bad6e07660d5ed06b5ea4c",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/momo_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "7ee8cb04b28d8e435f54f1badb2dca01126da825ef8ef1b4377da48f052acc26",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/momo_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "247e9a9401b79485e0573fec84367f44b8648351aa89d40b9f7fea9c74b4685f",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/momo_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "7b86ab834d58ee1a7350fad6530ed1db2c1347cebc3b5670b2a7d59432c3042a",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/momo_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "63f2dd6ee419595f0936c64a2e830462423861e6fa60b42181a4400513d66309",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/momo_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "353decb29d3fe089b7bc8bb94d47aff2ea3369c545da2a0676b7f26e3c5e15bf",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/nova_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "fde9033f01dfb94c154388a616966c46e007fa6928eff4ec71e37d21fa5a9ab5",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/nova_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "148ec805b3bbb653a0f53f0f19ad348f39bc99b2920d1efdd3ee85e29cd8b78a",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/nova_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "50fb5006fc3fe4a23f0a11cb01e262de7fec4a396068bf8697013ee323a1e7a7",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/nova_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "e19e93737bae669375ff661e29ff4292d7447bbcd21433dc85dae1040f7a7363",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/nova_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "73bf5ef686389d5d4fb52ac917ff713e730db9f6487932fa7ff87a131dfc5eba",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/nova_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "901d1fbbb303b5c9962a7e6f5ae9ba6ab1f3be4ce41dc33ff36cc14fcf667864",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "b3af262de7ec67f07492ed98a3c7f9b1b17125c53e52c70320f984c9e9ae5237",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "490aeb86e6724759df6211ba5e3553ae740e45276e2e039a99e22f16d218fe1a",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "2d224594f77150363355fe2bbee55c38863ba57131692d8baf4cb6fb2a3e9d81",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "e348736d5b9e0f7df5ad9f056ccc2c631af14239f2272641bc45d3e4bb5b8819",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "456a7ef9c939a43b622a0fdf354ed6ce377f9c483ec735a2e18dd4d96c5f95ed",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/shadow_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "b2d33339c9e23f15f019a1f48176d31d5232ba31155a9f4b1818b6cb2d6f6ed0",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/terra_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "58366b4cc752caee2ea466739e8e21cf2b7b2729e73f8e86ed23fe83f0d615b3",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/terra_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "f233301c133da200438bf41b478cc7fd5958b15fac34255562bd1a91b0b2e6b7",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/terra_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4803f72467f209dbfdc4b4ef28827cbcc5bdabf8bd5172a487a1718e37364962",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/terra_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "057da83fe0a78c510452f26b366e083f0578a864510dae22a70ad3bec636e3d5",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/terra_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a0892accd1edb27a1d7c3ff515e6ccaeca79100f90eb08a6dd8210273f9af84f",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/terra_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ea07f6ca760bd2cba9163fbb460607e82da70c740caee3ce1f605e083567fd3b",
+      "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/zero_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "8f9a71f8ef34fce0ddd0f66d4c8fb77655d36b86acb92fc33a95e7e1f22e9c27",
+      "bytes": 36652
+    },
+    {
+      "path": "audio/sfx/chassis/zero_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ac4828bd39183c46b0caa4b61c815806f8b2fe7472323b316e337c966574717b",
+      "bytes": 41388
+    },
+    {
+      "path": "audio/sfx/chassis/zero_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "810640ea21560bc59ccd9035766d16553b2579c0c5e5348fba2d90e76b9fd3b0",
+      "bytes": 44332
+    },
+    {
+      "path": "audio/sfx/chassis/zero_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "7646427a57afd5705d004777e4b3af19afc451731ff88a463ef720009f8113fd",
+      "bytes": 28972
+    },
+    {
+      "path": "audio/sfx/chassis/zero_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "423f653d1b4bd573717a81c2e3b7409ea877d24cc518bc4727a6a3139317fe53",
+      "bytes": 94252
+    },
+    {
+      "path": "audio/sfx/chassis/zero_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_chassis_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "f07761b61e03fd68c52ef6568d9b435d29f853f4dd7ec804cc8028f555a7c427",
+      "bytes": 27052
     },
     {
       "path": "audio/sfx/core_pop.wav",
@@ -498,6 +957,33 @@
       "runtime": false
     },
     {
+      "path": "audio/source/music/yue2/aurora_relay.flac",
+      "provider": "Original YuE2-3B performance",
+      "source": "audio/source/music/yue2/aurora_relay.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": false,
+      "sha256": "dc59bf933eedf604eeb7644d370eaa113d25dd1f6dffacfaeffa112eb0e0012a",
+      "bytes": 7787733
+    },
+    {
+      "path": "audio/source/music/yue2/cinder_foundry.flac",
+      "provider": "Original YuE2-3B performance",
+      "source": "audio/source/music/yue2/cinder_foundry.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": false,
+      "sha256": "66587d1765cf03c1cef945e731cd4a5a0c0be71e87563c2746a8900579d12062",
+      "bytes": 7368258
+    },
+    {
+      "path": "audio/source/music/yue2/tideglass_station.flac",
+      "provider": "Original YuE2-3B performance",
+      "source": "audio/source/music/yue2/tideglass_station.json",
+      "terms": "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE",
+      "runtime": false,
+      "sha256": "a95c4d68f4ca1f5d1447b3ac64d0d1301c2c94d929d8e1399ab9964595b55c45",
+      "bytes": 8265263
+    },
+    {
       "path": "characters/models/kai.glb",
       "provider": "Project-specific Blender geometry",
       "source": "art_source/models/kai.blend; tools/build_mechs.py",
@@ -714,6 +1200,15 @@
       "runtime": true
     },
     {
+      "path": "stages/aurora_relay/aurora-relay-matte.png",
+      "provider": "Built-in ImageGen",
+      "source": "stages/aurora_relay/matte-prompt.txt",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "cd3820e46a20b7a4de3d5bbf546e1e977304f16f57f0a43a1ef9ca304616f190",
+      "bytes": 2168624
+    },
+    {
       "path": "stages/blossom_core/blossom-core-matte.png",
       "provider": "Built-in ImageGen; model identifier not exposed",
       "source": "art_source/arena-prompts.json; art_source/arena-provenance.json",
@@ -721,6 +1216,15 @@
       "runtime": true,
       "sha256": "7d7fe3377d50dee77f9bec66a7ba3e10844f3adc6304109c4a3cb98950a3fb2e",
       "bytes": 2138898
+    },
+    {
+      "path": "stages/cinder_foundry/cinder-foundry-matte.png",
+      "provider": "Built-in ImageGen",
+      "source": "stages/cinder_foundry/matte-prompt.txt",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ac41d237ca54ce021935faca3cd80a962841e85e2b1348c29cff0c5f89037432",
+      "bytes": 2056268
     },
     {
       "path": "stages/junk_fields/junk-fields-matte.png",
@@ -757,6 +1261,15 @@
       "source": "art_source/environments/skyport-matte.prompt.txt",
       "terms": "Project-specific generated asset",
       "runtime": true
+    },
+    {
+      "path": "stages/tideglass_station/tideglass-station-matte.png",
+      "provider": "Built-in ImageGen",
+      "source": "stages/tideglass_station/matte-prompt.txt",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "c9bfabe1400e7e6e9e225070296a6b9395578aca20be58271f253aac13d50b44",
+      "bytes": 2389101
     },
     {
       "path": "third_party/Barlow-OFL.txt",

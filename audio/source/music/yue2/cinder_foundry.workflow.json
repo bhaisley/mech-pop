@@ -1,0 +1,115 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "yue2_3b_bf16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": "Instrumental industrial arcade rock at 144 BPM in E minor. A clipped baritone electric guitar plays a heavy syncopated riff answered by a staccato brass synthesizer. Thick picked bass, acoustic kick and toms, metallic foundry percussion in a precise backbeat, small gaps between phrases. Strutting mechanical groove, fierce tuneful hook then a half-time bridge and rising return. Clear instrumental mix, no singing, no spoken voice."
+    }
+  },
+  "3": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": ""
+    }
+  },
+  "5": {
+    "class_type": "YuE2GenerateMusic",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "style": [
+        "2",
+        0
+      ],
+      "lyrics": [
+        "3",
+        0
+      ],
+      "abc": "X:1\nT:Ladle Run\nM:4/4\nL:1/8\nQ:1/4=144\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:Em\n% intro\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\nE2zEG2A2|B2GEz2D2|C2EGc2B2|^D2F2B,3z|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\nE2zGB2e2|d2BGD2G2|A2c2e2dc|B2F2^D2z2|\n% verse\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\nE2zEG2A2|B2GEz2D2|C2EGc2B2|^D2F2B,3z|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\nE2zGB2e2|d2BGD2G2|A2c2e2dc|B2F2^D2z2|\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\nE2zEG2A2|B2GEz2D2|C2EGc2B2|^D2F2B,3z|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\nE2zGB2e2|d2BGD2G2|A2c2e2dc|B2F2^D2z2|\n% chorus\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\ne3BG2E2|B2efg2e2|g3ec2Bc|^d2f2b2af|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\ne2geB2GA|d3BG2BD|c2Ace2dc|B2^d2f2z2|\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\ne3BG2E2|B2efg2e2|g3ec2Bc|^d2f2b2af|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\ne2geB2GA|d3BG2BD|c2Ace2dc|B2^d2f2z2|\n% interlude\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\nE2zEG2A2|B2GEz2D2|C2EGc2B2|^D2F2B,3z|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\nE2zGB2e2|d2BGD2G2|A2c2e2dc|B2F2^D2z2|\n% chorus\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\ne3BG2E2|B2efg2e2|g3ec2Bc|^d2f2b2af|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\ne2geB2GA|d3BG2BD|c2Ace2dc|B2^d2f2z2|\nV: Vocal\n\"Em\"z8|\"Em\"z8|\"C\"z8|\"B7\"z8|\nV: Ins\ne3BG2E2|B2efg2e2|g3ec2Bc|^d2f2b2af|\nV: Vocal\n\"Em\"z8|\"G\"z8|\"Am\"z8|\"B7\"z8|\nV: Ins\ne2geB2GA|d3BG2BD|c2Ace2dc|B2^d2f2z2|\n",
+      "seed": 261124302,
+      "mode": "full",
+      "max_duration": 111.67,
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 100,
+      "repetition_penalty": 1.2,
+      "cfg_scale": 1.0
+    }
+  },
+  "6": {
+    "class_type": "EmptyYuE2LatentAudio",
+    "inputs": {
+      "seconds": [
+        "5",
+        1
+      ],
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "5",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "6",
+        0
+      ],
+      "seed": 261124302,
+      "steps": 32,
+      "cfg": 1.0,
+      "sampler_name": "dpm_2",
+      "scheduler": "sgm_uniform",
+      "denoise": 1.0
+    }
+  },
+  "9": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "9",
+        0
+      ],
+      "filename_prefix": "mech-pop/cinder_foundry"
+    }
+  }
+}

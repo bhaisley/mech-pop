@@ -97,6 +97,8 @@ func _event(kind: StringName, data: Dictionary) -> void:
 			event["hitW"] = area.size.x
 			event["hitH"] = area.size.y
 	if data.get("part") is PartInstance: event["part"] = String(data.part.definition.id)
+	for key in ["armored", "shielded"]:
+		if data.has(key): event[key] = data[key]
 	if data.has("stolen"): event["stolen"] = data.stolen
 	if data.get("fighter") is Fighter: event["facing"] = data.fighter.facing
 	if kind == &"phase_shift":

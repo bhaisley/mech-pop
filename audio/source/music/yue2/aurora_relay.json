@@ -1,0 +1,39 @@
+{
+  "title": "Carrier Wave",
+  "bpm": 160,
+  "key": "A",
+  "bars": 72,
+  "seed": 261124303,
+  "style": "Instrumental melodic trance and bright arcade synth-pop at 160 BPM in A major. A clear bell-like arpeggiator carries a rising six-note signal motif, answered by bowed synth strings and octave bass. Crisp four-on-the-floor drums, gentle off-beat hats, high airy pads and a wide polar-night stereo field. Full rhythm from the opening, soaring middle eight, cycling hook suitable for continuous gameplay. Instrumental only, no vocals or spoken words.",
+  "model": "YuE2-3B",
+  "checkpoint": "yue2_3b_bf16.safetensors",
+  "score": "aurora_relay.abc",
+  "lyrics": "",
+  "mode": "full",
+  "sampler": "dpm_2",
+  "steps": 32,
+  "job": "c728d990-e952-4b58-9b30-a4ea2ba9808d",
+  "source_flac_sha256": "dc59bf933eedf604eeb7644d370eaa113d25dd1f6dffacfaeffa112eb0e0012a",
+  "loop": {
+    "estimated_bpm": 159.58,
+    "bars": 40,
+    "start_sample": 35040,
+    "end_sample": 2923200,
+    "sample_rate": 48000,
+    "tail_crossfade_ms": 85,
+    "seconds": 60.17,
+    "gain_db": -5.05,
+    "vorbis": {
+      "sha256": "8130af1d6f32319ab26a4c690dda074e6698ae7803e49345ab1d922a3623238c",
+      "lufs": -18.02,
+      "peak_dbtp": -4.8,
+      "seam_step": 0.01106
+    },
+    "mp3": {
+      "sha256": "6e6e23087e86e0bd1ceb29153f3e40c94a479c9b22cd8a2b2978f399ef864134",
+      "lufs": -18.0,
+      "peak_dbtp": -4.66,
+      "seam_step": 0.00728
+    }
+  }
+}

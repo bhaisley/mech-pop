@@ -1,0 +1,115 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "yue2_3b_bf16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": "Instrumental liquid drum and bass, arcade breakbeat at 132 BPM in D minor. An agile glass mallet lead and filtered clavinet trade syncopated notes over a fluid rubbery sub-bass. Brushed breakbeats, short kick and snare, bubbling stereo pulses, and wide sustained deep-sea chords. A clear melodic hook by the second bar, more active counterpoint in the B section, clean instrumental studio mix with space for game effects. No voice, choir or lyrics."
+    }
+  },
+  "3": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": ""
+    }
+  },
+  "5": {
+    "class_type": "YuE2GenerateMusic",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "style": [
+        "2",
+        0
+      ],
+      "lyrics": [
+        "3",
+        0
+      ],
+      "abc": "X:1\nT:Pressure Hull\nM:4/4\nL:1/8\nQ:1/4=132\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:Dm\n% intro\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\nd2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nF2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|\n% verse\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\nd2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nF2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\nd2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nF2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|\n% chorus\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\na3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nf2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\na3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nf2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|\n% interlude\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\nd2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nF2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|\n% chorus\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\na3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|\nV: Vocal\n\"Bbmaj7\"z8|\"C6\"z8|\"Gm7\"z8|\"A7\"z8|\nV: Ins\nf2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|\nV: Vocal\n\"Dm9\"z8|\"G7\"z8|\"Cmaj7\"z8|\"Am7\"z8|\nV: Ins\na3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|\n",
+      "seed": 261124301,
+      "mode": "full",
+      "max_duration": 114.09,
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 100,
+      "repetition_penalty": 1.2,
+      "cfg_scale": 1.0
+    }
+  },
+  "6": {
+    "class_type": "EmptyYuE2LatentAudio",
+    "inputs": {
+      "seconds": [
+        "5",
+        1
+      ],
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "5",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "6",
+        0
+      ],
+      "seed": 261124301,
+      "steps": 32,
+      "cfg": 1.0,
+      "sampler_name": "dpm_2",
+      "scheduler": "sgm_uniform",
+      "denoise": 1.0
+    }
+  },
+  "9": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "9",
+        0
+      ],
+      "filename_prefix": "mech-pop/tideglass_station"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+X:1
+T:Pressure Hull
+M:4/4
+L:1/8
+Q:1/4=132
+V: Vocal clef=treble name="Vocal Melody" snm="Vocal"
+V: Ins clef=treble name="Ins Melody" snm="Inst."
+K:Dm
+% intro
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+d2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+F2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|
+% verse
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+d2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+F2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+d2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+F2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|
+% chorus
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+a3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+f2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+a3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+f2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|
+% interlude
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+d2zAc2d2|e2g2z2ed|c3GE2GA|B2A2G2z2|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+F2AFd3c|G2EGc2e2|d2B2A2GF|E2^C2A,2z2|
+% chorus
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+a3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|
+V: Vocal
+"Bbmaj7"z8|"C6"z8|"Gm7"z8|"A7"z8|
+V: Ins
+f2agf2dc|e2ceg3e|d2fga2gf|e2^c2A4|
+V: Vocal
+"Dm9"z8|"G7"z8|"Cmaj7"z8|"Am7"z8|
+V: Ins
+a3gf2ed|g2deg2a2|e3dc2EG|A2c2e3g|

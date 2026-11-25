@@ -27,7 +27,7 @@ func _run() -> void:
 		if director.music.stream != stream or director.duck < 4: failures.append("Combat interrupted music transport")
 		director.stop_all()
 		if director.music.stream != null: failures.append("Music remained retained after stop")
-	print("MUSIC TESTS: five distinct arena loops; failures=", failures)
+	print("MUSIC TESTS: ", seen.size(), " distinct arena loops; failures=", failures)
 	director.queue_free()
 	await process_frame
 	quit(0 if failures.is_empty() else 1)

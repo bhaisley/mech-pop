@@ -106,6 +106,18 @@ func _process(delta: float) -> void:
 
 func _on_event(kind: StringName, payload: Dictionary) -> void:
 	if kind == &"hit":
+		if payload.get("armored", false):
+			var guard_color: Color = payload.fighter.data.energy
+			var toward := signf(payload.source.position.x - payload.fighter.position.x)
+			var face: Vector2 = payload.position + Vector2(toward * 47.0, 0)
+			var rim := _ring(self, guard_color, 0.86)
+			rim.position = Vector3(face.x / 100.0, -face.y / 100.0, 1.1)
+			rim.scale.x = 0.57
+			effects.append({"node": rim, "life": 0.32, "velocity": Vector3.ZERO, "grow": 1.1})
+			burst(face, guard_color, 7, 0.24)
+			return
+		if payload.get("shielded", false):
+			burst(payload.position, payload.fighter.data.energy, 3, 0.14)
 		mechs[payload.fighter.slot].impact = 1.0
 		camera.shake = minf(0.15, camera.shake + (0.065 if payload.attack.breaker else 0.025))
 		burst(payload.position, Color.WHITE, 7 if payload.attack.breaker else 4, 0.18)
@@ -117,10 +129,10 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 		shockwave(payload.position, Color("ffdc54"), 0.44, 0.6)
 		camera.shake = maxf(camera.shake, 0.13)
 	elif kind == &"core_pop":
-		burst(payload.position, Color("ef4fe7"), 22, 0.65)
+		burst(payload.position, payload.fighter.data.energy, 22, 0.65)
 		callout(payload.position, "CORE POP!", Color("ffabf5"), 1.0)
 		camera.shake = 0.22
-		shockwave(payload.position, Color("ed68e2"), 0.65, 1.1)
+		shockwave(payload.position, payload.fighter.data.energy, 0.65, 1.1)
 		shockwave(payload.position, Color.WHITE, 0.38, 0.4)
 	elif kind == &"snap":
 		mechs[payload.fighter.slot].snap = 1.0

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stage_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"cinder_foundry"
+display_name = "CINDER FOUNDRY"
+subtitle = "FURNACE LIFT"
+description = "Four furnace balconies surround a rising casting piston."
+platforms = Array[Rect2]([Rect2(-980, 0, 1960, 100), Rect2(-1050, -255, 390, 32), Rect2(660, -255, 390, 32), Rect2(-855, -570, 475, 32), Rect2(380, -570, 475, 32), Rect2(-200, -360, 400, 32)])
+spawns = Array[Vector2]([Vector2(-665, -95), Vector2(665, -95), Vector2(-835, -365), Vector2(835, -365)])
+moving_index = 5
+moving_amplitude = Vector2(0, 182)
+moving_speed = 0.62
+music = "res://audio/music/cinder-foundry.ogg"
+matte = "res://stages/cinder_foundry/cinder-foundry-matte.png"
+accent = Color(1.0, 0.541176, 0.258824, 1)
+deck = Color(0.733333, 0.588235, 0.470588, 1)
+dark = Color(0.258824, 0.172549, 0.207843, 1)
+trim = Color(1.0, 0.87451, 0.443137, 1)
+sky_top = Color(0.223529, 0.164706, 0.25098, 1)
+sky_horizon = Color(0.721569, 0.470588, 0.384314, 1)
+ambient = Color(0.929412, 0.792157, 0.756863, 1)
+sunlight = Color(1.0, 0.847059, 0.615686, 1)

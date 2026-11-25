@@ -271,37 +271,60 @@
     }
     return root;
   }
-  function effect(geometry, color, x, y, vx, vy, angle, sx, sy, life, spin = 0) {
+  function effect(geometry, color, x, y, vx, vy, angle, sx, sy, life, spin = 0, gravity = 0) {
     if (effects.length >= 96)
       return;
     const node = mesh(battle, geometry, flat(color));
     node.position.set(x, y, .68);
     node.rotation.z = angle;
     node.scale.set(sx, sy, .15);
-    effects.push({node, vx, vy, life, age: 0, sx, sy, spin});
+    effects.push({node, vx, vy, life, age: 0, sx, sy, spin, gravity});
   }
   function eventVisual(e, data) {
+    const f = data.fighters[e.fighter], color = f ? catalog.mechs[f.id].energy : '#fff6be';
+    let x = e.x / 100, y = -e.y / 100;
+    if (e.kind === 'core_pop') {
+      // Keep a ring-out visible at the edge nearest the actual blast position.
+      const halfWidth = size * width / Math.max(1, height) * .47;
+      x = clamp(x, centerX - halfWidth, centerX + halfWidth);
+      y = clamp(y, centerY - size*.40, centerY + size*.40);
+      e = {...e, x: x*100, y: -y*100};
+    }
     combatEffects.event(e, data);
-    const x = e.x / 100, y = -e.y / 100, f = data.fighters[e.fighter],
-          color = f ? catalog.mechs[f.id].energy : '#fff6be';
-    const big = e.kind === 'core_pop', pop = big || e.kind === 'part_pop', hit = e.kind === 'hit';
-    if (hit || pop) {
-      const count = big ? 16 : pop ? 11 : e.breaker ? 7 : 4, radius = big ? 1.4 : pop ? .85 : e.breaker ? .71 : .44;
+    if (e.kind === 'hit') {
+      const source = data.fighters[e.source];
+      const dir = Math.sign(x - (source?.x ?? e.x)/100) || source?.facing || 1;
+      const energy = catalog.parts[source?.weapon[0]]?.energy || color;
+      const count = reducedMotion ? 3 : e.armored ? 6 : e.breaker ? 12 : 7;
       for (let i = 0; i < count; i++) {
-        const angle = 2 * Math.PI * i / count + Math.random() * .28, speed = (3 + Math.random() * 4) * radius;
-        effect(
-            box,
-            i % 3 === 0 ? '#ffffff' :
-                pop     ? '#ffe066' :
-                          color,
-            x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, angle, radius * (.35 + Math.random() * .55),
-            .06, .19 + Math.random() * .20);
+        const arc = (i/(count-1)-.5)*(e.armored ? 2.9 : 2.2) + (Math.random()-.5)*.18;
+        const speed = (e.breaker ? 5.4 : 3.4)*(1+Math.random()*.8);
+        const dx = (e.armored ? -dir : dir)*Math.cos(arc), dy = Math.sin(arc);
+        effect(crystal, i%3 === 0 ? '#fffde6' : e.armored ? color : energy,
+            x+(e.armored ? -dir*.38 : 0), y, dx*speed, dy*speed, Math.atan2(dy,dx),
+            (e.breaker ? .43 : .28)*(1+Math.random()*.4), .035, .16+i%3*.045);
       }
-      if (pop)
-        effect(loop, '#ffdf6b', x, y, 0, .15, 0, radius, radius, .20);
-      shake = Math.max(shake, big ? .28 : pop ? .16 : e.breaker ? .10 : .04);
+      if (!e.armored)
+        shake = Math.max(shake, e.breaker ? .10 : .035);
+    } else if (e.kind === 'part_pop' || e.kind === 'core_pop') {
+      const ko = e.kind === 'core_pop', count = reducedMotion ? 6 : ko ? 22 : 12;
+      const tint = ko ? color : catalog.parts[e.part]?.energy || '#ffe066';
+      for (let i = 0; i < count; i++) {
+        const a = i/count*2*Math.PI + Math.random()*.24;
+        const shell = i%3 === 0, speed = (ko ? 6 : 3.6)*(.63+Math.random()*.70);
+        const flight = shell ? (ko ? .70 : .45) : .23+Math.random()*.24;
+        effect(shell ? box : crystal, shell ? (i%2 ? '#334355' : catalog.mechs[f.id].color) :
+            i%2 ? tint : '#fff3aa', x,y, Math.cos(a)*speed, Math.sin(a)*speed+(shell ? 1.5 : 0),
+            a, shell ? .28 : .38, shell ? .16 : .052, flight, shell ? 6*Math.sin(i+1) : 0, shell ? 9 : 2);
+      }
+      shake = Math.max(shake, ko ? .24 : .13);
     } else if (e.kind === 'snap' || e.kind === 'repair' || e.kind === 'respawn') {
-      effect(loop, e.kind === 'repair' ? '#8cffa8' : color, x, y, 0, .8, 0, .84, .84, .32);
+      const count = reducedMotion ? 3 : 7, radius = e.kind === 'respawn' ? 1.28 : .84;
+      for (let i = 0; i < count; i++) {
+        const a = i/count*2*Math.PI, dx = Math.cos(a)*radius, dy = Math.sin(a)*radius;
+        effect(crystal, e.kind === 'repair' ? '#8cffa8' : color, x+dx, y+dy, -dx*3, -dy*3,
+            a, .19, .047, .31);
+      }
     } else if (e.kind === 'jump' || e.kind === 'dodge') {
       const dir = f?.facing || 1;
       for (let i = 0; i < 3; i++)
@@ -417,6 +440,7 @@
         continue;
       }
       const k = 1 - e.age / e.life, step = frame.paused ? 0 : dt;
+      e.vy -= e.gravity * step;
       e.node.position.x += e.vx * step;
       e.node.position.y += e.vy * step;
       e.node.rotation.z += e.spin * step;

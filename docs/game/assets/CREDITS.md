@@ -2,10 +2,12 @@
 
 The eight pilot portraits in `pilots/` come from the roster on the original MECH★POP poster. Each illustrated panel was cropped inside its frame and straightened for the character selector. [Original concept art](https://github.com/bhaisley/mech-pop/blob/main/docs/media/original-concept.png)
 
-The five arena backdrops in `stages/` are 1600 × 900 WebP editions of the game’s ImageGen environment paintings. SkyPort, Neon Alley, Junk Fields, Blossom Core and Reactor Ring use their respective native stage mattes. [Source artwork](https://github.com/bhaisley/mech-pop/tree/main/stages)
+The eight arena backdrops are 1600 × 900 WebP editions of environment paintings created with built-in ImageGen. Each new arena retains its prompt alongside the native PNG. [Paintings and prompts](https://github.com/bhaisley/mech-pop/tree/main/stages) · [Art provenance](https://github.com/bhaisley/mech-pop/blob/main/art_source/arena-provenance.json)
 
-The stereo music in `music/` was generated for MECH★POP with MiniMax-Music3. The browser tracks were encoded from the game’s 48 kHz lossless loop masters. Hangar and SkyPort use the two edits of the SkyPort recording. The four expansion arenas each use a separate recording. [Music sources and edit records](https://github.com/bhaisley/mech-pop/tree/main/audio/source/music) · [MiniMax-Music3 license](music/MiniMax-Music3-LICENSE.txt)
+Tideglass Station plays *Pressure Hull*, Cinder Foundry plays *Ladle Run* and Aurora Relay plays *Carrier Wave*. YuE2-3B by M-A-P rendered three original instrumental ABC scores at 48 kHz in stereo. Each recording was edited into a battle loop for native Vorbis and browser MP3 playback. [Scores, performances, prompts and loop edits](https://github.com/bhaisley/mech-pop/tree/main/audio/source/music/yue2) · [YuE2-3B](https://huggingface.co/m-a-p/YuE2-3B) · [Model terms](https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE)
 
-The 27 MP3 effects in `sfx/` come from the native game’s original SuperCollider synthesis scores. They include the jump and boost jets, weapon attacks, metal hits, coupler snap, Core Pop and round cues. [Synthesis scores](https://github.com/bhaisley/mech-pop/tree/main/audio/source)
+MiniMax-Music3 generated the original five arena recordings. Hangar and SkyPort use two edits of the SkyPort recording. [Music sources and edit records](https://github.com/bhaisley/mech-pop/tree/main/audio/source/music) · [MiniMax-Music3 license](music/MiniMax-Music3-LICENSE.txt)
+
+SuperCollider supplied the 27 shared effects and 48 chassis cues. Each chassis has six instruments or articulations for light swings, breakers, contact, shell resonance, thrust and Core Pop. The equipped module supplies its own special-attack sound. [Synthesis scores](https://github.com/bhaisley/mech-pop/tree/main/audio/source)
 
 Barlow SemiBold, Barlow Condensed Bold and Barlow Condensed Black Italic were designed by Jeremy Tribby. The local WOFF2 fonts use the SIL Open Font License 1.1. [Font license](fonts/OFL.txt)

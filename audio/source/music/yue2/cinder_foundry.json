@@ -1,0 +1,39 @@
+{
+  "title": "Ladle Run",
+  "bpm": 144,
+  "key": "Em",
+  "bars": 64,
+  "seed": 261124302,
+  "style": "Instrumental industrial arcade rock at 144 BPM in E minor. A clipped baritone electric guitar plays a heavy syncopated riff answered by a staccato brass synthesizer. Thick picked bass, acoustic kick and toms, metallic foundry percussion in a precise backbeat, small gaps between phrases. Strutting mechanical groove, fierce tuneful hook then a half-time bridge and rising return. Clear instrumental mix, no singing, no spoken voice.",
+  "model": "YuE2-3B",
+  "checkpoint": "yue2_3b_bf16.safetensors",
+  "score": "cinder_foundry.abc",
+  "lyrics": "",
+  "mode": "full",
+  "sampler": "dpm_2",
+  "steps": 32,
+  "job": "3d2552bf-fc29-4c58-b083-54db1a06e053",
+  "source_flac_sha256": "66587d1765cf03c1cef945e731cd4a5a0c0be71e87563c2746a8900579d12062",
+  "loop": {
+    "estimated_bpm": 144.0,
+    "bars": 36,
+    "start_sample": 6912,
+    "end_sample": 2886912,
+    "sample_rate": 48000,
+    "tail_crossfade_ms": 85,
+    "seconds": 60.0,
+    "gain_db": -4.8,
+    "vorbis": {
+      "sha256": "09afa3f56db81bd2c4660f1ff84d21136769e6b14db52786422b6a6ed7de64c8",
+      "lufs": -18.1,
+      "peak_dbtp": -5.24,
+      "seam_step": 0.04252
+    },
+    "mp3": {
+      "sha256": "e04ce8c2b85f8a1cc2ef29a640a3bf9b70c66418657a834bbc2e624ada3b0ef0",
+      "lufs": -17.99,
+      "peak_dbtp": -5.1,
+      "seam_step": 0.03503
+    }
+  }
+}

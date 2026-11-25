@@ -30,5 +30,29 @@
     "sha256": "847181fc3dc0b560ff991fa99f204a66117441eb71e3b93ccea155a675ee315d",
     "prompt_file": "art_source/arena-prompts.json",
     "tool": "built-in image_gen"
+  },
+  {
+    "arena": "aurora_relay",
+    "source_filename": "exec-7b560464-e4bb-49aa-bb77-3ebd969b13bd.png",
+    "asset": "stages/aurora_relay/aurora-relay-matte.png",
+    "sha256": "cd3820e46a20b7a4de3d5bbf546e1e977304f16f57f0a43a1ef9ca304616f190",
+    "prompt_file": "stages/aurora_relay/matte-prompt.txt",
+    "tool": "built-in image_gen"
+  },
+  {
+    "arena": "cinder_foundry",
+    "source_filename": "exec-d4ce5ee6-38b0-4bde-b95b-9e8e56dbf9be.png",
+    "asset": "stages/cinder_foundry/cinder-foundry-matte.png",
+    "sha256": "ac41d237ca54ce021935faca3cd80a962841e85e2b1348c29cff0c5f89037432",
+    "prompt_file": "stages/cinder_foundry/matte-prompt.txt",
+    "tool": "built-in image_gen"
+  },
+  {
+    "arena": "tideglass_station",
+    "source_filename": "exec-5c69caa2-1a61-4c33-90d4-d5212e3adeb0.png",
+    "asset": "stages/tideglass_station/tideglass-station-matte.png",
+    "sha256": "c9bfabe1400e7e6e9e225070296a6b9395578aca20be58271f253aac13d50b44",
+    "prompt_file": "stages/tideglass_station/matte-prompt.txt",
+    "tool": "built-in image_gen"
   }
 ]

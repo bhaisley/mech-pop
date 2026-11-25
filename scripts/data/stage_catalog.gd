@@ -1,7 +1,7 @@
 class_name StageCatalog
 extends RefCounted
 
-const IDS: Array[StringName] = [&"skyport", &"neon_alley", &"junk_fields", &"blossom_core", &"reactor_ring"]
+const IDS: Array[StringName] = [&"skyport", &"neon_alley", &"junk_fields", &"blossom_core", &"reactor_ring", &"tideglass_station", &"cinder_foundry", &"aurora_relay"]
 static var _stages: Dictionary = {}
 
 static func stage(id: StringName) -> StageData:

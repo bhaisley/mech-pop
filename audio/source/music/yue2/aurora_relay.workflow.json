@@ -1,0 +1,115 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "yue2_3b_bf16.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": "Instrumental melodic trance and bright arcade synth-pop at 160 BPM in A major. A clear bell-like arpeggiator carries a rising six-note signal motif, answered by bowed synth strings and octave bass. Crisp four-on-the-floor drums, gentle off-beat hats, high airy pads and a wide polar-night stereo field. Full rhythm from the opening, soaring middle eight, cycling hook suitable for continuous gameplay. Instrumental only, no vocals or spoken words."
+    }
+  },
+  "3": {
+    "class_type": "PrimitiveStringMultiline",
+    "inputs": {
+      "value": ""
+    }
+  },
+  "5": {
+    "class_type": "YuE2GenerateMusic",
+    "inputs": {
+      "clip": [
+        "1",
+        1
+      ],
+      "style": [
+        "2",
+        0
+      ],
+      "lyrics": [
+        "3",
+        0
+      ],
+      "abc": "X:1\nT:Carrier Wave\nM:4/4\nL:1/8\nQ:1/4=160\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:A\n% intro\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\nA2cef2ed|B2EGB2e2|c3AF2Ac|d2FAd2e2|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nB2dfe2d2|A2dfa2fe|c2ecA2B2|G2B2E4|\n% verse\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\nA2cef2ed|B2EGB2e2|c3AF2Ac|d2FAd2e2|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nB2dfe2d2|A2dfa2fe|c2ecA2B2|G2B2E4|\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\nA2cef2ed|B2EGB2e2|c3AF2Ac|d2FAd2e2|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nB2dfe2d2|A2dfa2fe|c2ecA2B2|G2B2E4|\n% chorus\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\ne2ac'b2ag|g3eB2eg|f2afc2ef|d2fdA2df|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nb3af2ed|a2fde2f2|e3cA2ce|B2G2E2z2|\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\ne2ac'b2ag|g3eB2eg|f2afc2ef|d2fdA2df|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nb3af2ed|a2fde2f2|e3cA2ce|B2G2E2z2|\n% interlude\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\nA2cef2ed|B2EGB2e2|c3AF2Ac|d2FAd2e2|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nB2dfe2d2|A2dfa2fe|c2ecA2B2|G2B2E4|\n% chorus\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\ne2ac'b2ag|g3eB2eg|f2afc2ef|d2fdA2df|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nb3af2ed|a2fde2f2|e3cA2ce|B2G2E2z2|\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\ne2ac'b2ag|g3eB2eg|f2afc2ef|d2fdA2df|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nb3af2ed|a2fde2f2|e3cA2ce|B2G2E2z2|\nV: Vocal\n\"Aadd9\"z8|\"E\"z8|\"F#m7\"z8|\"Dmaj7\"z8|\nV: Ins\ne2ac'b2ag|g3eB2eg|f2afc2ef|d2fdA2df|\nV: Vocal\n\"Bm7\"z8|\"D\"z8|\"A\"z8|\"E7\"z8|\nV: Ins\nb3af2ed|a2fde2f2|e3cA2ce|B2G2E2z2|\n",
+      "seed": 261124303,
+      "mode": "full",
+      "max_duration": 113.0,
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 100,
+      "repetition_penalty": 1.2,
+      "cfg_scale": 1.0
+    }
+  },
+  "6": {
+    "class_type": "EmptyYuE2LatentAudio",
+    "inputs": {
+      "seconds": [
+        "5",
+        1
+      ],
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "5",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "6",
+        0
+      ],
+      "seed": 261124303,
+      "steps": 32,
+      "cfg": 1.0,
+      "sampler_name": "dpm_2",
+      "scheduler": "sgm_uniform",
+      "denoise": 1.0
+    }
+  },
+  "9": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveAudio",
+    "inputs": {
+      "audio": [
+        "9",
+        0
+      ],
+      "filename_prefix": "mech-pop/aurora_relay"
+    }
+  }
+}

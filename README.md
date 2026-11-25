@@ -8,7 +8,7 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ## Browser edition
 
-Choose a mech, pick an arena and press **Launch match**. The first player uses the keyboard on desktop and on-screen controls on a touchscreen. The other three slots start as bots. Select a player tab to assign a controller or change its mech.
+Choose a mech, pick an arena and press **Launch match**. The first player uses the keyboard on desktop and on-screen controls on a touchscreen. The other three slots start as bots. Press a button on your controller, then choose it under **P1 input** or the input menu for another player.
 
 The **One-handed WASD** layout puts combat under your left hand. Move with **A/D**, aim with **W/S**, jump with **Space**, and use **Q** for a light attack, **E** for a breaker and **R** for your weapon special. **Shift** dodges and **F** salvages. Open **Controls** in the hangar or pause menu to rebind a key or select the **Classic** layout. Your browser remembers your choice.
 
@@ -16,7 +16,7 @@ The **One-handed WASD** layout puts combat under your left hand. Move with **A/D
 
 All eight mechs have articulated Three.js models based on the concept poster. Nova carries a curved energy blade, Terra a broad pile cannon and Momo a ring-shaped caster. All sixteen weapon arms and shells detach, land in the arena and fit the mech that salvages them. The original combat simulation, bots and room protocol run in WebAssembly.
 
-The browser edition includes all five arenas, their music and local four-player matches. For network play, **Private room** connects to a running room server. [Browser gameplay screenshot](docs/media/browser-battle.webp) · [Browser assets and credits](docs/game/assets/CREDITS.md) · [Room server setup](server/README.md)
+The browser edition has eight arenas. Tideglass Station has a crossing shuttle, Cinder Foundry has a furnace piston and Aurora Relay has a diagonal cable lift. Their YuE2 tracks are *Pressure Hull*, *Ladle Run* and *Carrier Wave*. Each chassis has its own attack, impact, boost and Core Pop sounds. Directional sparks, shell flashes and a hexagonal shield show how a hit landed. For network play, **Private room** connects to a running room server. [Browser gameplay screenshot](docs/media/browser-battle.webp) · [Browser assets and credits](docs/game/assets/CREDITS.md) · [Room server setup](server/README.md)
 
 ## The original concept
 
@@ -53,7 +53,7 @@ These are unretouched game renders. [Junk Fields screenshot](docs/media/junk-fie
 ## What's playable
 
 - **Eight mechs:** Nova, Kuren, Terra, Momo, Shadow, Lumi, Kai and Zero.
-- **Five arenas:** SkyPort, Neon Alley, Junk Fields, Blossom Core and Reactor Ring, each with its own battle theme.
+- The current browser game and source include eight arenas with individual battle themes. Native preview build 16 includes the original five.
 - **Modular combat:** eight weapon arms and eight shells that can be broken off, collected and equipped during a fight.
 - **Four-player matches:** mix bots, keyboard, touch on iPad and connected controllers using each player's Input selector.
 - **Local and network play:** couch matches, direct LAN rooms and private Internet rooms through the included room server.
@@ -104,6 +104,6 @@ The repository includes GDScript source, authored Blender models, runtime assets
 
 ## Made with
 
-**Three.js** draws the browser edition. **Godot** runs the shared combat simulation and native game. The project uses **Blender** for the native mech models, **SuperCollider** for original sound effects, **MiniMax-Music3** for music, **ImageGen** for the stage mattes and construction reference, and **FFmpeg** for audio and video finishing. [Dependency and asset inventory](docs/THIRD_PARTY_LICENSES.md)
+**Three.js** draws the browser edition. **Godot** runs the shared combat simulation and native game. The project uses **Blender** for the native mech models, **SuperCollider** for original sound effects, **MiniMax-Music3** and **YuE2-3B** for music, **ImageGen** for the stage mattes and construction reference, and **FFmpeg** for audio and video finishing. [Dependency and asset inventory](docs/THIRD_PARTY_LICENSES.md)
 
 No open-source license has been assigned to the original game code or assets. Third-party components retain their own licenses.

@@ -40,9 +40,16 @@ In the game choose **Play with Friends → Internet**, enter `https://your-appro
 
 ## Browser clients
 
-Use the gateway from this checkout to play from the [GitHub Pages game](https://bhaisley.github.io/mech-pop/). Choose **Private room**, enter the gateway’s HTTPS origin, then create a room or join with a code. The room leader can choose the arena, configure bots and launch after each party is ready. Browser and native build 16 clients use the same protocol and content fingerprint.
+Use the gateway from this checkout to play from the [GitHub Pages game](https://bhaisley.github.io/mech-pop/). Choose **Private room**, enter the gateway’s HTTPS origin, then create a room or join with a code. The room leader can choose the arena, configure bots and launch after each party is ready. The eight-arena browser client uses the content fingerprint of this checkout. Native preview build 16 pairs with its packaged five-arena server.
 
-The gateway accepts the official game origin `https://bhaisley.github.io` by default. When serving the game locally or from another host, pass its exact origin with `--browser-origin`, for example `--browser-origin http://127.0.0.1:8000`. Use the updated gateway with the build 16 game pack or app. The GitHub Pages site hosts the client. Operators supply the room service.
+The gateway accepts the official game origin `https://bhaisley.github.io` by default. When serving the game locally or from another host, pass its exact origin with `--browser-origin`, for example `--browser-origin http://127.0.0.1:8000`. To host the eight-arena game, import this checkout with Godot 4.7.2 and run the gateway against the project. Use the Python environment from the setup above.
+
+```sh
+godot --headless --editor --path . --import --quit
+server/.venv/bin/python server/room_gateway.py --engine "$(command -v godot)" --project .
+```
+
+The GitHub Pages site hosts the client. Operators supply the room service.
 
 ## Limits and acceptance
 

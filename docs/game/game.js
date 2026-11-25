@@ -10,7 +10,7 @@
   let slot = 0, stage = 'skyport', screen = 'hangar', dialogType = '', generation = 0, noticeTimer;
   let api = null, boot = null, engine = null, version = null, resolveBoot, rejectBoot;
   let online = false, room = null, roomAction = false, request = null, roomServer = '', roomCode = '';
-  let countdown = '', hud = [], lastHud = 0, lastBanner = 0, variant = 0, finished = false;
+  let countdown = '', hud = [], lastHud = 0, lastBanner = 0, finished = false;
   try {
     roomServer = localStorage.getItem('mechpop.roomServer') || '';
   } catch {
@@ -221,7 +221,13 @@
   function updateInputs() {
     const select = $('input-device');
     select.replaceChildren();
-    for (const id of [KEYBOARD, TOUCH, ...controls.pads().map(p => p.index), BOT]) {
+    const pads = controls.pads();
+    for (const id of [KEYBOARD, TOUCH, ...pads.map(p => p.index), BOT]) {
+      if (id === BOT && !pads.length) {
+        const waiting = new Option('Controller · press a pad button', 'waiting');
+        waiting.disabled = true;
+        select.add(waiting);
+      }
       const owner = devices.indexOf(id);
       option(select, deviceName(id) + (id !== BOT && owner >= 0 && owner !== slot ? ' · P' + (owner + 1) : ''), id);
     }
@@ -289,7 +295,7 @@
     stage = id;
     const name = stages[id].name;
     text('stage-name', name);
-    text('stage-number', String(arenas.indexOf(id) + 1).padStart(2, '0') + ' / 05');
+    text('stage-number', String(arenas.indexOf(id) + 1).padStart(2, '0') + ' / ' + String(arenas.length).padStart(2, '0'));
     $('stage-thumb').src = 'game/assets/stages/' + id + '.webp';
     $('showcase')
         .style.setProperty(
@@ -347,7 +353,7 @@
                  });
                  // Cache the engine separately from the smaller game pack. Its
                  // move timeline must match the version of the renderer in HTML.
-                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=2', 'sim.pck')])
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=4', 'sim.pck')])
                      .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
@@ -444,6 +450,7 @@
     controls.clear();
     hud = makeHud(config.characters);
     view.start(config);
+    sound.prepare(config.characters);
     sound.music(config.stage);
     sound.sound('ready', .72);
   }
@@ -468,6 +475,7 @@
     $('battle').hidden = true;
     view?.hangar(roster[slot]);
     updateHangar();
+    sound.clearEffects();
     sound.music('hangar');
   }
   function pause() {
@@ -481,6 +489,7 @@
       return;
     controls.clear();
     dispatch('pause', {value: true});
+    sound.clearEffects();
     sound.pause();
     showPauseMenu();
   }
@@ -549,21 +558,33 @@
   }
   function feedback(e, frame) {
     const f = frame.fighters[e.fighter], part = parts[e.part];
+    const pan = (e.x || 0) / 1750;
+    const chassis = (role, level, priority, pitch = 1) => {
+      if (f)
+        sound.sound('chassis/' + f.id + '_' + role, level, pan, priority, pitch);
+    };
     switch (e.kind) {
       case 'hit':
-        variant = (variant + 1) % 3;
-        sound.sound('hit_' + (e.breaker ? 'heavy_' : 'light_') + (variant + 1), .65);
+        if (e.armored) {
+          chassis('guard', 1, 4, .91);
+        } else {
+          chassis('hit', e.breaker ? .98 : .78, 3, e.breaker ? .83 : 1.03);
+          if (e.shielded)
+            chassis('guard', e.breaker ? .38 : .24, 1, 1.1);
+        }
         break;
       case 'attack_active':
-        if (e.special && e.cue)
-          sound.sound(e.cue, .72);
+        if ((e.special || e.attackId === 'zero_scope') && e.cue)
+          sound.sound(e.cue, .75, pan, 2);
+        else
+          chassis(e.breaker ? 'heavy' : 'light', e.breaker ? .74 : .57, 2);
         break;
       case 'attack_start':
         if (e.attackId === 'rail_shot')
           sound.sound('rail_charge', .62);
         break;
       case 'part_pop':
-        sound.sound('part_pop');
+        sound.sound('part_pop', .92, pan, 4);
         if (part)
           banner(part.name + ' popped loose');
         break;
@@ -573,14 +594,16 @@
           banner(mechs[f.id].name + (e.stolen ? ' stole ' : ' equipped ') + part.name);
         break;
       case 'core_pop':
-        sound.sound('core_pop');
+        chassis('ko', 1, 5);
         if (f)
           banner(playerLabel(f, e.fighter) + ' · Core Pop!');
         break;
       case 'dodge':
-        sound.sound('boost', .42);
+        chassis('boost', .62, 1);
         break;
       case 'jump':
+        chassis('boost', .36, 0, 1.32);
+        break;
       case 'land':
         sound.sound(e.kind, .4);
         break;

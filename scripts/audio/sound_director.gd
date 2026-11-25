@@ -9,7 +9,6 @@ var voice_priority: Array[int] = []
 var ui_player: AudioStreamPlayer
 var music: AudioStreamPlayer
 var session: MatchSession
-var variant: int = 0
 var cue_times: Dictionary = {}
 var duck: float = 0.0
 var rumble: float = 0.55
@@ -32,6 +31,10 @@ func _ready() -> void:
 		var path: String = "res://audio/sfx/%s.wav" % cue
 		if ResourceLoader.exists(path):
 			sounds[cue] = load(path)
+	for id in Roster.IDS:
+		for role in ["light", "heavy", "hit", "guard", "boost", "ko"]:
+			var bank := "chassis/%s_%s" % [id, role]
+			sounds[bank] = load("res://audio/sfx/%s.wav" % bank)
 	for i in range(24):
 		var player := AudioStreamPlayer2D.new()
 		player.bus = "SFX"
@@ -114,11 +117,16 @@ func ui_cue(name: String = "ui_confirm") -> void:
 func _on_event(kind: StringName, payload: Dictionary) -> void:
 	var fighter: Fighter = payload.get("fighter")
 	var point: Vector2 = fighter.position if fighter else Vector2.ZERO
+	var bank := "chassis/%s_" % fighter.data.id if fighter else ""
 	match kind:
 		&"hit":
-			variant = (variant + 1) % 3
 			var heavy: bool = payload.attack.breaker
-			cue(("hit_heavy_" if heavy else "hit_light_") + str(variant + 1), point, 2 if heavy else 1, 1.0 if heavy else 2.5)
+			if payload.get("armored", false):
+				cue(bank + "guard", point, 4, 0.0, 0.91)
+			else:
+				cue(bank + "hit", point, 3, 0.0 if heavy else -2.0, 0.83 if heavy else 1.03)
+				if payload.get("shielded", false):
+					cue(bank + "guard", point, 1, -8.0 if heavy else -12.0, 1.1)
 			_rumble(fighter, 0.55 if heavy else 0.2, 0.10 if heavy else 0.045)
 			_rumble(payload.source, 0.35 if heavy else 0.13, 0.065)
 			if heavy:
@@ -128,7 +136,7 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 			_rumble(fighter, 0.8, 0.16)
 			duck = 4.0
 		&"core_pop":
-			cue("core_pop", point, 5, 2.0)
+			cue(bank + "ko", point, 5, 1.0)
 			duck = 6.0
 			_rumble(fighter, 1.0, 0.28)
 		&"snap":
@@ -137,10 +145,12 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 		&"attack_active":
 			if payload.special or payload.attack.id == &"zero_scope":
 				cue(String(payload.attack.feedback), point, 2, 0.0 if payload.attack.id == &"pile_shot" else 1.0)
+			else:
+				cue(bank + ("heavy" if payload.attack.breaker else "light"), point, 2, -3.0)
 		&"attack_start":
 			if payload.attack.id == &"rail_shot": cue("rail_charge", point, 1, -2.0)
-		&"jump": cue("jump", point, 0, 4.0, 1.1 if payload.air else 1.0)
-		&"dodge": cue("boost", point, 1, 4.0)
+		&"jump": cue(bank + "boost", point, 0, -9.0, 1.4 if payload.air else 1.25)
+		&"dodge": cue(bank + "boost", point, 1, -4.0)
 		&"land": cue("land", point, 0, -2.0)
 		&"repair": cue("halo", point, 2, -6.0)
 		&"go": cue("go", Vector2.ZERO, 5, -1.0)
@@ -150,7 +160,7 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 			cue("victory", Vector2.ZERO, 5, 0.0)
 
 func _rumble(fighter: Fighter, strength: float, duration: float) -> void:
-	if rumble <= 0.0 or not session:
+	if rumble <= 0.0 or not session or not fighter:
 		return
 	var device: int = session.input_router.devices[fighter.slot]
 	if device >= 0:

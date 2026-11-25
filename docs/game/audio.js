@@ -10,7 +10,7 @@
   music.preload = 'none';
   music.volume = .45;
   music.muted = muted;
-  const buffers = new Map(), playing = new Set(), last = new Map();
+  const buffers = new Map(), playing = new Map(), last = new Map();
   function playMusic(track) {
     wanted = track;
     if (!unlocked || muted)
@@ -28,7 +28,13 @@
         context = new AudioContext();
         bus = context.createGain();
         bus.gain.value = muted ? 0 : .72;
-        bus.connect(context.destination);
+        const limiter = context.createDynamicsCompressor();
+        limiter.threshold.value = -8;
+        limiter.ratio.value = 6;
+        limiter.attack.value = .003;
+        limiter.release.value = .10;
+        bus.connect(limiter);
+        limiter.connect(context.destination);
       }
     }
     if (context?.state === 'suspended')
@@ -36,37 +42,76 @@
     unlocked = true;
     playMusic(wanted);
   }
-  function sound(name, volume = 1) {
-    if (!name || muted || !context || context.state !== 'running' || playing.size > 11)
+  const roles = ['light', 'heavy', 'hit', 'guard', 'boost', 'ko'];
+  let generation = 0;
+  function buffer(name) {
+    if (!buffers.has(name)) {
+      const result = fetch('game/assets/sfx/' + name + '.mp3')
+          .then(r => {
+            if (!r.ok)
+              throw Error(r.status);
+            return r.arrayBuffer();
+          })
+          .then(bytes => context.decodeAudioData(bytes))
+          .catch(() => {
+            buffers.delete(name);
+            return null;
+          });
+      buffers.set(name, result);
+    }
+    return buffers.get(name);
+  }
+  function clearEffects() {
+    generation++;
+    last.clear();
+    for (const node of playing.keys())
+      node.stop();
+    playing.clear();
+  }
+  function prepare(characters) {
+    clearEffects();
+    if (!context || muted)
       return;
-    const t = performance.now();
-    if (t - (last.get(name) ?? -1000) < 65)
+    for (const id of new Set(characters))
+      for (const role of roles)
+        buffer('chassis/' + id + '_' + role);
+  }
+  function sound(name, volume = 1, pan = 0, priority = 2, pitch = 1) {
+    if (!name || muted || context?.state !== 'running')
+      return;
+    const t = performance.now(), round = generation;
+    if (t - (last.get(name) ?? -1000) < (priority >= 3 ? 30 : 55))
       return;
     last.set(name, t);
-    if (!buffers.has(name))
-      buffers.set(
-          name,
-          fetch('game/assets/sfx/' + name + '.mp3')
-              .then(r => {
-                if (!r.ok)
-                  throw Error(r.status);
-                return r.arrayBuffer();
-              })
-              .then(b => context.decodeAudioData(b))
-              .catch(() => null));
-    buffers.get(name).then(b => {
-      if (!b || muted || context.state !== 'running' || performance.now() - t > 500)
+    buffer(name).then(b => {
+      if (!b || round !== generation || muted || context.state !== 'running' || performance.now() - t > 400)
         return;
+      if (playing.size >= 14) {
+        const quiet = [...playing].find(([, level]) => level < priority);
+        if (!quiet)
+          return;
+        playing.delete(quiet[0]);
+        quiet[0].stop();
+      }
       const node = context.createBufferSource(), gain = context.createGain();
+      const panner = context.createStereoPanner?.();
       node.buffer = b;
+      node.playbackRate.value = pitch;
       gain.gain.value = volume;
       node.connect(gain);
-      gain.connect(bus);
-      playing.add(node);
+      if (panner) {
+        panner.pan.value = Math.min(.72, Math.max(-.72, pan));
+        gain.connect(panner);
+        panner.connect(bus);
+      } else {
+        gain.connect(bus);
+      }
+      playing.set(node, priority);
       node.onended = () => {
         playing.delete(node);
         node.disconnect();
         gain.disconnect();
+        panner?.disconnect();
       };
       node.start();
     });
@@ -89,6 +134,8 @@
   window.MechAudio = {
     unlock,
     sound,
+    prepare,
+    clearEffects,
     music: playMusic,
     toggle,
     get muted() {

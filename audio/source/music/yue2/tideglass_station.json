@@ -1,0 +1,39 @@
+{
+  "title": "Pressure Hull",
+  "bpm": 132,
+  "key": "Dm",
+  "bars": 60,
+  "seed": 261124301,
+  "style": "Instrumental liquid drum and bass, arcade breakbeat at 132 BPM in D minor. An agile glass mallet lead and filtered clavinet trade syncopated notes over a fluid rubbery sub-bass. Brushed breakbeats, short kick and snare, bubbling stereo pulses, and wide sustained deep-sea chords. A clear melodic hook by the second bar, more active counterpoint in the B section, clean instrumental studio mix with space for game effects. No voice, choir or lyrics.",
+  "model": "YuE2-3B",
+  "checkpoint": "yue2_3b_bf16.safetensors",
+  "score": "tideglass_station.abc",
+  "lyrics": "",
+  "mode": "full",
+  "sampler": "dpm_2",
+  "steps": 32,
+  "job": "6b121bea-fd5d-42a0-9990-191bd440d42e",
+  "source_flac_sha256": "a95c4d68f4ca1f5d1447b3ac64d0d1301c2c94d929d8e1399ab9964595b55c45",
+  "loop": {
+    "estimated_bpm": 132.6,
+    "bars": 36,
+    "start_sample": 117600,
+    "end_sample": 3244800,
+    "sample_rate": 48000,
+    "tail_crossfade_ms": 85,
+    "seconds": 65.15,
+    "gain_db": -5.66,
+    "vorbis": {
+      "sha256": "2ea5fa08978ebf98cd08a00d51faded684347f04b9e69b238298e8605c09a2c1",
+      "lufs": -18.03,
+      "peak_dbtp": -4.81,
+      "seam_step": 0.00019
+    },
+    "mp3": {
+      "sha256": "ad388a448282857e28142c0ec790d8ee83dd2f275dc91bea33058f106f71b668",
+      "lufs": -17.99,
+      "peak_dbtp": -5.11,
+      "seam_step": 0.00024
+    }
+  }
+}

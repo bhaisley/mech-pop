@@ -22,6 +22,14 @@ music = "third_party/MiniMax-Music3-LICENSE.txt"
 for directory in ["characters", "modules"]:
     add(directory + "/models/*.glb", "Project-specific Blender geometry", lambda p: f"art_source/models/{p.stem}.blend; tools/build_mechs.py", original)
 add("ui/portraits/*.png", "Native render of the production character model", lambda p: f"characters/models/{p.stem}.glb; tools/render_assets.gd", original)
+yue2 = "https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE"
+for score in (ROOT / "audio/source/music/yue2").glob("*.abc"):
+    name = score.stem
+    receipt = str(score.with_suffix(".json").relative_to(ROOT))
+    add(f"audio/music/{name.replace('_', '-')}.ogg", "YuE2-3B instrumental, edited for MECH POP", lambda p: receipt, yue2)
+    add(f"audio/source/music/yue2/{name}.flac", "Original YuE2-3B performance", lambda p: receipt, yue2, False)
+    add(f"stages/{name}/*-matte.png", "Built-in ImageGen", lambda p: f"stages/{name}/matte-prompt.txt", original)
+add("audio/sfx/chassis/*.wav", "Original SuperCollider chassis instruments", lambda p: "audio/source/render_chassis_sfx.scd", original)
 add("stages/*/*-matte.png", "Built-in ImageGen; model identifier not exposed", lambda p: "art_source/arena-prompts.json; art_source/arena-provenance.json", "Project-specific generated asset")
 add("audio/sfx/*.wav", "Original SuperCollider synthesis", lambda p: "audio/source/render_expansion_sfx.scd", original)
 add("audio/music/*.ogg", "MiniMax-Music3 composition, edited and mastered for this game", lambda p: f"audio/source/music/{p.stem}-loop-edit.json; tools/master_expansion_music.py", music)

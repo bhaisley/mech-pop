@@ -444,6 +444,147 @@ window.MechCatalog = {
 			"trim": "#ff9848",
 			"sunlight": "#d9f9ff",
 			"ambient": "#bddbf0"
+		},
+		"tideglass_station": {
+			"name": "Tideglass Station",
+			"description": "Cross the pressure docks on a fast horizontal shuttle.",
+			"moving_index": 4,
+			"platforms": [
+				[
+					-1250.0,
+					0.0,
+					2500.0,
+					100.0
+				],
+				[
+					-1190.0,
+					-255.0,
+					510.0,
+					32.0
+				],
+				[
+					570.0,
+					-455.0,
+					600.0,
+					32.0
+				],
+				[
+					-650.0,
+					-645.0,
+					505.0,
+					32.0
+				],
+				[
+					-220.0,
+					-335.0,
+					440.0,
+					32.0
+				]
+			],
+			"accent": "#5ef2c8",
+			"deck": "#a8d4cf",
+			"dark": "#174960",
+			"trim": "#ffac55",
+			"sunlight": "#eaffee",
+			"ambient": "#b9e6ed"
+		},
+		"cinder_foundry": {
+			"name": "Cinder Foundry",
+			"description": "Four furnace balconies surround a rising casting piston.",
+			"moving_index": 5,
+			"platforms": [
+				[
+					-980.0,
+					0.0,
+					1960.0,
+					100.0
+				],
+				[
+					-1050.0,
+					-255.0,
+					390.0,
+					32.0
+				],
+				[
+					660.0,
+					-255.0,
+					390.0,
+					32.0
+				],
+				[
+					-855.0,
+					-570.0,
+					475.0,
+					32.0
+				],
+				[
+					380.0,
+					-570.0,
+					475.0,
+					32.0
+				],
+				[
+					-200.0,
+					-360.0,
+					400.0,
+					32.0
+				]
+			],
+			"accent": "#ff8a42",
+			"deck": "#bb9678",
+			"dark": "#422c35",
+			"trim": "#ffdf71",
+			"sunlight": "#ffd89d",
+			"ambient": "#edcac1"
+		},
+		"aurora_relay": {
+			"name": "Aurora Relay",
+			"description": "Climb the staggered antenna decks or ride the diagonal cable lift.",
+			"moving_index": 5,
+			"platforms": [
+				[
+					-1125.0,
+					0.0,
+					2250.0,
+					100.0
+				],
+				[
+					-1180.0,
+					-290.0,
+					470.0,
+					32.0
+				],
+				[
+					-525.0,
+					-495.0,
+					455.0,
+					32.0
+				],
+				[
+					640.0,
+					-355.0,
+					520.0,
+					32.0
+				],
+				[
+					-165.0,
+					-745.0,
+					350.0,
+					30.0
+				],
+				[
+					-165.0,
+					-362.0,
+					330.0,
+					32.0
+				]
+			],
+			"accent": "#99ffd1",
+			"deck": "#d4e6ff",
+			"dark": "#393650",
+			"trim": "#e88bca",
+			"sunlight": "#e7fff8",
+			"ambient": "#caddff"
 		}
 	},
 	"moves": {

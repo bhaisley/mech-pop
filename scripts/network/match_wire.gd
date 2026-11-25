@@ -265,7 +265,7 @@ static func valid_event(event: Dictionary) -> bool:
 				if not value is Dictionary or not value.get("part") is int or value.part < 1 or not Roster.all_modules().has(StringName(str(value.get("definition", "")))): return false
 			"position", "origin":
 				if not vector(value): return false
-			"armored", "stolen", "special", "air":
+			"armored", "shielded", "stolen", "special", "air":
 				if not value is bool: return false
 			"credited":
 				if not value is int or value < -1 or value > 3: return false

@@ -124,6 +124,69 @@
   }
   const impactStar = star(8);
 
+  // A single camera-facing quad draws each impact seal. Its rings expand around the
+  // event's world position even after the participants enter hitstop or move apart.
+  const sealPlane = new T.PlaneGeometry(2, 2);
+  const sealFragment = `
+    uniform float age, mode;
+    uniform vec3 tint;
+    varying vec2 vUv;
+    float line(float d, float width) { return 1.-smoothstep(width, width+.014, abs(d)); }
+    float hex(vec2 p) { p=abs(p); return max(p.y, dot(p,vec2(.866025,.5))); }
+    void main() {
+      vec2 p=vUv*2.-1.;
+      float r=length(p), a=atan(p.y,p.x+1.e-6), k=age;
+      float ease=1.-(1.-k)*(1.-k), fade=1.-smoothstep(.44,1.,k);
+      float ink=0., glow=0.;
+      if(mode<1.5) {
+        // A chip traces the facing edge. Braced armor lights a seven-cell shield.
+        float side=mode<.5 ? smoothstep(-.35,.18,p.x) : 1.;
+        float shell=hex(p);
+        ink=line(shell-(.60+.18*ease),.032)*side;
+        glow=line(shell-(.51+.17*ease),.016)*side;
+        if(mode>.5) {
+          float cell=hex(p);
+          for(int i=0;i<6;i++) {
+            float t=float(i)*1.047198;
+            cell=min(cell,hex(p-.28*vec2(cos(t),sin(t))));
+          }
+          ink+=line(cell-.121,.011)*.76*(1.-k);
+          glow+=(1.-smoothstep(.05,.69,shell))*.38*(1.-k);
+        }
+      } else if(mode<2.5) {
+        float arc=smoothstep(-.5,.3,cos(a))*(.45+.55*smoothstep(-.7,.2,cos(a*5.)));
+        ink=line(r-(.22+.66*ease),.025)*arc;
+        glow=line(r-(.14+.63*ease),.018)*arc;
+      } else if(mode<3.5) {
+        // Split retaining collar. Six lugs separate as the coupler lets go.
+        float teeth=smoothstep(.02,.34,cos(a*6.+k*.9));
+        ink=line(hex(p)-(.27+.50*ease),.048)*teeth;
+        glow=line(r-(.18+.44*ease),.027);
+      } else if(mode<4.5) {
+        float first=.13+.75*ease, second=.08+.67*(1.-pow(1.-k,3.));
+        ink=line(r-first,.033)+line(r-second*.76,.022)*step(.16,k);
+        float spokes=pow(abs(cos(a*6.+.28)),12.);
+        glow=(1.-smoothstep(.06,.42,r))*(1.-smoothstep(.03,.4,k));
+        glow+=spokes*(1.-smoothstep(first-.22,first+.06,r))*smoothstep(.08,.20,r)*(1.-k)*.9;
+        glow+=line(r-second,.019)*smoothstep(-.5,.5,cos(3.*a+k));
+      } else {
+        float edge=hex(p);
+        ink=line(edge-(.84-.53*ease),.036);
+        glow=line(edge-(.72-.49*ease),.015)+line(p.y-(.78-1.56*k),.028)*(1.-smoothstep(.53,.68,edge));
+      }
+      float alpha=clamp((ink+glow)*fade,0.,1.);
+      if(alpha<.012) discard;
+      gl_FragColor=vec4(mix(tint,vec3(1.,.99,.91),clamp(glow/(ink+glow+.001),0.,1.)),alpha);
+      #include <colorspace_fragment>
+    }`;
+  function sealMaterial() {
+    return new T.ShaderMaterial({
+      uniforms: {age: {value: 0}, mode: {value: 0}, tint: {value: new T.Color()}},
+      vertexShader: strokeVertex, fragmentShader: sealFragment,
+      transparent: true, depthWrite: false, side: T.DoubleSide
+    });
+  }
+
   function trailGeometry() {
     const count = 16, g = new T.BufferGeometry(), coords = new Float32Array(count * 4 * 3), uv = [], indices = [];
     for (let i = 0; i < count; i++) {
@@ -150,6 +213,27 @@
     parent.add(layer);
     const at = new T.Vector3(), base = new T.Vector3();
     const hitBursts = [];
+    const seals = Array.from({length: 16}, () => {
+      const node = mesh(layer, sealPlane, sealMaterial());
+      node.visible = false;
+      node.renderOrder = 5;
+      return {node, start: -10, life: 0};
+    });
+    function seal(e, time, mode, color, sx, sy, life, dx = 0) {
+      const slot = seals.find(s => !s.node.visible || time >= s.start + s.life) ||
+          seals.reduce((a, b) => a.start + a.life < b.start + b.life ? a : b);
+      slot.start = time;
+      slot.life = life;
+      const node = slot.node, u = node.material.uniforms;
+      node.name = ['shell-contact', 'armor-block', 'breaker-wave', 'coupler-break', 'core-blast', 'reassembly'][mode];
+      node.visible = true;
+      node.position.set(e.x / 100 + dx, -e.y / 100, 1.02);
+      const scale = reducedMotion ? .82 : 1;
+      node.scale.set(sx*scale, sy*scale, 1);
+      u.age.value = 0;
+      u.mode.value = mode;
+      u.tint.value.set(color);
+    }
     const slots = units.map(() => {
       const stroke = mesh(layer, shapes.jab, strokeMaterial());
       stroke.renderOrder = 4;
@@ -212,8 +296,18 @@
         return;
       const slot = slots[e.fighter], heavy = e.breaker;
       slot.hitTime = data.time;
-      slot.hitPower = heavy ? 1 : .65;
+      slot.hitPower = e.armored ? .16 : heavy ? 1 : .65;
       slot.hitDir = Math.sign(f.vx || f.x - source.x || source.facing);
+      const incoming = Math.sign(source.x - f.x) || -slot.hitDir;
+      const shellColor = MechCatalog.parts[f.shell[0]]?.energy || MechCatalog.mechs[f.id].energy;
+      if (e.armored) {
+        seal(e, data.time, 1, shellColor, incoming*.78, 1.23, .42, incoming*.41);
+        return;
+      }
+      if (e.shielded)
+        seal(e, data.time, 0, shellColor, incoming*.69, .91, .22, incoming*.27);
+      if (heavy)
+        seal(e, data.time, 2, energy(source, MechCatalog.moves[e.attackId]), -incoming*1.80, 1.12, .32);
       const burst = new T.Group();
       layer.add(burst);
       burst.position.set(e.x / 100, -e.y / 100, .90);
@@ -238,6 +332,13 @@
       const f = data.fighters[e.fighter], slot = slots[e.fighter];
       if (!f || !slot)
         return;
+      const tint = MechCatalog.mechs[f.id].energy;
+      if (e.kind === 'core_pop')
+        seal(e, data.time, 4, tint, 2.25, 2.10, .60);
+      else if (e.kind === 'part_pop')
+        seal(e, data.time, 3, MechCatalog.parts[e.part]?.energy || tint, 1.10, .99, .38);
+      else if (e.kind === 'respawn' || e.kind === 'snap')
+        seal(e, data.time, 5, e.kind === 'snap' ? 0xffd863 : tint, .90, 1.38, .38);
       if (e.kind === 'phase_shift' && Number.isFinite(e.fromX)) {
         const x0 = e.fromX / 100, x1 = e.x / 100, y0 = -e.fromY / 100 + .85, y1 = -e.y / 100 + .85;
         if (slot.blink)
@@ -416,6 +517,13 @@
       return {impact: hold * (reducedMotion ? .10 : .43), recoil: -slot.hitDir * facing * hold};
     }
     function update(t) {
+      for (const slot of seals) {
+        if (!slot.node.visible)
+          continue;
+        const k = clamp((t-slot.start)/slot.life, 0, 1);
+        slot.node.material.uniforms.age.value = k;
+        slot.node.visible = k < 1;
+      }
       for (let i = hitBursts.length - 1; i >= 0; i--) {
         const burst = hitBursts[i], k = clamp((t - burst.t) / burst.life, 0, 1);
         if (k >= 1) {
@@ -428,6 +536,8 @@
       }
     }
     function dispose() {
+      for (const slot of seals)
+        slot.node.material.dispose();
       for (const slot of slots) {
         slot.trail.geometry.dispose();
         slot.trail.material.dispose();

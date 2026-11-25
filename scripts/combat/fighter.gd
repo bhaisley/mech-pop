@@ -336,7 +336,7 @@ func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
 	hitstop = maxf(hitstop, move.hitstop)
 	source.hitstop = maxf(source.hitstop, move.hitstop)
 	source.attack_confirmed = true
-	session.broadcast(&"hit", {"fighter": self, "source": source, "attack": move, "position": position + Vector2(0, -data.height * 0.55), "armored": was_armored})
+	session.broadcast(&"hit", {"fighter": self, "source": source, "attack": move, "position": position + Vector2(0, -data.height * 0.55), "armored": was_armored, "shielded": shielded})
 	if core <= 0.0:
 		session.knock_out(self, source.slot)
 

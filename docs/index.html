@@ -9,15 +9,15 @@
   <link rel="icon" href="game/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="game/style.css?v=3">
   <script defer src="game/vendor/three.min.js"></script>
-  <script defer src="game/catalog.js?v=2"></script>
+  <script defer src="game/catalog.js?v=4"></script>
   <script defer src="game/attack-motion.js?v=2"></script>
   <script defer src="game/models.js?v=2"></script>
-  <script defer src="game/combat-effects.js?v=2"></script>
-  <script defer src="game/arenas.js"></script>
+  <script defer src="game/combat-effects.js?v=4"></script>
+  <script defer src="game/arenas.js?v=4"></script>
   <script defer src="game/controls.js?v=3"></script>
-  <script defer src="game/audio.js"></script>
-  <script defer src="game/view.js?v=3"></script>
-  <script defer src="game/game.js?v=3"></script>
+  <script defer src="game/audio.js?v=4"></script>
+  <script defer src="game/view.js?v=4"></script>
+  <script defer src="game/game.js?v=4"></script>
 </head>
 <body data-screen="hangar">
   <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -52,7 +52,7 @@
       <section class="setup-panel" aria-label="Match settings">
         <div class="match-heading"><span class="mode-mark" aria-hidden="true">★</span><div><small>Match mode</small><h2>Pop Rush</h2></div><span class="duration" id="duration-label">3:00</span></div>
         <p class="mode-copy">Break armor. Steal parts. Score Core Pops before time runs out.</p>
-        <div class="arena-label"><label>Arena</label><span id="stage-number">01 / 05</span></div>
+        <div class="arena-label"><label>Arena</label><span id="stage-number">01 / 08</span></div>
         <div class="arena-picker"><img id="stage-thumb" src="game/assets/stages/skyport.webp" alt=""><div class="stage-name" id="stage-name">SkyPort</div><button id="prev-stage" class="arrow" aria-label="Previous arena"><svg><use href="#i-prev"/></svg></button><button id="next-stage" class="arrow" aria-label="Next arena"><svg><use href="#i-next"/></svg></button></div>
         <div class="settings-line"><label id="input-label" for="input-device">P1 input</label><select id="input-device" aria-labelledby="input-label"></select></div>
         <div class="settings-line"><label for="difficulty">Bot level</label><select id="difficulty"><option value="0">Rookie</option><option value="1" selected>Arcade</option><option value="2">Ace</option></select></div>
