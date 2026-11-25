@@ -1,7 +1,43 @@
 {
-  "version": "0.2.0-preview",
-  "asset_source_commit": "b5910b61f9e6debec799d28bb1bd94eaf919c06d",
+  "version": "0.6.0-web",
+  "asset_source_commit": "cce5d756702157450ed470ebf13f87c78d46b564",
   "assets": [
+    {
+      "path": "art_source/characters/challengers/coda.png",
+      "provider": "Built-in ImageGen",
+      "source": "art_source/characters/challengers/portraits.json",
+      "terms": "Project-specific generated asset",
+      "runtime": false,
+      "sha256": "a321b576d9a9e762ec1ce3d6bb0f7f4c9cf04b03a6bf2611e7202991d5bd16aa",
+      "bytes": 442060
+    },
+    {
+      "path": "art_source/characters/challengers/kite.png",
+      "provider": "Built-in ImageGen",
+      "source": "art_source/characters/challengers/portraits.json",
+      "terms": "Project-specific generated asset",
+      "runtime": false,
+      "sha256": "fff8862d63e0be3f29da12e55bd422de7e2a33e4beb041958c49c6504ce8cfa2",
+      "bytes": 426671
+    },
+    {
+      "path": "art_source/characters/challengers/rivet.png",
+      "provider": "Built-in ImageGen",
+      "source": "art_source/characters/challengers/portraits.json",
+      "terms": "Project-specific generated asset",
+      "runtime": false,
+      "sha256": "7d685ca75950185a1b500964bf25ed8b43d99e8485622ca4d220c7172405f2a7",
+      "bytes": 466134
+    },
+    {
+      "path": "art_source/characters/challengers/rook.png",
+      "provider": "Built-in ImageGen",
+      "source": "art_source/characters/challengers/portraits.json",
+      "terms": "Project-specific generated asset",
+      "runtime": false,
+      "sha256": "b087593ab978d9acff0a7256a81017694f30fda04ae911d5abb41cdab606c918",
+      "bytes": 396247
+    },
     {
       "path": "art_source/characters/nova/nova-construction-v001.png",
       "sha256": "2fa53a5a1659c9e89a0cfc118f29fa3b194fb0450943c733e42baf64ffbc463b",
@@ -10,6 +46,15 @@
       "source": "art_source/characters/nova/nova-construction-v001.prompt.txt",
       "terms": "Project-specific generated reference",
       "runtime": false
+    },
+    {
+      "path": "art_source/models/adaptive_shell.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "c59cf5754253fe39cf8492da6e094ddb494c1613f37345c31563523bcc59b6ac",
+      "bytes": 1078499
     },
     {
       "path": "art_source/models/arc_blade.blend",
@@ -39,6 +84,24 @@
       "runtime": false
     },
     {
+      "path": "art_source/models/coda.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "27f0af81cd9ebc39fee229c28c92584358863886ccec4dc4a24f6bbb102c7186",
+      "bytes": 1466355
+    },
+    {
+      "path": "art_source/models/echo_bell.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "1697ed58269a4c990f51205d9373c23bbe092b391ff329e0b4894dbd0290913a",
+      "bytes": 1054836
+    },
+    {
       "path": "art_source/models/fin_plate.blend",
       "sha256": "605d2487edbb3ac0d21719bb5b28431d2306b6f400f3ef2d242e80b08b2b5421",
       "bytes": 1013338,
@@ -46,6 +109,33 @@
       "source": "tools/build_mechs.py",
       "terms": "Original game content",
       "runtime": false
+    },
+    {
+      "path": "art_source/models/flux_frame.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "d69be3748bfb0c10bc15c602d4c62732235b0a01138e4ddf9af10837fcf7f86f",
+      "bytes": 1099523
+    },
+    {
+      "path": "art_source/models/gale_disc.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "38160661b90d983fa892ea419aa481b31a258773e3d66bef8d532cab41b31535",
+      "bytes": 637137
+    },
+    {
+      "path": "art_source/models/gate_shield.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "48c092038ca3d8528592a534dc41130717cd0b30df7d8ca67b21df2fc31b63a0",
+      "bytes": 952354
     },
     {
       "path": "art_source/models/halo_caster.blend",
@@ -66,6 +156,33 @@
       "runtime": false
     },
     {
+      "path": "art_source/models/kai.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "29043f2427a8c010fe3f96250f8b1190ff9d3f15052d13ef9662e8f6d9bccac4",
+      "bytes": 1509239
+    },
+    {
+      "path": "art_source/models/keystone_plate.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "855c41cddfb16de705122ca9bdc974c650f3453cd494287dd952512b7702d5d0",
+      "bytes": 1028147
+    },
+    {
+      "path": "art_source/models/kite.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "303c3f767c8be6e70fd437f82c3a5422e1a363489401186d10b0124c837a5d21",
+      "bytes": 1237088
+    },
+    {
       "path": "art_source/models/kuren.blend",
       "sha256": "4bdf056f1e8c58e620344aa76f5e1c871d7c7183ce27d849353963250e720c1a",
       "bytes": 1349278,
@@ -73,6 +190,33 @@
       "source": "tools/build_mechs.py",
       "terms": "Original game content",
       "runtime": false
+    },
+    {
+      "path": "art_source/models/lumi.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "2a8423f3ff2a861021295bbbd9d1ddd3b83d44158317217985e3881bf8d1fadb",
+      "bytes": 1568948
+    },
+    {
+      "path": "art_source/models/mag_fork.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "bb3db3c8ae58128a3ecdb7be8fbad85e48994716621c01dc4e0f193a43fb24b3",
+      "bytes": 952369
+    },
+    {
+      "path": "art_source/models/mirage_mantle.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "f06710fc6ce15af6fe0c8cb083c32b0581a76cbada7de22b9fb323efa8e8728d",
+      "bytes": 1048498
     },
     {
       "path": "art_source/models/momo.blend",
@@ -93,6 +237,15 @@
       "runtime": false
     },
     {
+      "path": "art_source/models/phase_talon.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "afc2456a97ca54d770c593cc80333b9af25b5834fefdf9edb4676d14075e7a54",
+      "bytes": 1002477
+    },
+    {
       "path": "art_source/models/pile_cannon.blend",
       "sha256": "39f27d27d2937234b729ce6734cdc6ebccd204ae13b2ae3df35aebc33216cb8a",
       "bytes": 887156,
@@ -100,6 +253,87 @@
       "source": "tools/build_mechs.py",
       "terms": "Original game content",
       "runtime": false
+    },
+    {
+      "path": "art_source/models/prism_emitter.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "45f595730e56e0b3b4a153997f9adbdebbb5994dcf8453e066b2e2d27a4f30f7",
+      "bytes": 1034766
+    },
+    {
+      "path": "art_source/models/prism_shell.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "76299ce7770407641e0bc73a4a36c0928153e80c68fb8dd7d80d5038834c5a5e",
+      "bytes": 1151266
+    },
+    {
+      "path": "art_source/models/rail_lance.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "4cc9f14f69535e1180b7d3ba30886a63e35bbc0cbe76f90c74112f4e4e4556e0",
+      "bytes": 735151
+    },
+    {
+      "path": "art_source/models/resonance_shell.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "3273d87d7fc78e267c831f893d925379c61dc4ce85c8b189da001f602d9113d3",
+      "bytes": 1114542
+    },
+    {
+      "path": "art_source/models/rivet.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "af3f05e524db8917576b24a2ec30c4cee323d7f6929df62ea0d0967d653b7e53",
+      "bytes": 1129853
+    },
+    {
+      "path": "art_source/models/rook.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "00119b130a192de14b2a0731e74a3a732fb6f5f47b997f617c830609a1eb3756",
+      "bytes": 1335279
+    },
+    {
+      "path": "art_source/models/sail_frame.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "1530544694d41de0be69944950bae2f8d25947c2f79a2ef94e8eca793bf9eb44",
+      "bytes": 1030784
+    },
+    {
+      "path": "art_source/models/shadow.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "379f971c094487877673a9a17ee40f076fd9e8420f234fa365d1105691f5c9d8",
+      "bytes": 1266722
+    },
+    {
+      "path": "art_source/models/switch_driver.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "50fa8ba4d76d63ce490ecf2b799dea5f3e33960df20d9551934a6a1c94f47439",
+      "bytes": 1025415
     },
     {
       "path": "art_source/models/terra.blend",
@@ -118,6 +352,24 @@
       "source": "tools/build_mechs.py",
       "terms": "Original game content",
       "runtime": false
+    },
+    {
+      "path": "art_source/models/winch_pack.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "32839402c0abbc68a0a1e839ef80d885311c821d0b3958c0987898873f125e9e",
+      "bytes": 1086455
+    },
+    {
+      "path": "art_source/models/zero.blend",
+      "provider": "Project-specific Blender geometry",
+      "source": "tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": false,
+      "sha256": "723208db19b8211ee2b7d4a8b11e4071bc59f949abc9405d36872b1ebc041dcf",
+      "bytes": 1601136
     },
     {
       "path": "audio/music/aurora-relay.ogg",
@@ -237,6 +489,69 @@
       "runtime": true
     },
     {
+      "path": "audio/sfx/chassis/coda_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d8a4d97c98ddef2d541fd34033a18968953d640086a9d79a15382b86a3362992",
+      "bytes": 36140
+    },
+    {
+      "path": "audio/sfx/chassis/coda_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "dd5e40ae523be683418f7aa642d4658f555ca24fa8060db231b1a56fdc8e41a2",
+      "bytes": 38060
+    },
+    {
+      "path": "audio/sfx/chassis/coda_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "66b510e1981fb66ff1f8790d4d6747cb4368dc8be507dd45a5f8b52ef1f8a29f",
+      "bytes": 41900
+    },
+    {
+      "path": "audio/sfx/chassis/coda_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "837d9ba111dd00b3cf3b2f83421e1f1bb67784143218bf86c1c8557a9c2b205b",
+      "bytes": 26540
+    },
+    {
+      "path": "audio/sfx/chassis/coda_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d03d7eebbbc27c971aea953e823e4ae863ec0da63a0377b5a3ac6f18ef762a34",
+      "bytes": 86956
+    },
+    {
+      "path": "audio/sfx/chassis/coda_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "3093cbe95e9dc1d54af242a41afc6088ff01290181a6f1f616ae2b61e40eff0e",
+      "bytes": 25516
+    },
+    {
+      "path": "audio/sfx/chassis/coda_special.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "08cdc8fb60a53c64f2001717b31281bf849dd9050203fa4a65cba481a387aa67",
+      "bytes": 65836
+    },
+    {
       "path": "audio/sfx/chassis/kai_boost.wav",
       "provider": "Original SuperCollider chassis instruments",
       "source": "audio/source/render_chassis_sfx.scd",
@@ -289,6 +604,69 @@
       "runtime": true,
       "sha256": "0a7557599cb350b4794103f10f9cee3ee50e65c3b95d0641a01b6f091bcaa5db",
       "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/kite_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "acad516b522106d9d8ae8c56d5f08eb0b5100323ea0f4ea054fd70517b4115eb",
+      "bytes": 36140
+    },
+    {
+      "path": "audio/sfx/chassis/kite_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "fdc94c04c67a7da16793d7f343bce72d367883de3935a9bf9daf5ab9b0fe64fa",
+      "bytes": 38060
+    },
+    {
+      "path": "audio/sfx/chassis/kite_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "eb0f0f096ef7c5774dc88245c98a379f8ee2330025e8515c255650a43480ad36",
+      "bytes": 41900
+    },
+    {
+      "path": "audio/sfx/chassis/kite_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "f651d30ef3b3ce9c24334c8026a9a77ae99a077918e6f184dff0b7476aecbc93",
+      "bytes": 26540
+    },
+    {
+      "path": "audio/sfx/chassis/kite_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "901795fbb46f2fa4bf7bac41ab6efa3b022faf6bcf6b8d39911d4b3a422565e7",
+      "bytes": 86956
+    },
+    {
+      "path": "audio/sfx/chassis/kite_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "9e3c5fdf412771c4dda08c56e5f3cfcbefe1fbc46a5de4a61dacc4b350a958c0",
+      "bytes": 25516
+    },
+    {
+      "path": "audio/sfx/chassis/kite_special.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "07f7029389ebece5de09437ab2f31aa146909eeaa2de7d84752da00366c58c4d",
+      "bytes": 65836
     },
     {
       "path": "audio/sfx/chassis/kuren_boost.wav",
@@ -505,6 +883,132 @@
       "runtime": true,
       "sha256": "901d1fbbb303b5c9962a7e6f5ae9ba6ab1f3be4ce41dc33ff36cc14fcf667864",
       "bytes": 27052
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0e18ca8634014d0f4a1b701b900f4a376b6f2212d207c12218570cef09f58d0d",
+      "bytes": 36140
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "1da02dec321511ccdd29420ff1ba96e3d5127321f49e59e44c1f9dd98a37b0c3",
+      "bytes": 38060
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "005a619dc68535cf00c088de4db93ed089e359bc34e2452135d467639a0c303a",
+      "bytes": 41900
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "40934d51b17236e2ba6985670efd7c951ec2225d04a483d5a5c6026360ca1e6f",
+      "bytes": 26540
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0c80736d2e6f9bd28b75a668d30955fe78142669bb9817e789853e296cc324d9",
+      "bytes": 86956
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "60d453bb81f95f6000ce88361653629cd2b5356d991709b40178aba7e75bc963",
+      "bytes": 25516
+    },
+    {
+      "path": "audio/sfx/chassis/rivet_special.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "323ddc88750db1d1c4514adcb172bbd03e0d7b80fe2974c125ac7442a169a282",
+      "bytes": 65836
+    },
+    {
+      "path": "audio/sfx/chassis/rook_boost.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "47ae19e20047ceb33cad9d322b70b44718dfe4ac8709bf68f21201a805bd3604",
+      "bytes": 36140
+    },
+    {
+      "path": "audio/sfx/chassis/rook_guard.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "37e256a9a0f8d06a3df5be6eb818f9c5c21e565050bb965f0898c9f7d2ad532c",
+      "bytes": 38060
+    },
+    {
+      "path": "audio/sfx/chassis/rook_heavy.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "887eae4680c6dcb15f9cfd8622d3b9ed87d4450b0cb0a3ac03ccfd883b23e649",
+      "bytes": 41900
+    },
+    {
+      "path": "audio/sfx/chassis/rook_hit.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "f33bb82d172079e8fb43ab79c8b86fea3266950779a2cc320fcdad7fb7032708",
+      "bytes": 26540
+    },
+    {
+      "path": "audio/sfx/chassis/rook_ko.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a75cf21bb5fe9738bc05c74833f5cf0e77c9afeacd27cb453b5fcf6f61d9c659",
+      "bytes": 86956
+    },
+    {
+      "path": "audio/sfx/chassis/rook_light.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "dd2fb2f6bb3b78b234f861cd735c4bb665b8d86d28122f618477fbb9d5aef269",
+      "bytes": 25516
+    },
+    {
+      "path": "audio/sfx/chassis/rook_special.wav",
+      "provider": "Original SuperCollider chassis instruments",
+      "source": "audio/source/render_challenger_sfx.scd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "c9dc709062519f2ed9517c50a575f0dd24922faa7c59ac3cfb9510638cea202d",
+      "bytes": 65836
     },
     {
       "path": "audio/sfx/chassis/shadow_boost.wav",
@@ -984,6 +1488,15 @@
       "bytes": 8265263
     },
     {
+      "path": "characters/models/coda.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/coda.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "803334faf69fda7013e88c2cfcea1e38fa8ba61fdf0758abcacd61bd94bf4c3f",
+      "bytes": 584880
+    },
+    {
       "path": "characters/models/kai.glb",
       "provider": "Project-specific Blender geometry",
       "source": "art_source/models/kai.blend; tools/build_mechs.py",
@@ -991,6 +1504,15 @@
       "runtime": true,
       "sha256": "73a08bf368a099220d4f1ef64ae3d1f9d67803d16437511593f8c8bea774ea1a",
       "bytes": 741624
+    },
+    {
+      "path": "characters/models/kite.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/kite.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "2f2da54eeef8357b70d10f9e5f1b7acee6094be7acace2dde75904e0ae9fea12",
+      "bytes": 538504
     },
     {
       "path": "characters/models/kuren.glb",
@@ -1029,6 +1551,24 @@
       "runtime": true
     },
     {
+      "path": "characters/models/rivet.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/rivet.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "6f192050a01afd67d29e2c08c5b5f5290e331aaeb8e3202a8d0a1a864e35321f",
+      "bytes": 549620
+    },
+    {
+      "path": "characters/models/rook.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/rook.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "7ab58ba628b8f149a33994cd9c49dda425e2243945e87be02d89bd256007d758",
+      "bytes": 542788
+    },
+    {
       "path": "characters/models/shadow.glb",
       "provider": "Project-specific Blender geometry",
       "source": "art_source/models/shadow.blend; tools/build_mechs.py",
@@ -1054,6 +1594,294 @@
       "runtime": true,
       "sha256": "d6e1a5da26478679a2da817f07101624ee65c1335dc28b4152e8a42d1488c456",
       "bytes": 712460
+    },
+    {
+      "path": "docs/game/assets/pilots/coda.webp",
+      "provider": "Browser edition of original challenger portrait",
+      "source": "art_source/characters/challengers/coda.png",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ec7730eccb5e2038722f61f8e613951f6df5fc6309f9231008a8d1e10e4ab555",
+      "bytes": 19840
+    },
+    {
+      "path": "docs/game/assets/pilots/kite.webp",
+      "provider": "Browser edition of original challenger portrait",
+      "source": "art_source/characters/challengers/kite.png",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "9fc3bdb9272f5de669123737c0ee84eb2a53f38a034a6b5e977e24ab454dc55f",
+      "bytes": 18212
+    },
+    {
+      "path": "docs/game/assets/pilots/rivet.webp",
+      "provider": "Browser edition of original challenger portrait",
+      "source": "art_source/characters/challengers/rivet.png",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "863f333465e95f5680180a960939e095abd6d7290f0b6ad199db26443edf609d",
+      "bytes": 24234
+    },
+    {
+      "path": "docs/game/assets/pilots/rook.webp",
+      "provider": "Browser edition of original challenger portrait",
+      "source": "art_source/characters/challengers/rook.png",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "837899638f81c6025684e235ccaffb725037e33cbceef4bcec156ae774c5d117",
+      "bytes": 17064
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_boost.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_boost.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "09136f3c2ce05ee1a8ac7985b19a55efa0a28647fedc8677e0f24bae0011ea5d",
+      "bytes": 3885
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_guard.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_guard.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4f0fc276f24a4edbcd56b861b50c8b73c04833777fb646812bc7e6ecac1f3d05",
+      "bytes": 3933
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_heavy.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_heavy.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "c23ede6c0c9f200466c5d13b1246f48ecc7f6fb3188c6964b8fb8d773347f1db",
+      "bytes": 4341
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_hit.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_hit.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "46c228b9b8e0c15aa3ac91e8fa7477f33409f4a4b44dd45a3a3932101b6b9df6",
+      "bytes": 3117
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_ko.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_ko.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "714121306a80442c3ea8201101e11da1db37af7e928b4cc6f7f60bad04e6a640",
+      "bytes": 7701
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_light.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_light.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4008af75bd302d68be2236fb062f9c3e26e1f2e0d04756e0eef492728844853d",
+      "bytes": 3021
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/coda_special.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/coda_special.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0f067434c573522f89acfcde8ab7648ef01686a9b1a258c0ee2cc1c7f3b89b96",
+      "bytes": 6141
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_boost.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_boost.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "c7df371b985ce017b4026c55e5da155098f53a95ca64fc18c4745e33208df3a1",
+      "bytes": 5085
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_guard.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_guard.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "901807e29f0944309ebc653208f3f667edf0eb9ef9a7b19f6b7f026f6203bab8",
+      "bytes": 5565
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_heavy.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_heavy.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "0c0a5674e73960e5933c3e63faadce42e5c11610f339ba25b7f4293b294130ed",
+      "bytes": 5157
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_hit.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_hit.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4123af0084709c74aa9456b5daf5b8ab44e6e80c15c13c5fafbb02fceab99ce8",
+      "bytes": 3453
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_ko.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_ko.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "72442bb7dda559da6d8fc1eac58f4ca47ef140032387d488722adc781e562bde",
+      "bytes": 9597
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_light.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_light.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "6bb404dcf7ea496479d1dd620bb4359a58075744654b4b1b4df1ef3917aef476",
+      "bytes": 3981
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/kite_special.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/kite_special.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "5d0eb92fed797aa811fdadcfc825e64343364129b67d834e851292de1ecfe54a",
+      "bytes": 8157
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_boost.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_boost.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "8595cc1012026d63fcfbfcf5f915f0e957c2704a4c6b56ce1b7491241d0357ab",
+      "bytes": 5733
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_guard.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_guard.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4d21ee5e326595d4578ae3cb7d18e6db7ca2b42bd7be037757554d45c3ed4238",
+      "bytes": 5781
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_heavy.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_heavy.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "91f78da40335f239b61abd731d10989e56705fc6d864570cc9cf3da77e4a228c",
+      "bytes": 6357
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_hit.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_hit.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "bac7e53efa2b752fc4096ab261901cb1946ac2d58a6936d679b8bded98cc528f",
+      "bytes": 4173
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_ko.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_ko.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "e05c4f94614bc606180222138982f69542fa6e983f5add4bc7a44ec41537bd92",
+      "bytes": 12357
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_light.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_light.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "51d4d9d9722e9fc496a22bbda6461001c158d61e785fe70e4db62bfceeff493d",
+      "bytes": 3981
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rivet_special.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rivet_special.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "a0f046fb7bf272627d3eefd33cd69d2e90ab1f0d046eab9f0d702517801510ce",
+      "bytes": 9933
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_boost.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_boost.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "067e45124b3843731b762cfd5f5fa06c75b115c3ab4746d5f82ce32d999df1b0",
+      "bytes": 2829
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_guard.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_guard.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "968b9017e2d68d883bda9ace3f1857bb12ef7a1497c5a29de9ef399a3ec46889",
+      "bytes": 2949
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_heavy.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_heavy.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ee677b51406282233bc5f08f8f30a37ceeb8afbf64b9bc0d14d28c6b33d6e974",
+      "bytes": 3165
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_hit.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_hit.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "804123d7cecdf316007f331ec2aed874dc95328304dbf0abe0476315dda7fb09",
+      "bytes": 2469
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_ko.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_ko.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "f59bff4bc605597a3ead6f6952d1be16959bb6f316e68fa617bdaffde3472b7e",
+      "bytes": 5037
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_light.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_light.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "5f97da20d84c94330255efb7075d75cbc8d1428d6856dbec9af1cfb81154927d",
+      "bytes": 2445
+    },
+    {
+      "path": "docs/game/assets/sfx/chassis/rook_special.mp3",
+      "provider": "Browser edit of the original SuperCollider cue",
+      "source": "audio/sfx/chassis/rook_special.wav",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "b165795214b1e5ad8d5eea649413076db2689ed54d035d1aedcbc783fd7145a9",
+      "bytes": 4077
     },
     {
       "path": "modules/models/adaptive_shell.glb",
@@ -1092,6 +1920,15 @@
       "runtime": true
     },
     {
+      "path": "modules/models/echo_bell.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/echo_bell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "fe85d346d7839c50d26dbf2e7b5d85e45347873b7d2d27b6ce4a74bcef883f1f",
+      "bytes": 127564
+    },
+    {
       "path": "modules/models/fin_plate.glb",
       "sha256": "c5c5e2a019abdeafd9ab5c08e999dcea83f4770cdcf88fdfdb979e8db9ba8256",
       "bytes": 138552,
@@ -1110,6 +1947,24 @@
       "bytes": 184500
     },
     {
+      "path": "modules/models/gale_disc.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/gale_disc.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "b304fc2301c18b8bd3864d31fc24617cc07a26e099b44b9d943f7a0157b79c38",
+      "bytes": 84700
+    },
+    {
+      "path": "modules/models/gate_shield.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/gate_shield.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "279e6149d354d14458cf4ee5673210f8c6403feec775a7dc9c0a5f44a619ce17",
+      "bytes": 67084
+    },
+    {
       "path": "modules/models/halo_caster.glb",
       "sha256": "84e105f21142f7046cea191fb822b93e02bd56c7c0100cefb57c30fd02ec1e66",
       "bytes": 114796,
@@ -1126,6 +1981,24 @@
       "source": "art_source/models/halo_shell.blend; tools/build_mechs.py",
       "terms": "Original game content; no open-source license assigned",
       "runtime": true
+    },
+    {
+      "path": "modules/models/keystone_plate.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/keystone_plate.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "bed597b17c8523f9529f260e6ff830eff6cd3c018148c68f2c6b4858d9e1202e",
+      "bytes": 155160
+    },
+    {
+      "path": "modules/models/mag_fork.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/mag_fork.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "d570c63ed9fe254fcc2c286c001d9782b7412e9be411ac150b3cc39e69ea2e08",
+      "bytes": 67116
     },
     {
       "path": "modules/models/mirage_mantle.glb",
@@ -1182,6 +2055,24 @@
       "bytes": 201276
     },
     {
+      "path": "modules/models/resonance_shell.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/resonance_shell.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "20ab19b5d2d290a733e6af6004e5d05c964d0781ee9d25c8cfd5a00d447627d4",
+      "bytes": 175776
+    },
+    {
+      "path": "modules/models/sail_frame.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/sail_frame.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "3023c82c897213691ba26049efb9bf584944a4fffb858654dd53a0738da2135f",
+      "bytes": 158848
+    },
+    {
       "path": "modules/models/switch_driver.glb",
       "provider": "Project-specific Blender geometry",
       "source": "art_source/models/switch_driver.blend; tools/build_mechs.py",
@@ -1198,6 +2089,15 @@
       "source": "art_source/models/vent_shell.blend; tools/build_mechs.py",
       "terms": "Original game content; no open-source license assigned",
       "runtime": true
+    },
+    {
+      "path": "modules/models/winch_pack.glb",
+      "provider": "Project-specific Blender geometry",
+      "source": "art_source/models/winch_pack.blend; tools/build_mechs.py",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "ad59033ae31315b77a8adc006f996bdfc57d375391a45589e3cfaec992a2acaf",
+      "bytes": 225012
     },
     {
       "path": "stages/aurora_relay/aurora-relay-matte.png",
@@ -1335,6 +2235,15 @@
       "runtime": true
     },
     {
+      "path": "ui/portraits/coda.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/coda.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "854218f5fd2335eeef3ab9508196da3a3ca0e22925b8b0d7f34baf5d2e66f299",
+      "bytes": 83042
+    },
+    {
       "path": "ui/portraits/kai.png",
       "provider": "Native render of the production character model",
       "source": "characters/models/kai.glb; tools/render_assets.gd",
@@ -1342,6 +2251,15 @@
       "runtime": true,
       "sha256": "0bbbb4482ab24fe0afc31c15e80c2cc2a1b93605483db65345755c0e06467611",
       "bytes": 93987
+    },
+    {
+      "path": "ui/portraits/kite.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/kite.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "6d61c28cafc8c4b898d4fb415c9f8131ba2fd78bfbb3f5aebab9bded583e6826",
+      "bytes": 91759
     },
     {
       "path": "ui/portraits/kuren.png",
@@ -1378,6 +2296,24 @@
       "source": "characters/models/nova.glb; tools/render_assets.gd",
       "terms": "Original game content",
       "runtime": true
+    },
+    {
+      "path": "ui/portraits/rivet.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/rivet.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "4d52a96bd030d0bcf0f331874d9c05ad918c7f8a1af51cef174041cc197979d5",
+      "bytes": 66318
+    },
+    {
+      "path": "ui/portraits/rook.png",
+      "provider": "Native render of the production character model",
+      "source": "characters/models/rook.glb; tools/render_assets.gd",
+      "terms": "Original game content; no open-source license assigned",
+      "runtime": true,
+      "sha256": "b7aa5d9f3b2ca8459e2626c30ffa479021232e2eddd489257a8334343561da19",
+      "bytes": 85842
     },
     {
       "path": "ui/portraits/shadow.png",

@@ -20,6 +20,7 @@ def add(pattern, provider, source, terms, runtime=True):
 original = "Original game content; no open-source license assigned"
 challengers = {"rivet", "kite", "rook", "coda"}
 music = "third_party/MiniMax-Music3-LICENSE.txt"
+add("art_source/models/*.blend", "Project-specific Blender geometry", lambda p: "tools/build_mechs.py", original, False)
 for directory in ["characters", "modules"]:
     add(directory + "/models/*.glb", "Project-specific Blender geometry", lambda p: f"art_source/models/{p.stem}.blend; tools/build_mechs.py", original)
 add("ui/portraits/*.png", "Native render of the production character model", lambda p: f"characters/models/{p.stem}.glb; tools/render_assets.gd", original)
@@ -34,6 +35,7 @@ add("audio/sfx/chassis/*.wav", "Original SuperCollider chassis instruments", lam
 add("art_source/characters/challengers/*.png", "Built-in ImageGen", lambda p: "art_source/characters/challengers/portraits.json", "Project-specific generated asset", False)
 for name in sorted(challengers):
     add(f"docs/game/assets/pilots/{name}.webp", "Browser edition of original challenger portrait", lambda p: f"art_source/characters/challengers/{p.stem}.png", original)
+    add(f"docs/game/assets/sfx/chassis/{name}_*.mp3", "Browser edit of the original SuperCollider cue", lambda p: f"audio/sfx/chassis/{p.stem}.wav", original)
 add("stages/*/*-matte.png", "Built-in ImageGen; model identifier not exposed", lambda p: "art_source/arena-prompts.json; art_source/arena-provenance.json", "Project-specific generated asset")
 add("audio/sfx/*.wav", "Original SuperCollider synthesis", lambda p: "audio/source/render_expansion_sfx.scd", original)
 add("audio/music/*.ogg", "MiniMax-Music3 composition, edited and mastered for this game", lambda p: f"audio/source/music/{p.stem}-loop-edit.json; tools/master_expansion_music.py", music)

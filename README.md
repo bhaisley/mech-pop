@@ -8,6 +8,17 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ## Browser edition
 
+**New Challengers · v0.6.0.** Choose Rivet, Kite, Rook or Coda in the hangar for local matches, Friend Duels and private rooms. Stealing an arm gives you its special. Your chassis keeps its own movement and salvage traits.
+
+| Mech | Chassis trait | Weapon you can steal | Starting shell |
+| --- | --- | --- | --- |
+| **Rivet** · salvage rigger | Can start a pickup from farther away. | **Mag Fork** pulls a loose part in front of you toward your catch point. Press Salvage to claim it. | Winch Pack |
+| **Kite** · air courier | Gets two midair jumps after taking off. | **Gale Disc** can hit once on the way out and once on the way back. Move to change its return path. | Sail Frame |
+| **Rook** · counter guard | Resists knockback when standing still on the ground. | **Gate Shield** parries a frontal hit and immediately answers with a bash. The startup and your back are exposed. | Keystone Plate |
+| **Coda** · echo drummer | Drops sharply when you hold down while falling. | **Echo Bell** marks the strike location. A second beat hits the same spot 0.48 seconds later. | Resonance Shell |
+
+![Rivet, Kite, Rook and Coda with their starting equipment in the playable hangar](docs/media/new-challengers.webp)
+
 **Cannon Scramble · v0.5.0.** Choose **Rematch Terra** in the hangar or after winning the practice duel. On Skyport, Terra chases his Pile Cannon, can knock it out of your hands during a catch and can take it back. If he gets there first, break it off again. Win by hitting him with his own cannon.
 
 On the one-handed layout, **S + E** slams the part down close, **E** sends it forward, and **W + E** launches it for an aerial catch. Press **F** within reach of the outlined part. The loose mount opens before it breaks, and the cannon travels to the new pilot’s wrist during the 0.18-second catch. Face Terra and press **R** to fire.
@@ -26,9 +37,9 @@ Choose a mech, pick an arena and press **Launch match**. The first player uses t
 
 The **One-handed WASD** layout puts combat under your left hand. Move with **A/D**, aim with **W/S**, jump with **Space**, and use **Q** for a light attack, **E** for a breaker and **R** for your weapon special. **Shift** dodges and **F** salvages. Open **Controls** in the hangar or pause menu to rebind a key or select the **Classic** layout. Your browser remembers your choice.
 
-[![Nova on the Three.js turntable with the eight-mech roster and match settings](docs/media/browser-hangar.webp)](https://bhaisley.github.io/mech-pop/)
+[![Nova on the Three.js turntable with the twelve-mech roster and match settings](docs/media/browser-hangar.webp)](https://bhaisley.github.io/mech-pop/)
 
-All eight mechs have articulated Three.js models based on the concept poster. Nova carries a curved energy blade, Terra a broad pile cannon and Momo a ring-shaped caster. All sixteen weapon arms and shells detach, land in the arena and fit the mech that salvages them. The original combat simulation, bots and room protocol run in WebAssembly.
+All twelve mechs have articulated Three.js models. The original eight take their silhouettes from the concept poster. Nova carries a curved energy blade, Terra a broad pile cannon and Momo a ring-shaped caster. All twelve weapon arms and twelve shells detach, land in the arena and fit the mech that salvages them. The original combat simulation, bots and room protocol run in WebAssembly.
 
 The browser edition has eight arenas. Tideglass Station has a crossing shuttle, Cinder Foundry has a furnace piston and Aurora Relay has a diagonal cable lift. Their YuE2 tracks are *Pressure Hull*, *Ladle Run* and *Carrier Wave*. Each chassis has its own attack, impact, boost and Core Pop sounds. Directional sparks, shell flashes and a hexagonal shield show how a hit landed. For network play, **Private room** connects to a running room server. [Browser gameplay screenshot](docs/media/browser-battle.webp) · [Browser assets and credits](docs/game/assets/CREDITS.md) · [Room server setup](server/README.md)
 
@@ -52,7 +63,7 @@ Actual native gameplay from **macOS build 16**, featuring Nova, Momo, Kai and Ze
 
 ## From concept to playable game
 
-![The actual game title screen, showing all eight playable mechs](docs/media/eight-mechs.png)
+![The native build 16 title screen showing the original eight mechs](docs/media/eight-mechs.png)
 
 | Neon Alley | Blossom Core |
 | --- | --- |
@@ -66,9 +77,9 @@ These are unretouched game renders. [Junk Fields screenshot](docs/media/junk-fie
 
 ## What's playable
 
-- **Eight mechs:** Nova, Kuren, Terra, Momo, Shadow, Lumi, Kai and Zero.
+- **Twelve playable mechs.** Nova, Kuren, Terra, Momo, Shadow, Lumi, Kai, Zero, Rivet, Kite, Rook and Coda.
 - The current browser game and source include eight arenas with individual battle themes. Native preview build 16 includes the original five.
-- **Modular combat:** eight weapon arms and eight shells that can be broken off, collected and equipped during a fight.
+- **Modular combat.** Twelve weapon arms and twelve shells that can be broken off, collected and equipped during a fight.
 - **Four-player matches:** mix bots, keyboard, touch on iPad and connected controllers using each player's Input selector.
 - **Local and network play:** couch matches, direct LAN rooms and private Internet rooms through the included room server.
 - **Native macOS and iPad builds:** the preview has been played and tested on both devices.

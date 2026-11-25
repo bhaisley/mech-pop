@@ -2,6 +2,14 @@
 
 The **native 0.2.0 preview, build 16**, shipped with eight fighters, sixteen interchangeable equipment parts and five arenas. Its release tag preserves that native build’s source. The complete private development record also retains failed investigations and raw device diagnostics.
 
+## New Challengers browser release 0.6.0
+
+The expansion suite exercised all 1,728 combinations of twelve chassis, twelve weapon arms and twelve shells. It checked both passes of the Gale Disc, the fixed position and timing of the Echo Bell, frontal and rear shield hits, stolen shield counters, salvage range, exclusive pickup claims, Coda’s descent and Rook’s grounded knockback. Eight Godot suites passed 2,216 checks.
+
+A four-player Chrome match on Skyport loaded all 1,728 Three.js loadouts, played both of Kite’s midair hops and Coda’s echo, and confirmed Rook’s counter hit against Rivet. All twelve roster buttons fit the desktop, portrait phone and landscape phone layouts. Touch input selected Coda and fired the delayed strike. Nova still won the Skyport cannon rematch with one-handed WASD.
+
+Two browser profiles chose Rook and Kite for a Friend Duel. The guest switched to Coda between rounds. Both clients agreed on the result of the first-to-two set and started the next set at 0–0. A separate four-seat room completed a round and rematch with two browsers and two bots. Controller and touch input were simulated on one Mac. Physical hardware, play across separate Internet connections and human balance testing remain open.
+
 ## Cannon Scramble browser release 0.5.0
 
 - In Chrome on Skyport, Nova slammed the cannon close and won with one-handed WASD. With standard Gamepad API input, Terra recovered his original cannon after a forward break, then Nova broke it off again, stole it and landed the winning shot in the same round. With touch input in a phone viewport, Nova uppercut the cannon, jumped to meet it, claimed it in midair and won.

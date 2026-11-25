@@ -46,8 +46,8 @@
     },
     {
       "file": "docs/media/browser-hangar.webp",
-      "sha256": "5a437f9a4730d71dccd14eb14d820bc934e3a82b7185d7162fea22f1ce7fc282",
-      "description": "Chrome capture of the 0.5.0 hangar with the eight-mech roster and Rematch Terra.",
+      "sha256": "e2fb27884d4d3bfcc140a88bdff64fdbbc1e6e74cc2ffbe6b7479b44cdc62c92",
+      "description": "Chrome capture of the 0.6.0 browser hangar with twelve selectable mechs.",
       "retouched": false
     },
     {
@@ -60,6 +60,12 @@
       "file": "docs/media/cannon-scramble.webp",
       "sha256": "8d84da8767776d3b33b0eb088c25566c2cf8a79d8d9bdd46b219e686bce7e2c6",
       "description": "Chrome capture of a playable Skyport rematch just after Nova slams Terra’s Pile Cannon onto the deck.",
+      "retouched": false
+    },
+    {
+      "file": "docs/media/new-challengers.webp",
+      "sha256": "3a5441a47b05753af0795c82fc243f798b6d43e1f2c5960c58d72033731ec1f5",
+      "description": "Four Chrome captures of the playable Three.js hangar arranged in a two-by-two grid. Rivet, Kite, Rook and Coda carry their starting equipment.",
       "retouched": false
     }
   ],

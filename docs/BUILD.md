@@ -1,6 +1,6 @@
 # Build MECH★POP
 
-This checkout builds the **0.5.0 browser edition**. To reproduce the packaged **0.2.0 native preview, build 16**, use its release tag. [Native build 16](https://github.com/bhaisley/mech-pop/tree/v0.2.0-preview.16)
+This checkout builds the **0.6.0 browser edition**. To reproduce the packaged **0.2.0 native preview, build 16**, use its release tag. [Native build 16](https://github.com/bhaisley/mech-pop/tree/v0.2.0-preview.16)
 
 ## Requirements
 
@@ -13,7 +13,7 @@ The browser game is ready to serve from this checkout. The following toolchain i
 
 ## Run the browser game
 
-The current browser game uses the Cannon Scramble rules. For a four-seat private room, run the authority from the same release tag, `v0.5.0-web`.
+The browser game includes the twelve-mech New Challengers roster. Run the four-seat room authority from the matching `v0.6.0-web` release tag.
 
 Serve the `docs` directory from the repository root.
 
