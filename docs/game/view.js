@@ -60,7 +60,7 @@
   previewShadow.scale.set(.68, .40, 1);
   previewShadow.position.y = .001;
   let model = null, previewId = '', yaw = 0, drag = null, mode = 'preview', width = 0, height = 0;
-  let arena = null, stage = null, rects = [], fighters = [], labels = [], shadows = [];
+  let arena = null, stage = null, duel = false, rects = [], fighters = [], labels = [], pickupLabels = [], shadows = [];
   let combatEffects = null;
   let loose = new Map(), shots = new Map(), effects = [], frame = null, centerX = 0, centerY = 3.2, size = 13,
       shake = 0;
@@ -134,6 +134,7 @@
     fighters = [];
     shadows = [];
     labels = [];
+    pickupLabels = [];
     fieldLabels.replaceChildren();
     loose.clear();
     shots.clear();
@@ -157,6 +158,7 @@
     effects = [];
     frame = null;
     mode = 'battle';
+    duel = config.duel;
     preview.visible = false;
     battle.visible = true;
     mount(battleMount);
@@ -185,6 +187,14 @@
       label.hidden = true;
       fieldLabels.append(label);
       return label;
+    });
+    pickupLabels = fighters.map((_, i) => {
+      const hint = document.createElement('span');
+      hint.className = 'pickup-hint';
+      hint.style.setProperty('--slot', colors[i]);
+      hint.hidden = true;
+      fieldLabels.append(hint);
+      return hint;
     });
     centerX = 0;
     centerY = 3.1;
@@ -345,7 +355,18 @@
   }
   function follow(dt) {
     const aspect = width / Math.max(1, height);
-    let x0 = -4, x1 = 4, y0 = .1, y1 = 5.5;
+    // In practice, keep the learner, Terra and the loose cannon in the same shot.
+    const playerX = frame.fighters[0].x / 100;
+    let x0 = duel ? playerX : -4, x1 = duel ? playerX : 4, y0 = .1, y1 = duel ? 3.2 : 5.5;
+    if (duel && frame.duelStep === 'take') {
+      const cannon = frame.parts.find(item => item[1] === 'pile_cannon');
+      if (cannon) {
+        x0 = Math.min(x0, cannon[2] / 100);
+        x1 = Math.max(x1, cannon[2] / 100);
+        y0 = Math.min(y0, -cannon[3] / 100);
+        y1 = Math.max(y1, -cannon[3] / 100 + 1);
+      }
+    }
     for (const f of frame.fighters)
       if (!f.dead) {
         const x = clamp(f.x / 100, -17, 17), y = clamp(-f.y / 100, -6, 13);
@@ -355,7 +376,7 @@
         y1 = Math.max(y + 2.2, y1);
       }
     // A side-on camera includes the action even on a narrow portrait display.
-    const h = Math.max(8.8, y1 - y0 + 2.35, (x1 - x0 + 3.5) / aspect);
+    const h = Math.max(duel ? 7.6 : 8.8, y1 - y0 + 2.35, (x1 - x0 + (duel ? 2.8 : 3.5)) / aspect);
     const cx = (x0 + x1) * .5, cy = (y0 + y1) * .5 - .1;
     const rate = frame.phase === 'intro' ? 8 : 3.8;
     size = T.MathUtils.lerp(size, h, 1 - Math.exp(-dt * (h > size ? 8 : rate * .55)));
@@ -391,17 +412,25 @@
       const marker = labels[i];
       marker.hidden = f.dead;
       if (!f.dead) {
-        let caption = 'P' + (i + 1);
-        if (f.nearby) {
-          const button = f.device === -1 ? MechControls.keyboard.label('salvage') : f.device === -4 ? 'Tap' : 'RB';
-          caption += ' · ' + button + ' Salvage';
-        }
-        if (marker.textContent !== caption)
-          marker.textContent = caption;
         vector.set(x, y + meta.height / 100 + .22, z).project(camera);
         marker.style.left = ((vector.x + 1) * 50) + '%';
         marker.style.top = ((1 - vector.y) * 50) + '%';
         marker.style.opacity = f.safe ? '.7' : '1';
+      }
+      const hint = pickupLabels[i];
+      const item = f.nearby && frame.parts.find(p => p[0] === f.nearbyUid);
+      hint.hidden = !item;
+      if (item) {
+        const sameTarget = frame.fighters.filter(p => p.nearbyUid === f.nearbyUid);
+        const seat = sameTarget.length > 1 ? 'P' + (i + 1) + ' · ' : '';
+        const name = catalog.parts[item[1]].name;
+        const caption = seat + MechControls.actionLabel(f.device, 'salvage') + ' · Take ' + name;
+        if (hint.textContent !== caption)
+          hint.textContent = caption;
+        vector.set(item[2] / 100, -item[3] / 100 + .85, .25).project(camera);
+        const row = sameTarget.indexOf(f);
+        hint.style.left = clamp((vector.x + 1) * width / 2, hint.offsetWidth / 2 + 3, width - hint.offsetWidth / 2 - 3) + 'px';
+        hint.style.top = clamp((1 - vector.y) * height / 2 - row * (hint.offsetHeight + 2), hint.offsetHeight + 3, height - 3) + 'px';
       }
       const shadow = shadows[i];
       let below = -Infinity;

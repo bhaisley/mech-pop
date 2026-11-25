@@ -102,6 +102,13 @@
     selectLayout,
     bindKey
   };
+  const padLabels = {heavy: 'Y/△', salvage: 'RB/R1', special: 'B/○'};
+  const touchLabels = {heavy: 'Break', salvage: 'Salvage', special: 'Special'};
+  function actionLabel(device, action) {
+    if (device === -1)
+      return keyboard.label(action);
+    return (device === -4 ? touchLabels : padLabels)[action];
+  }
   function state(device) {
     if (!states.has(device))
       states.set(device, {x: 0, y: 0, jump: false, edges: 0, buttons: []});
@@ -265,6 +272,7 @@
   }
   window.MechControls = {
     keyboard,
+    actionLabel,
     clear,
     read,
     pads,

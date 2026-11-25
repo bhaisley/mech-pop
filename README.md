@@ -8,6 +8,10 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ## Browser edition
 
+**Cannon Duel · v0.3.0.** Choose **Practice duel** in the hangar to play Nova against Terra on Skyport. Break his Pile Cannon, take it and land a shot with it. You have 90 seconds and can replay immediately.
+
+In any match, move close to a loose part to see its name and your pickup button. Your HUD shows what the equipped weapon does and when its special is ready. The score feed names the scorer and victim of each KO. Tied results show the core damage that decided the round.
+
 Choose a mech, pick an arena and press **Launch match**. The first player uses the keyboard on desktop and on-screen controls on a touchscreen. The other three slots start as bots. Press a button on your controller, then choose it under **P1 input** or the input menu for another player.
 
 The **One-handed WASD** layout puts combat under your left hand. Move with **A/D**, aim with **W/S**, jump with **Space**, and use **Q** for a light attack, **E** for a breaker and **R** for your weapon special. **Shift** dodges and **F** salvages. Open **Controls** in the hangar or pause menu to rebind a key or select the **Classic** layout. Your browser remembers your choice.

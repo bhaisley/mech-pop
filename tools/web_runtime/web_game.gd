@@ -1,5 +1,6 @@
 extends Node
 
+const CannonDuel := preload("res://scripts/combat/cannon_duel.gd")
 const WebInput := preload("res://web_input.gd")
 var page: JavaScriptObject
 var callback: JavaScriptObject
@@ -68,14 +69,18 @@ func _begin(config: Dictionary) -> void:
 	var roster: Array[StringName] = []
 	for id in config.characters:
 		roster.append(StringName(id) if Roster.IDS.has(StringName(id)) else &"nova")
-	if roster.size() != 4: return
+	var duel: bool = not link.active and config.get("mode", "") == "cannon_duel"
+	if duel:
+		roster = [&"nova", &"terra"]
+		config = config.merged({"stage": "skyport", "duration": 90.0}, true)
+	elif roster.size() != 4: return
 	router.clear_state()
-	session = MatchSession.new()
+	session = CannonDuel.new() if duel else MatchSession.new()
 	add_child(session)
 	session.setup(router, roster, config)
 	session.combat_event.connect(_event)
 	if link.active: link.bind_match(session)
-	page.started(JSON.stringify({"stage": config.stage, "characters": config.characters, "online": link.active}))
+	page.started(JSON.stringify({"stage": config.stage, "characters": roster, "online": link.active, "duel": duel, "devices": router.devices.slice(0, roster.size())}))
 
 func _lobby() -> void:
 	if not page: return
@@ -104,6 +109,10 @@ func _event(kind: StringName, data: Dictionary) -> void:
 	if kind == &"phase_shift":
 		event["fromX"] = data.origin.x
 		event["fromY"] = data.origin.y
+	if kind == &"core_pop":
+		event["credited"] = data.credited
+		# Pre-duel room servers sent the KO position but no explicit cause.
+		event["ringOut"] = data.ring_out if data.has("ring_out") else session.stage.is_outside(data.position + Vector2(0, 100))
 	var where: Vector2 = data.get("position", Vector2.ZERO)
 	if not data.has("position") and data.get("fighter") is Fighter: where = data.fighter.position + Vector2(0, -90)
 	event["x"] = where.x
@@ -123,11 +132,14 @@ func _process(delta: float) -> void:
 		if f.attack: move_time = clampf(f.attack_time / f.attack.total_time(), 0.0, 1.0)
 		var device: int = router.devices[f.slot]
 		var nearby := ""
+		var nearby_uid := -1
 		if device not in [PlayerInputRouter.BOT, PlayerInputRouter.REMOTE] and f.alive() and not f.attack and f.reserved_part < 0 and f.stun <= 0.0 and f.dodge_time <= 0.0:
 			var salvage: SalvageBody = session.parts.nearest(f)
-			if salvage: nearby = String(salvage.part.definition.id)
+			if salvage:
+				nearby = String(salvage.part.definition.id)
+				nearby_uid = salvage.part.uid
 		frames.append({
-			"id": f.data.id, "device": device, "nearby": nearby,
+			"id": f.data.id, "device": device, "nearby": nearby, "nearbyUid": nearby_uid,
 			"moveId": String(f.attack.id) if f.attack else "", "serial": f.attack_serial,
 			"x": snappedf(point.x, 0.1), "y": snappedf(point.y, 0.1),
 			"vx": snappedf(f.velocity.x, 1), "facing": f.facing, "state": f.state,
@@ -135,7 +147,7 @@ func _process(delta: float) -> void:
 			"dead": not f.alive(), "safe": f.invulnerable > 0.0, "core": snappedf(f.core, 0.1),
 			"weapon": _part(f, &"weapon_arm"), "shell": _part(f, &"shell"),
 			"score": f.score, "steals": f.steals, "breaks": f.parts_broken, "pops": f.pops,
-			"special": snappedf(f.special_cooldown, 0.1),
+			"special": f.special_cooldown, "damage": f.damage_done,
 		})
 	var loose: Array = []
 	for item in session.parts.instances.values():
@@ -151,5 +163,8 @@ func _process(delta: float) -> void:
 		"countdown": session.countdown, "paused": session.paused, "events": events,
 		"winners": session.winners() if session.phase == &"results" else [],
 	}
+	if session is CannonDuel:
+		frame["duelStep"] = session.objective
+		frame["duelReason"] = session.ended_reason
 	page.frame(JSON.stringify(frame))
 	events.clear()

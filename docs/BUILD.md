@@ -58,6 +58,7 @@ The Mac preset creates a universal app with its engine and assets. It uses an ad
 
 ```sh
 godot --headless --path . --script tests/test_systems.gd
+godot --headless --path . --script tests/test_cannon_duel.gd
 godot --headless --path . --script tests/test_controller_menus.gd
 godot --headless --path . --script tests/test_touch_controls.gd -- --touch-preview
 godot --headless --path . --script tests/test_front_end.gd

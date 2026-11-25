@@ -1710,3 +1710,114 @@ dialog[data-view=help] {
     transition: none!important;
   }
 }
+
+.hangar-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px,1.4vw,18px);
+}
+
+.hangar-actions .room-button {
+  min-width: 0;
+  padding-inline: 3px;
+  white-space: nowrap;
+}
+
+.pickup-hint {
+  position: absolute;
+  transform: translate(-50%,-100%);
+  padding: 3px 7px;
+  color: #fff;
+  background: #142030f5;
+  border: 1px solid var(--slot);
+  border-radius: 3px;
+  font: 700 clamp(11px,1.3vw,16px) var(--cond);
+  white-space: nowrap;
+}
+
+.pickup-hint:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 4px);
+  border: 4px solid transparent;
+  border-top-color: var(--slot);
+}
+
+#score-feed {
+  position: absolute;
+  top: max(calc(env(safe-area-inset-top) + 45px),58px);
+  left: 3%;
+  max-width: 94%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+#score-feed li {
+  width: fit-content;
+  margin-bottom: 3px;
+  padding: 4px 8px;
+  color: white;
+  background: #132232ef;
+  border-left: 3px solid var(--slot);
+  font: 700 clamp(12px,1.25vw,17px) var(--cond);
+}
+
+.hud-special {
+  width: fit-content;
+  padding-inline: 3px;
+  border-left: 2px solid var(--slot);
+  color: #f2f8fc;
+  font: 700 clamp(10px,1vw,14px) var(--cond);
+}
+
+.hud-special.cooling {
+  color: #becbd3;
+  border-color: #81929c;
+}
+
+.hud-special.just-ready {
+  background: var(--slot);
+  color: #132232;
+}
+
+.duel #hud {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+
+#duel-guide {
+  position: absolute;
+  bottom: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 92%;
+  padding: 7px 12px;
+  border-left: 4px solid var(--yellow);
+  border-radius: 2px;
+  background: #142030ef;
+  pointer-events: none;
+}
+
+#duel-step {
+  display: block;
+  color: #ffe478;
+  font: 700 clamp(14px,1.6vw,21px) var(--cond);
+  text-transform: uppercase;
+}
+
+#duel-hint {
+  color: white;
+  font: 600 clamp(12px,1.15vw,16px) var(--small);
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+  #score-feed { top: 34px; }
+  #duel-guide { top: 38px; bottom: auto; max-width: 68%; padding: 4px 8px; }
+  .duel #announcement { top: auto; bottom: 10%; }
+  #battle:has(#touch:not([hidden])) .hud-special { font-size: 10px; }
+}

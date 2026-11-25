@@ -210,17 +210,24 @@ static func digest(snapshot: Dictionary) -> String:
 
 static func event_to_wire(kind: StringName, payload: Dictionary) -> Dictionary:
 	var encoded: Dictionary = {}
+	var event := {"kind": String(kind), "payload": encoded}
 	for key in payload:
+		# Older peers validate every payload field but ignore optional envelope metadata.
+		if kind == &"core_pop" and key == "ring_out":
+			event["ring_out"] = payload[key]
+			continue
 		var value: Variant = payload[key]
 		if value is Fighter: encoded[key] = {"fighter": value.slot}
 		elif value is AttackData: encoded[key] = {"attack": String(value.id)}
 		elif value is PartInstance: encoded[key] = {"part": value.uid, "definition": String(value.definition.id)}
 		elif value is Vector2 or value is bool or value is int or value is float or value is String or value is StringName or value is Array:
 			encoded[key] = value
-	return {"kind": String(kind), "payload": encoded}
+	return event
 
 static func event_from_wire(session: MatchSession, event: Dictionary) -> Dictionary:
 	var payload: Dictionary = {}
+	if event.kind == "core_pop" and event.has("ring_out"):
+		payload["ring_out"] = event.ring_out
 	for key in event.get("payload", {}):
 		var value: Variant = event.payload[key]
 		if value is Dictionary:
@@ -252,6 +259,7 @@ static func valid_event(event: Dictionary) -> bool:
 		"phase_shift": ["fighter", "origin", "position"]
 	}
 	if not required.has(event.get("kind")) or not event.get("payload") is Dictionary or event.payload.size() > 12: return false
+	if event.has("ring_out") and (event.kind != "core_pop" or not event.ring_out is bool): return false
 	for key in required[event.kind]:
 		if not event.payload.has(key): return false
 	for key in event.payload:

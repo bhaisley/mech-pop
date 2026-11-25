@@ -1,8 +1,16 @@
-# Preview validation
+# Release validation
 
-This is a **0.2.0 preview, build 16**, with eight fighters, sixteen interchangeable equipment parts and five arenas. The public source snapshot preserves the tested runtime. The complete private development record also retains failed investigations and raw device diagnostics.
+The **native 0.2.0 preview, build 16**, shipped with eight fighters, sixteen interchangeable equipment parts and five arenas. Its release tag preserves that native build’s source. The complete private development record also retains failed investigations and raw device diagnostics.
 
-## Current build checks
+## Cannon Duel browser release 0.3.0
+
+- Chrome completed the practice duel using the one-handed layout, rebound keys, simulated Gamepad API input and touch events in a phone-sized viewport. Each run broke Terra’s cannon, displayed the named pickup, stole it, missed a shot, waited for the ready cue, then landed the shot. Replay and return to four-player Pop Rush also passed.
+- A four-player browser round showed a one-point loss on an uncredited fall and a shared damage tie. Replaying a credited ring-out, an exposed-core KO and a nonzero damage tiebreak checked the corresponding score messages and results.
+- Two browser clients played a private-room match over loopback. Both received the same scores, damage totals and winner, then launched a rematch.
+- Godot passed 11 duel checks, 62 network-state checks, 89 combat-system checks and 112 arena checks. Eight three-minute bot matches completed across the eight arenas.
+- The first-time playtest is open. Give five new players the hangar without coaching. Ask each to take Terra’s cannon and hit him with it, then explain who scored the last point after a Pop Rush round. Record the device, where each player hesitated and whether they did both unaided. The target is four of five, with one-handed WASD and a physical controller represented.
+
+## Native build 16 checks
 
 | Check | Result |
 | --- | --- |

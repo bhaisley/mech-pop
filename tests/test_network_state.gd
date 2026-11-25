@@ -61,7 +61,33 @@ func _run() -> void:
 	var malformed: Dictionary = event.duplicate(true)
 	malformed.payload.fighter.fighter = 999
 	check(not MatchWire.valid_event(malformed), "out-of-bounds cosmetic event rejected")
+	var knockouts: Array[Dictionary] = []
+	host.combat_event.connect(func(kind: StringName, data: Dictionary) -> void:
+		if kind == &"core_pop": knockouts.append(MatchWire.event_to_wire(kind, data)))
 	host.knock_out(donor, collector.slot)
+	var core_event := knockouts.back() as Dictionary
+	check(MatchWire.valid_event(core_event) and not core_event.ring_out, "credited core break crosses the wire with its cause")
+	check(not core_event.payload.has("ring_out") and core_event.payload.credited == collector.slot, "old clients receive the original KO payload and scorer")
+	var legacy := core_event.duplicate(true)
+	legacy.erase("ring_out")
+	check(MatchWire.valid_event(legacy) and not MatchWire.event_from_wire(replica, legacy).has("ring_out"), "older room authorities still decode")
+	var ring := host.fighters[0]
+	var score_before := collector.score
+	ring.position = host.stage.definition.blast_bounds.end + Vector2(300, 300)
+	ring.last_attacker = collector.slot
+	ring.credit_time = 2.0
+	host.step(1.0 / 120.0)
+	var ring_event := knockouts.back() as Dictionary
+	check(MatchWire.valid_event(ring_event) and MatchWire.event_from_wire(replica, ring_event).ring_out and collector.score == score_before + 1, "scorer earns a point on a credited ring-out")
+	host._respawn(ring)
+	score_before = ring.score
+	ring.position = host.stage.definition.blast_bounds.end + Vector2(300, 300)
+	host.step(1.0 / 120.0)
+	var fall := knockouts.back() as Dictionary
+	check(fall.ring_out and fall.payload.credited == -1 and ring.score == score_before - 1, "uncredited fall costs the falling fighter one point")
+	var malformed_cause := ring_event.duplicate(true)
+	malformed_cause.ring_out = "yes"
+	check(not MatchWire.valid_event(malformed_cause), "KO cause must be a boolean")
 	_roundtrip("Core Pop and retired shell")
 	host._respawn(donor)
 	_roundtrip("respawn allocates fresh unique parts")

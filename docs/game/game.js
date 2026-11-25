@@ -4,12 +4,18 @@
   const {mechs, parts, stages} = MechCatalog, ids = Object.keys(mechs), arenas = Object.keys(stages);
   const colors = ['#73dbff', '#ff8ca5', '#ffe478', '#98e6a9'];
   const controls = MechControls, sound = MechAudio, view = window.MechView;
-  const KEYBOARD = -1, BOT = -2, TOUCH = -4;
+  const KEYBOARD = -1, BOT = -2, REMOTE = -3, TOUCH = -4;
   const devices = [matchMedia('(pointer:coarse)').matches ? TOUCH : KEYBOARD, BOT, BOT, BOT];
   const roster = ids.slice(0, 4), dialog = $('modal'), body = $('dialog-body');
   let slot = 0, stage = 'skyport', screen = 'hangar', dialogType = '', generation = 0, noticeTimer;
   let api = null, boot = null, engine = null, version = null, resolveBoot, rejectBoot;
   let online = false, room = null, roomAction = false, request = null, roomServer = '', roomCode = '';
+  let duel = false, battleDevices = [], lastPoint = '';
+  const weaponActions = {
+    arc_blade: 'Sweep blade', burst_knuckle: 'Rush punch', pile_cannon: 'Fire cannon',
+    halo_caster: 'Repair gear', phase_talon: 'Blink strike', prism_emitter: 'Cast field',
+    rail_lance: 'Fire rail shot', switch_driver: 'Drive strike'
+  };
   let countdown = '', hud = [], lastHud = 0, lastBanner = 0, finished = false;
   try {
     roomServer = localStorage.getItem('mechpop.roomServer') || '';
@@ -201,7 +207,7 @@
     };
     const guide = node('details', undefined, 'match-guide');
     guide.append(node('summary', 'How to play'),
-        node('p', 'Hold an aim direction as you press the breaker for an uppercut or a slam. Wear down armor with light attacks, then land a breaker. Salvage loose parts to equip them. A Core Pop earns a point. Damage breaks score ties.'),
+        node('p', 'Hold an aim direction as you press the breaker for an uppercut or a slam. Wear down armor with light attacks, then land a breaker. Salvage loose parts to equip them. Break an exposed core or send a rival out for +1. An uncredited KO costs you a point. Core damage breaks score ties.'),
         node('p', 'For couch play, select a player tab and assign a connected controller. Press a controller button to make it available. Choose Touch for on-screen controls.'));
     body.append(layoutRow, message, table, guide,
         action(screen === 'battle' ? 'Back to match menu' : 'Back to hangar', closeDialog));
@@ -353,7 +359,7 @@
                  });
                  // Cache the engine separately from the smaller game pack. Its
                  // move timeline must match the version of the renderer in HTML.
-                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=4', 'sim.pck')])
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=5', 'sim.pck')])
                      .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
@@ -381,7 +387,7 @@
     show('error', title);
     body.append(node('p', error.message || String(error)), action('Back', back || dismiss, true));
   }
-  async function launch() {
+  async function launch(practice = false) {
     if (!view) {
       errorDialog(
           '3D graphics unavailable',
@@ -398,9 +404,12 @@
       await loadRuntime();
       if (ticket !== generation)
         return;
+      const trainee = devices[slot] !== BOT ? devices[slot] : devices.find(d => d !== BOT)
+          ?? (matchMedia('(pointer:coarse)').matches ? TOUCH : KEYBOARD);
       dispatch('local', {
-        characters: roster.slice(),
-        devices: devices.slice(),
+        mode: practice ? 'cannon_duel' : 'pop_rush',
+        characters: practice ? ['nova', 'terra'] : roster.slice(),
+        devices: practice ? [trainee, BOT, BOT, BOT] : devices.slice(),
         stage,
         difficulty: Number($('difficulty').value),
         duration: 180
@@ -409,7 +418,8 @@
       errorDialog('Could not launch', error);
     }
   }
-  $('start').onclick = launch;
+  $('start').onclick = () => launch();
+  $('duel-button').onclick = () => launch(true);
   function makeHud(chars) {
     $('hud').replaceChildren();
     return chars.map((id, i) => {
@@ -425,25 +435,35 @@
       meter.append(core);
       const gear = node('div', undefined, 'hud-gear'), weapon = node('span'), shell = node('span');
       gear.append(weapon, shell);
-      data.append(name, meter, gear);
+      const special = node('div', undefined, 'hud-special');
+      special.hidden = true;
+      data.append(name, meter, gear, special);
       card.append(img, data);
       $('hud').append(card);
-      return {score, core, meter, weapon, shell};
+      return {score, core, meter, weapon, shell, special, lastWeapon: null, ready: false, highlightUntil: 0};
     });
   }
   function begin(config) {
     dismiss();
     screen = 'battle';
     online = config.online;
+    duel = config.duel;
+    battleDevices = config.devices;
+    lastPoint = '';
+    $('score-feed').replaceChildren();
+    $('battle').classList.toggle('duel', duel);
+    $('duel-guide').hidden = !duel;
+    text('duel-step', '');
+    text('duel-hint', '');
     finished = false;
     countdown = '';
     lastHud = 0;
     document.body.dataset.screen = 'battle';
     $('hangar').hidden = true;
     $('battle').hidden = false;
-    $('touch').hidden = !devices.includes(TOUCH);
-    text('arena-title', stages[config.stage].name);
-    text('clock', '3:00');
+    $('touch').hidden = !battleDevices.includes(TOUCH);
+    text('arena-title', duel ? 'Cannon Duel' : stages[config.stage].name);
+    text('clock', duel ? '1:30' : '3:00');
     text('announcement', '');
     $('countdown').hidden = true;
     lastBanner = 0;
@@ -498,7 +518,10 @@
     if (online)
       body.append(node('p', 'The room keeps playing while your controls are paused.'));
     const resumeButton = action('Resume match', resume, true);
-    body.append(resumeButton, action('Controls', help), action('Return to hangar', returnHangar));
+    body.append(resumeButton, action('Controls', help));
+    if (duel)
+      body.append(action('Restart duel', () => launch(true)));
+    body.append(action('Return to hangar', returnHangar));
     resumeButton.focus();
   }
   function resume() {
@@ -515,26 +538,48 @@
     finished = true;
     controls.clear();
     sound.pause();
+    if (duel) {
+      const won = frame.duelStep === 'done';
+      show('results', won ? 'Cannon hit!' : 'Try the duel again');
+      body.append(node('p', won ? 'You broke off Terra’s Pile Cannon, equipped it and hit him with his own shot.'
+                                : frame.duelReason || 'Time ran out before the cannon hit.'),
+          action('Replay duel', () => launch(true), true), action('Launch Pop Rush', () => launch()),
+          action('Return to hangar', returnHangar));
+      body.querySelector('button').focus();
+      return;
+    }
     const winners = frame.winners,
           lead = winners.length === 1 ? playerLabel(frame.fighters[winners[0]], winners[0]) + ' wins' : 'Draw';
     show('results', lead);
     const t = node('table', undefined, 'results-table'), head = t.insertRow();
-    for (const label of ['Mech', 'Score', 'Breaks', 'Steals'])
+    const topScore = Math.max(...frame.fighters.map(f => f.score));
+    const tied = frame.fighters.filter(f => f.score === topScore).length > 1;
+    const damage = f => String(Number(f.damage.toFixed(3)));
+    const headings = ['Mech', 'Score', ...(tied ? ['Core damage'] : []), 'Breaks', 'Steals'];
+    for (const label of headings)
       head.append(node('th', label));
     frame.fighters.forEach((f, i) => {
       const row = t.insertRow();
       if (winners.includes(i))
         row.className = 'winner';
-      for (const value of [playerLabel(f, i), f.score, f.breaks, f.steals])
+      for (const value of [playerLabel(f, i), f.score, ...(tied ? [damage(f)] : []), f.breaks, f.steals])
         row.append(node('td', String(value)));
     });
-    body.append(t, node('p', 'Most points wins. Total damage breaks a score tie.'));
+    body.append(t);
+    if (tied) {
+      const deciding = frame.fighters[winners[0]];
+      const note = winners.length === 1 ? playerLabel(deciding, winners[0]) + ' wins on ' + damage(deciding) + ' core damage.'
+                                       : 'The leaders also tied on core damage.';
+      body.append(node('p', 'Score tied at ' + topScore + '. ' + note));
+    }
+    if (lastPoint)
+      body.append(node('p', 'Last point · ' + lastPoint));
     if (online)
       body.append(action('Room lobby', () => {
         showLobby(room);
       }, true));
     else
-      body.append(action('Rematch', launch, true));
+      body.append(action('Rematch', () => launch(), true));
     body.append(action('Return to hangar', returnHangar));
   }
   function gear(el, tuple, empty) {
@@ -551,6 +596,64 @@
       el.style.borderImage = 'none';
       el.title = empty;
     }
+  }
+  function specialHint(h, f, time) {
+    const verb = weaponActions[f.weapon[0]], el = h.special;
+    el.hidden = !verb || f.dead || f.device === BOT || f.device === REMOTE;
+    if (el.hidden) {
+      h.lastWeapon = null;
+      return;
+    }
+    const ready = f.special <= 0;
+    if (h.lastWeapon !== f.weapon[0] || ready && !h.ready)
+      h.highlightUntil = time + 1.6;
+    h.lastWeapon = f.weapon[0];
+    h.ready = ready;
+    const cooldown = ready ? '' : ' · ' + (Math.ceil(f.special * 10) / 10).toFixed(1) + 's';
+    const label = controls.actionLabel(f.device, 'special') + ' · ' + verb + cooldown;
+    if (el.textContent !== label)
+      el.textContent = label;
+    el.classList.toggle('cooling', !ready);
+    el.classList.toggle('just-ready', ready && time < h.highlightUntil);
+  }
+  function duelGuide(frame) {
+    const f = frame.fighters[0], key = action => controls.actionLabel(f.device, action);
+    let step, hint;
+    switch (frame.duelStep) {
+      case 'break':
+        step = '1 / 3 · Break the cannon';
+        hint = 'Get close to Terra. Face him and press ' + key('heavy') + ' without aiming up or down.';
+        break;
+      case 'take':
+        step = '2 / 3 · Take the Pile Cannon';
+        hint = 'Move beside the loose cannon and press ' + key('salvage') + '.';
+        break;
+      case 'fire':
+        step = '3 / 3 · Land a cannon shot';
+        hint = 'Leave room for the barrel. Face Terra and press ' + key('special') + '.';
+        break;
+      default:
+        step = '3 / 3 · Direct hit!';
+        hint = 'Terra took a hit from his own cannon.';
+    }
+    text('duel-step', step);
+    text('duel-hint', hint);
+  }
+  function scorePoint(e, frame) {
+    const victim = playerLabel(frame.fighters[e.fighter], e.fighter);
+    const credited = e.credited >= 0 && e.credited !== e.fighter;
+    if (credited) {
+      const scorer = playerLabel(frame.fighters[e.credited], e.credited);
+      lastPoint = scorer + ' +1 · ' + (e.ringOut ? 'Ring-out on ' + victim : 'Broke ' + victim + '’s exposed core');
+    } else {
+      lastPoint = victim + ' −1 · ' + (e.ringOut ? 'Fell out' : 'Lost core') + ' (uncredited)';
+    }
+    const feed = $('score-feed'), line = node('li', lastPoint);
+    line.style.setProperty('--slot', colors[credited ? e.credited : e.fighter]);
+    line.dataset.until = String(frame.time + 5);
+    feed.append(line);
+    if (feed.children.length > 4)
+      feed.firstElementChild.remove();
   }
   function banner(value) {
     text('announcement', value);
@@ -590,13 +693,15 @@
         break;
       case 'snap':
         sound.sound('snap');
+        if (part?.slot === 'weapon_arm')
+          hud[e.fighter].lastWeapon = null;
         if (f && part)
           banner(mechs[f.id].name + (e.stolen ? ' stole ' : ' equipped ') + part.name);
         break;
       case 'core_pop':
         chassis('ko', 1, 5);
         if (f)
-          banner(playerLabel(f, e.fighter) + ' · Core Pop!');
+          scorePoint(e, frame);
         break;
       case 'dodge':
         chassis('boost', .62, 1);
@@ -619,7 +724,8 @@
         banner('Final 30 seconds');
         break;
       case 'match_end':
-        sound.sound('victory');
+        if (!duel || frame.duelStep === 'done')
+          sound.sound('victory');
         break;
     }
   }
@@ -640,8 +746,14 @@
       text('announcement', '');
       lastBanner = 0;
     }
-    if (now - lastHud > 85 || frame.phase === 'results' && !finished) {
+    const gearChanged = frame.events.some(e => e.kind === 'snap' || e.kind === 'part_pop' || e.kind === 'respawn' || e.kind === 'core_pop');
+    if (gearChanged || now - lastHud > 85 || frame.phase === 'results' && !finished) {
       lastHud = now;
+      const feed = $('score-feed');
+      while (feed.firstElementChild && Number(feed.firstElementChild.dataset.until) < frame.time)
+        feed.firstElementChild.remove();
+      if (duel)
+        duelGuide(frame);
       const seconds = Math.ceil(frame.remaining);
       text('clock', Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0'));
       frame.fighters.forEach((f, i) => {
@@ -651,6 +763,7 @@
         h.score.textContent = f.score;
         gear(h.weapon, f.weapon, 'Bare arm');
         gear(h.shell, f.shell, 'Exposed');
+        specialHint(h, f, frame.time);
       });
     }
     if (frame.phase === 'results' && !finished)
@@ -907,7 +1020,7 @@
     pause,
     menu: gamepadMenu,
     lost: id => {
-      const owner = devices.indexOf(id);
+      const owner = (screen === 'battle' ? battleDevices : devices).indexOf(id);
       if (owner < 0)
         return;
       // Retain the assigned index in a match so reconnecting that controller resumes play.

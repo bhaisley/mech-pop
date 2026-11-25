@@ -1,0 +1,78 @@
+extends MatchSession
+## A two-fighter local exercise on Skyport's main deck.
+
+var objective: String = "break"
+var cannon: PartInstance
+var stole_cannon: bool = false
+var next_jab: float = 3.5
+var completed_at: float = -1.0
+var ended_reason: String = ""
+
+func setup(router: PlayerInputRouter, selections: Array[StringName], config: Dictionary = {}) -> void:
+	super.setup(router, selections, config)
+	var nova := fighters[0]
+	var terra := fighters[1]
+	nova.reset_at(Vector2(-100, -3))
+	terra.reset_at(Vector2(85, -3))
+	cannon = terra.part(&"weapon_arm")
+	cannon.condition = 1.0
+	command_source = _sparring_input
+	combat_event.connect(_track_objective)
+	tick_completed.connect(_check_attempt)
+
+func _sparring_input(slot: int, _delta: float) -> FighterCommand:
+	if slot == 0:
+		return input_router.command_for(slot)
+	var command := FighterCommand.new()
+	var terra := fighters[1]
+	var distance := fighters[0].position.x - terra.position.x
+	if objective == "break":
+		# Give the trainee time to read the prompt, then spar at close range.
+		if absf(distance) > 175.0 and absf(terra.position.x) < 850.0:
+			command.move.x = signf(distance) * 0.40
+		elif absf(distance) < 150.0 and elapsed >= next_jab:
+			terra.facing = signf(distance) if absf(distance) > 1.0 else terra.facing
+			command.light = true
+			next_jab = elapsed + 3.5
+	elif objective in ["take", "fire"]:
+		# Step clear of the loose cannon and give the trainee a visible target.
+		var mark := 700.0 if terra.position.x >= fighters[0].position.x else -700.0
+		if absf(distance) < 340.0 and absf(mark - terra.position.x) > 35.0:
+			command.move.x = signf(mark - terra.position.x) * 0.55
+		else:
+			terra.facing = signf(distance) if absf(distance) > 1.0 else terra.facing
+	return command
+
+func _track_objective(kind: StringName, data: Dictionary) -> void:
+	if completed_at >= 0.0 or not ended_reason.is_empty(): return
+	match kind:
+		&"part_pop":
+			if data.part == cannon and data.fighter == fighters[1]:
+				objective = "take"
+		&"snap":
+			if objective == "take" and data.part == cannon and data.fighter == fighters[0]:
+				objective = "fire"
+				stole_cannon = true
+		&"hit":
+			# Only Terra's cannon can produce this move in the Nova/Terra duel.
+			if stole_cannon and data.fighter == fighters[1] and data.source == fighters[0] and data.attack.id == &"pile_shot":
+				objective = "done"
+				completed_at = elapsed
+		&"core_pop":
+			ended_reason = "A mech was knocked out before the cannon hit."
+
+func _check_attempt() -> void:
+	if phase != &"fight": return
+	if completed_at >= 0.0:
+		if elapsed - completed_at < 0.5: return
+	elif ended_reason.is_empty():
+		if objective == "fire" and cannon.carrier != 0:
+			objective = "take"
+		if objective == "take" and is_instance_valid(cannon.entity):
+			# Leave time to read the prompt or check the bindings in the pause menu.
+			cannon.entity.lifetime = maxf(cannon.entity.lifetime, remaining)
+		if cannon.state != &"retired": return
+		ended_reason = "The loose cannon left play."
+	phase = &"results"
+	broadcast(&"match_end", {"winners": winners()})
+	match_finished.emit()

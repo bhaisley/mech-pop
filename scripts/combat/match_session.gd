@@ -40,7 +40,7 @@ func setup(router: PlayerInputRouter, selections: Array[StringName], config: Dic
 	parts = EquipmentStore.new()
 	parts.session = self
 	add_child(parts)
-	for slot in range(4):
+	for slot in range(selections.size()):
 		var fighter := Fighter.new()
 		fighter.configure(slot, Roster.mech(selections[slot]), self)
 		add_child(fighter)
@@ -105,7 +105,7 @@ func step(delta: float) -> void:
 			victim.snared = 0.7
 	for fighter in fighters:
 		if fighter.alive() and stage.is_outside(fighter.position):
-			knock_out(fighter, fighter.last_attacker if fighter.credit_time > 0.0 else -1)
+			knock_out(fighter, fighter.last_attacker if fighter.credit_time > 0.0 else -1, true)
 		if fighter.reserved_part >= 0 and fighter.attach_time <= 0.0 and fighter.stun <= 0.0:
 			parts.commit_claim(fighter)
 	parts.resolve_requests(claim_requests)
@@ -203,7 +203,7 @@ func _step_projectiles(delta: float, contacts: Array[Dictionary]) -> void:
 		if projectile.remaining <= 0.0 or stage.is_outside(projectile.position):
 			projectiles.erase(projectile)
 
-func knock_out(fighter: Fighter, credited_slot: int) -> void:
+func knock_out(fighter: Fighter, credited_slot: int, ring_out: bool = false) -> void:
 	if fighter.respawn_time > 0.0:
 		return
 	var position_at_ko: Vector2 = fighter.position
@@ -221,7 +221,7 @@ func knock_out(fighter: Fighter, credited_slot: int) -> void:
 	for contributor in fighter.contributors:
 		if int(contributor) != credited_slot and elapsed - float(fighter.contributors[contributor]) < 5.0:
 			fighters[int(contributor)].assists += 1
-	broadcast(&"core_pop", {"fighter": fighter, "credited": credited_slot, "position": position_at_ko + Vector2(0, -100)})
+	broadcast(&"core_pop", {"fighter": fighter, "credited": credited_slot, "ring_out": ring_out, "position": position_at_ko + Vector2(0, -100)})
 
 func _respawn(fighter: Fighter) -> void:
 	var best: Vector2 = stage.spawn_point(fighter.slot)

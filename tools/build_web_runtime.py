@@ -44,7 +44,7 @@ def main():
         (project / "project.godot").write_text('''config_version=5
 [application]
 config/name="MECH POP Browser"
-config/version="0.2.0-dev"
+config/version="0.3.0-web"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 [display]
