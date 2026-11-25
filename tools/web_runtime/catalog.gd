@@ -16,6 +16,7 @@ func _initialize() -> void:
 		_record_move(catalog.moves, part.attack, "special", id)
 		_record_move(catalog.moves, part.up_attack, "rise", id)
 		_record_move(catalog.moves, part.down_attack, "slam", id)
+		_record_move(catalog.moves, part.counter_attack, "heavy", id)
 		catalog.parts[id] = {"name": part.display_name.capitalize(), "short": part.short_name, "donor": part.donor, "slot": part.slot, "max": part.maximum, "color": "#" + part.color.to_html(false), "energy": "#" + part.energy.to_html(false)}
 	for id in StageCatalog.IDS:
 		var stage := StageCatalog.stage(id)
@@ -40,3 +41,4 @@ func _record_move(moves: Dictionary, move: AttackData, kind: String, weapon: Str
 		"size": [move.size.x / 100.0, move.size.y / 100.0],
 		"radius": [move.projectile_radius.x / 100.0, move.projectile_radius.y / 100.0],
 	}
+	if move.phase_delay > 0.0: moves[move.id]["delay"] = move.phase_delay

@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"echo_stamp"
+startup = 0.205
+active = 0.095
+recovery = 0.27
+damage = 13
+component_damage = 15
+knockback = Vector2(305, -170)
+offset = Vector2(157, -94)
+size = Vector2(212, 141)
+delivery = &"echo"
+phase_delay = 0.48
+projectile_lifetime = 0.64
+projectile_radius = Vector2(106, 70)
+piercing = true
+breaker = true
+feedback = &"chassis/coda_special"
+
+[resource]
+script = ExtResource("1")
+id = &"echo_bell"
+display_name = "ECHO BELL"
+short_name = "BELL"
+slot = &"weapon_arm"
+donor = &"coda"
+color = Color(0.647059, 0.298039, 0.568627, 1)
+energy = Color(1.0, 0.819608, 0.462745, 1)
+cooldown = 1.86
+action = &"echo"
+attack = SubResource("attack")

@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"rook_light"
+startup = 0.09
+active = 0.09
+recovery = 0.21
+damage = 11
+component_damage = 11
+knockback = Vector2(465, -200)
+offset = Vector2(85, -92)
+size = Vector2(141, 106)
+breaker = false
+target_slot = &"weapon_arm"
+hitstop = 0.04
+feedback = &"light"
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"rook_heavy"
+startup = 0.245
+active = 0.115
+recovery = 0.32
+damage = 25
+component_damage = 25
+knockback = Vector2(1030, -430)
+offset = Vector2(103, -86)
+size = Vector2(178, 138)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+ejection = 1
+id = &"rook_uppercut"
+startup = 0.2
+active = 0.105
+recovery = 0.31
+damage = 23
+component_damage = 23
+knockback = Vector2(290, -1200)
+offset = Vector2(53, -145)
+size = Vector2(160, 202)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+ejection = 2
+id = &"rook_slam"
+startup = 0.25
+active = 0.12
+recovery = 0.34
+damage = 26
+component_damage = 28
+knockback = Vector2(720, -735)
+offset = Vector2(76, -38)
+size = Vector2(216, 136)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.075
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+id = &"rook"
+display_name = "ROOK"
+role = "COUNTER GUARD"
+quote = "Your move."
+description = "Raise the Gate Shield just before a frontal hit to answer with a bash. Stand your ground to resist launch."
+native_weapon = &"gate_shield"
+native_shell = &"keystone_plate"
+face_region = Rect2(125, 94, 510, 510)
+color = Color(0.862745, 0.898039, 0.815686, 1)
+energy = Color(1.0, 0.788235, 0.376471, 1)
+height = 194
+width = 102
+mass = 1.26
+speed = 655
+acceleration = 4700
+gravity = 2660
+ground_brace = 1.31
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

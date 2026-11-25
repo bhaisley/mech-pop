@@ -87,6 +87,50 @@ window.MechCatalog = {
 			"energy": "#ff5c77",
 			"height": 174.0,
 			"speed": 775.0
+		},
+		"rivet": {
+			"name": "Rivet",
+			"role": "Salvage Rigger",
+			"description": "Reel loose gear closer with the Mag Fork. Start your catch from farther away.",
+			"weapon": "mag_fork",
+			"shell": "winch_pack",
+			"color": "#eb8238",
+			"energy": "#61f4e0",
+			"height": 168.0,
+			"speed": 725.0
+		},
+		"kite": {
+			"name": "Kite",
+			"role": "Air Courier",
+			"description": "Jump twice in midair. Line up both passes of the Gale Disc.",
+			"weapon": "gale_disc",
+			"shell": "sail_frame",
+			"color": "#25bcb0",
+			"energy": "#ffe680",
+			"height": 163.0,
+			"speed": 835.0
+		},
+		"rook": {
+			"name": "Rook",
+			"role": "Counter Guard",
+			"description": "Raise the Gate Shield just before a frontal hit to answer with a bash. Stand your ground to resist launch.",
+			"weapon": "gate_shield",
+			"shell": "keystone_plate",
+			"color": "#dce5d0",
+			"energy": "#ffc960",
+			"height": 194.0,
+			"speed": 655.0
+		},
+		"coda": {
+			"name": "Coda",
+			"role": "Echo Drummer",
+			"description": "Strike the Echo Bell, then herd rivals back into its second beat. Hold down in the air for a steep descent.",
+			"weapon": "echo_bell",
+			"shell": "resonance_shell",
+			"color": "#a54c91",
+			"energy": "#ffd176",
+			"height": 173.0,
+			"speed": 755.0
 		}
 	},
 	"parts": {
@@ -162,6 +206,42 @@ window.MechCatalog = {
 			"color": "#474551",
 			"energy": "#ff5c77"
 		},
+		"mag_fork": {
+			"name": "Mag Fork",
+			"short": "MAG FORK",
+			"donor": "rivet",
+			"slot": "weapon_arm",
+			"max": 40.0,
+			"color": "#eb8238",
+			"energy": "#61f4e0"
+		},
+		"gale_disc": {
+			"name": "Gale Disc",
+			"short": "DISC",
+			"donor": "kite",
+			"slot": "weapon_arm",
+			"max": 40.0,
+			"color": "#25bcb0",
+			"energy": "#ffe680"
+		},
+		"gate_shield": {
+			"name": "Gate Shield",
+			"short": "GATE",
+			"donor": "rook",
+			"slot": "weapon_arm",
+			"max": 40.0,
+			"color": "#dce5d0",
+			"energy": "#ffc960"
+		},
+		"echo_bell": {
+			"name": "Echo Bell",
+			"short": "BELL",
+			"donor": "coda",
+			"slot": "weapon_arm",
+			"max": 40.0,
+			"color": "#a54c91",
+			"energy": "#ffd176"
+		},
 		"fin_plate": {
 			"name": "Fin Plate",
 			"short": "FIN",
@@ -233,6 +313,42 @@ window.MechCatalog = {
 			"max": 60.0,
 			"color": "#474551",
 			"energy": "#ff5c77"
+		},
+		"winch_pack": {
+			"name": "Winch Pack",
+			"short": "WINCH",
+			"donor": "rivet",
+			"slot": "shell",
+			"max": 61.0,
+			"color": "#eb8238",
+			"energy": "#61f4e0"
+		},
+		"sail_frame": {
+			"name": "Sail Frame",
+			"short": "SAIL",
+			"donor": "kite",
+			"slot": "shell",
+			"max": 49.0,
+			"color": "#25bcb0",
+			"energy": "#ffe680"
+		},
+		"keystone_plate": {
+			"name": "Keystone Plate",
+			"short": "KEYSTONE",
+			"donor": "rook",
+			"slot": "shell",
+			"max": 67.0,
+			"color": "#dce5d0",
+			"energy": "#ffc960"
+		},
+		"resonance_shell": {
+			"name": "Resonance Shell",
+			"short": "RESONATOR",
+			"donor": "coda",
+			"slot": "shell",
+			"max": 55.0,
+			"color": "#a54c91",
+			"energy": "#ffd176"
 		}
 	},
 	"stages": {
@@ -1302,6 +1418,342 @@ window.MechCatalog = {
 				0.34
 			]
 		},
+		"rivet_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.07,
+			"active": 0.07,
+			"recovery": 0.17,
+			"offset": [
+				0.91,
+				0.78
+			],
+			"size": [
+				1.51,
+				0.85
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rivet_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.19,
+			"active": 0.1,
+			"recovery": 0.28,
+			"offset": [
+				1.14,
+				0.78
+			],
+			"size": [
+				1.84,
+				1.12
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rivet_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.15,
+			"active": 0.09,
+			"recovery": 0.28,
+			"offset": [
+				0.51,
+				1.31
+			],
+			"size": [
+				1.54,
+				1.84
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rivet_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.21,
+			"active": 0.11,
+			"recovery": 0.29,
+			"offset": [
+				0.92,
+				0.39
+			],
+			"size": [
+				1.92,
+				1.2
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kite_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.046,
+			"active": 0.066,
+			"recovery": 0.15,
+			"offset": [
+				0.83,
+				0.82
+			],
+			"size": [
+				1.37,
+				0.78
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kite_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.15,
+			"active": 0.09,
+			"recovery": 0.24,
+			"offset": [
+				1.17,
+				0.86
+			],
+			"size": [
+				1.78,
+				0.97
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kite_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.12,
+			"active": 0.08,
+			"recovery": 0.24,
+			"offset": [
+				0.48,
+				1.32
+			],
+			"size": [
+				1.29,
+				1.87
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"kite_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.175,
+			"active": 0.1,
+			"recovery": 0.25,
+			"offset": [
+				0.87,
+				0.38
+			],
+			"size": [
+				1.69,
+				1.1
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rook_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.09,
+			"active": 0.09,
+			"recovery": 0.21,
+			"offset": [
+				0.85,
+				0.92
+			],
+			"size": [
+				1.41,
+				1.06
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rook_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.245,
+			"active": 0.115,
+			"recovery": 0.32,
+			"offset": [
+				1.03,
+				0.86
+			],
+			"size": [
+				1.78,
+				1.38
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rook_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.2,
+			"active": 0.105,
+			"recovery": 0.31,
+			"offset": [
+				0.53,
+				1.45
+			],
+			"size": [
+				1.6,
+				2.02
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"rook_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.25,
+			"active": 0.12,
+			"recovery": 0.34,
+			"offset": [
+				0.76,
+				0.38
+			],
+			"size": [
+				2.16,
+				1.36
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"coda_light": {
+			"kind": "light",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": false,
+			"startup": 0.055,
+			"active": 0.085,
+			"recovery": 0.175,
+			"offset": [
+				0.95,
+				0.84
+			],
+			"size": [
+				1.66,
+				0.82
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"coda_heavy": {
+			"kind": "heavy",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.205,
+			"active": 0.115,
+			"recovery": 0.27,
+			"offset": [
+				1.21,
+				0.85
+			],
+			"size": [
+				2.07,
+				1.14
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"coda_uppercut": {
+			"kind": "rise",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.155,
+			"active": 0.1,
+			"recovery": 0.285,
+			"offset": [
+				0.65,
+				1.32
+			],
+			"size": [
+				1.69,
+				1.9
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"coda_slam": {
+			"kind": "slam",
+			"weapon": "",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.2,
+			"active": 0.125,
+			"recovery": 0.285,
+			"offset": [
+				0.98,
+				0.41
+			],
+			"size": [
+				2.05,
+				1.26
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
 		"arc_sweep": {
 			"kind": "special",
 			"weapon": "arc_blade",
@@ -1511,6 +1963,113 @@ window.MechCatalog = {
 				0.81,
 				0.65
 			]
+		},
+		"mag_tug": {
+			"kind": "special",
+			"weapon": "mag_fork",
+			"delivery": "magnet",
+			"breaker": false,
+			"startup": 0.17,
+			"active": 0.09,
+			"recovery": 0.29,
+			"offset": [
+				1.12,
+				0.82
+			],
+			"size": [
+				1.92,
+				1.16
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"gale_return": {
+			"kind": "special",
+			"weapon": "gale_disc",
+			"delivery": "disc",
+			"breaker": false,
+			"startup": 0.16,
+			"active": 0.08,
+			"recovery": 0.23,
+			"offset": [
+				1.08,
+				0.86
+			],
+			"size": [
+				1.2,
+				0.72
+			],
+			"radius": [
+				0.44,
+				0.29
+			],
+			"delay": 0.4
+		},
+		"gate_guard": {
+			"kind": "special",
+			"weapon": "gate_shield",
+			"delivery": "parry",
+			"breaker": false,
+			"startup": 0.095,
+			"active": 0.235,
+			"recovery": 0.34,
+			"offset": [
+				0.81,
+				0.92
+			],
+			"size": [
+				1.3,
+				1.58
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"gate_bash": {
+			"kind": "heavy",
+			"weapon": "gate_shield",
+			"delivery": "melee",
+			"breaker": true,
+			"startup": 0.045,
+			"active": 0.11,
+			"recovery": 0.32,
+			"offset": [
+				1.15,
+				0.89
+			],
+			"size": [
+				2.18,
+				1.46
+			],
+			"radius": [
+				0.48,
+				0.34
+			]
+		},
+		"echo_stamp": {
+			"kind": "special",
+			"weapon": "echo_bell",
+			"delivery": "echo",
+			"breaker": true,
+			"startup": 0.205,
+			"active": 0.095,
+			"recovery": 0.27,
+			"offset": [
+				1.57,
+				0.94
+			],
+			"size": [
+				2.12,
+				1.41
+			],
+			"radius": [
+				1.06,
+				0.7
+			],
+			"delay": 0.48
 		}
 	}
 };

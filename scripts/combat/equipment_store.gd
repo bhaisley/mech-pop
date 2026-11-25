@@ -2,7 +2,6 @@ class_name EquipmentStore
 extends Node
 
 const MAX_LOOSE: int = 8
-const PICKUP_RANGE: float = 150.0
 const CLAIM_TIME: float = 0.18
 var aimed_salvage: bool = false
 var session: Node
@@ -73,14 +72,32 @@ func nearest(fighter: Fighter) -> SalvageBody:
 		if body.part.state != &"loose" or body.age < 0.15: continue
 		var offset := body.position - origin
 		var distance := offset.length()
-		if distance >= PICKUP_RANGE: continue
+		if distance >= fighter.data.pickup_reach: continue
 		# A neutral stick keeps nearest-part selection. A deliberate aim favors
 		# the reachable item in that direction; physical reach never changes.
-		var cost := distance - PICKUP_RANGE * maxf(0.0, aim.dot(offset.normalized()))
+		var cost := distance - fighter.data.pickup_reach * maxf(0.0, aim.dot(offset.normalized()))
 		if cost < best_cost:
 			best_cost = cost
 			closest = body
 	return closest
+
+func reel_nearest(fighter: Fighter) -> void:
+	var socket := socket_position(fighter, &"weapon_arm")
+	var closest: SalvageBody = null
+	var best_distance := 550.0
+	for body in loose:
+		var offset := body.position - socket
+		if body.part.state != &"loose" or offset.x * fighter.facing < -12.0 or absf(offset.y) > 220.0:
+			continue
+		var distance := offset.length()
+		if distance < best_distance:
+			closest = body
+			best_distance = distance
+	if closest:
+		var travel := 0.34
+		closest.velocity = (socket - closest.position) / travel - Vector2(0, 900.0 * travel)
+		closest.settled = false
+		session.broadcast(&"magnet_reel", {"fighter": fighter, "part": closest.part, "position": closest.position})
 
 func resolve_requests(requesters: Array[Fighter]) -> void:
 	# Collect bids first. Equal-distance contests rotate priority by slot.

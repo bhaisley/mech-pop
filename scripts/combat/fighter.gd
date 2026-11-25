@@ -92,7 +92,7 @@ func shell_definition() -> ModuleData:
 func adaptive_mode() -> StringName:
 	var weapon: PartInstance = part(&"weapon_arm")
 	if weapon == null: return &"STRIKE"
-	if weapon.definition.action in [&"projectile", &"rail", &"field"]: return &"SCOPE"
+	if weapon.definition.action in [&"projectile", &"rail", &"field", &"disc", &"echo"]: return &"SCOPE"
 	if weapon.definition.action == &"repair": return &"SYNC"
 	return &"STRIKE"
 
@@ -136,7 +136,7 @@ func step(command: FighterCommand, delta: float) -> void:
 	var on_ground: bool = grounded()
 	if on_ground:
 		coyote = 0.08
-		jumps_left = 1
+		jumps_left = data.air_jumps
 		air_boost_left = true
 		hover_left = 0.7 + (shell_definition().hover_bonus if shell_definition() else 0.0)
 	else:
@@ -211,7 +211,7 @@ func step(command: FighterCommand, delta: float) -> void:
 	var gravity_scale: float = 1.0
 	var hovering := false
 	if command.move.y > 0.55 and velocity.y > 0.0:
-		gravity_scale = 1.7
+		gravity_scale = data.fast_fall
 	elif data.id == &"momo" and command.jump_held and velocity.y > 0.0 and hover_left > 0.0:
 		hover_left = maxf(0.0, hover_left - delta)
 		hovering = true
@@ -264,6 +264,9 @@ func _start_buffered_attack() -> void:
 			elif adaptive_mode() == &"SYNC": next = data.support_heavy
 	else:
 		next = data.light
+	_begin_attack(next)
+
+func _begin_attack(next: AttackData) -> void:
 	attack = next
 	attack_time = 0.0
 	attack_serial += 1
@@ -298,10 +301,16 @@ func can_be_hit() -> bool:
 func armored() -> bool:
 	return data.id == &"terra" and attack != null and not attack_is_special and attack.breaker and attack_time < attack.startup and attack_time > 0.065
 
-func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
+func apply_hit(source: Fighter, move: AttackData, direction: float) -> bool:
 	# Eligibility was snapshotted by MatchSession, so valid simultaneous hits can trade.
 	if not alive():
-		return
+		return false
+	if attack and attack.delivery == &"parry" and attack.is_active(attack_time) and direction * facing < 0.0:
+		var shield := part(&"weapon_arm")
+		if shield and shield.definition.counter_attack:
+			session.broadcast(&"parry", {"fighter": self, "source": source, "position": position + Vector2(facing * 57.0, -data.height * 0.55)})
+			_begin_attack(shield.definition.counter_attack)
+			return false
 	var was_armored: bool = armored() and move.id != &"terra_clinch"
 	var preferred: StringName = move.target_slot
 	if not equipment.has(preferred):
@@ -333,6 +342,8 @@ func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
 	combo_window = 0.7
 	if not was_armored:
 		var resistance: float = data.mass
+		if grounded() and absf(velocity.x) < 45.0:
+			resistance *= data.ground_brace
 		if shell_definition():
 			resistance *= shell_definition().resistance
 		velocity = Vector2(move.knockback.x * direction, move.knockback.y) / resistance
@@ -351,6 +362,7 @@ func apply_hit(source: Fighter, move: AttackData, direction: float) -> void:
 	session.broadcast(&"hit", {"fighter": self, "source": source, "attack": move, "position": position + Vector2(0, -data.height * 0.55), "armored": was_armored, "shielded": shielded})
 	if core <= 0.0:
 		session.knock_out(self, source.slot)
+	return true
 
 func reset_at(point: Vector2) -> void:
 	position = point
@@ -377,7 +389,7 @@ func reset_at(point: Vector2) -> void:
 	combo_window = 0.0
 	jump_buffer = 0.0
 	action_buffer_time = 0.0
-	jumps_left = 1
+	jumps_left = data.air_jumps
 	air_boost_left = true
 	repair_budget = 28.0
 	contributors.clear()

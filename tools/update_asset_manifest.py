@@ -18,6 +18,7 @@ def add(pattern, provider, source, terms, runtime=True):
 
 
 original = "Original game content; no open-source license assigned"
+challengers = {"rivet", "kite", "rook", "coda"}
 music = "third_party/MiniMax-Music3-LICENSE.txt"
 for directory in ["characters", "modules"]:
     add(directory + "/models/*.glb", "Project-specific Blender geometry", lambda p: f"art_source/models/{p.stem}.blend; tools/build_mechs.py", original)
@@ -29,7 +30,10 @@ for score in (ROOT / "audio/source/music/yue2").glob("*.abc"):
     add(f"audio/music/{name.replace('_', '-')}.ogg", "YuE2-3B instrumental, edited for MECH POP", lambda p: receipt, yue2)
     add(f"audio/source/music/yue2/{name}.flac", "Original YuE2-3B performance", lambda p: receipt, yue2, False)
     add(f"stages/{name}/*-matte.png", "Built-in ImageGen", lambda p: f"stages/{name}/matte-prompt.txt", original)
-add("audio/sfx/chassis/*.wav", "Original SuperCollider chassis instruments", lambda p: "audio/source/render_chassis_sfx.scd", original)
+add("audio/sfx/chassis/*.wav", "Original SuperCollider chassis instruments", lambda p: "audio/source/render_challenger_sfx.scd" if p.stem.split("_")[0] in challengers else "audio/source/render_chassis_sfx.scd", original)
+add("art_source/characters/challengers/*.png", "Built-in ImageGen", lambda p: "art_source/characters/challengers/portraits.json", "Project-specific generated asset", False)
+for name in sorted(challengers):
+    add(f"docs/game/assets/pilots/{name}.webp", "Browser edition of original challenger portrait", lambda p: f"art_source/characters/challengers/{p.stem}.png", original)
 add("stages/*/*-matte.png", "Built-in ImageGen; model identifier not exposed", lambda p: "art_source/arena-prompts.json; art_source/arena-provenance.json", "Project-specific generated asset")
 add("audio/sfx/*.wav", "Original SuperCollider synthesis", lambda p: "audio/source/render_expansion_sfx.scd", original)
 add("audio/music/*.ogg", "MiniMax-Music3 composition, edited and mastered for this game", lambda p: f"audio/source/music/{p.stem}-loop-edit.json; tools/master_expansion_music.py", music)
@@ -40,5 +44,5 @@ for item in assets.values():
     item["sha256"] = hashlib.sha256(file.read_bytes()).hexdigest()
     item["bytes"] = file.stat().st_size
 asset_commit = subprocess.check_output(["git", "log", "-1", "--format=%H", "--", "characters", "modules", "stages", "audio", "art_source", "ui/portraits"], cwd=ROOT, text=True).strip()
-path.write_text(json.dumps({"version": "0.2.0-preview", "asset_source_commit": asset_commit, "assets": sorted(assets.values(), key=lambda item: item["path"])}, indent=2) + "\n")
+path.write_text(json.dumps({"version": "0.6.0-web", "asset_source_commit": asset_commit, "assets": sorted(assets.values(), key=lambda item: item["path"])}, indent=2) + "\n")
 print(json.dumps({"assets": len(assets), "manifest": str(path)}))

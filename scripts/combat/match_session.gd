@@ -100,8 +100,8 @@ func step(delta: float) -> void:
 	for contact in contacts:
 		var victim: Fighter = contact.target
 		var source: Fighter = contact.source
-		victim.apply_hit(source, contact.attack, float(contact.direction))
-		if bool(contact.get("snare", false)) and victim.alive():
+		var landed := victim.apply_hit(source, contact.attack, float(contact.direction))
+		if landed and bool(contact.get("snare", false)) and victim.alive():
 			victim.snared = 0.7
 	for fighter in fighters:
 		if fighter.alive() and stage.is_outside(fighter.position):
@@ -127,7 +127,7 @@ func collect_melee_contacts() -> Array[Dictionary]:
 		if not source.attack_emitted:
 			source.attack_emitted = true
 			_on_active_attack(source)
-		if move.delivery in [&"cannon", &"snare", &"field", &"rail"]:
+		if move.delivery in [&"cannon", &"snare", &"field", &"rail", &"disc", &"parry"]:
 			continue
 		var current_rect: Rect2 = move.hit_rect(source.position, source.facing)
 		var previous_rect: Rect2 = move.hit_rect(source.previous_position, source.facing)
@@ -143,7 +143,9 @@ func collect_melee_contacts() -> Array[Dictionary]:
 func _on_active_attack(fighter: Fighter) -> void:
 	var move: AttackData = fighter.attack
 	broadcast(&"attack_active", {"fighter": fighter, "attack": move, "special": fighter.attack_is_special})
-	if move.delivery in [&"cannon", &"snare", &"repair", &"field", &"rail"]:
+	if move.delivery == &"magnet":
+		parts.reel_nearest(fighter)
+	if move.delivery in [&"cannon", &"snare", &"repair", &"field", &"rail", &"disc", &"echo"]:
 		_spawn_projectile(fighter, move, move.delivery, Vector2(fighter.facing * move.projectile_speed.x, move.projectile_speed.y), move.projectile_lifetime)
 		if move.id in [&"pile_shot", &"rail_shot"]:
 			fighter.velocity.x = -fighter.facing * (560.0 if move.id == &"pile_shot" else 680.0) / fighter.data.mass
@@ -152,6 +154,8 @@ func _on_active_attack(fighter: Fighter) -> void:
 func _spawn_projectile(source: Fighter, move: AttackData, type: StringName, velocity: Vector2, lifetime: float) -> void:
 	projectile_serial += 1
 	var point: Vector2 = source.position + Vector2(source.facing * 105.0, -source.data.height * 0.57)
+	if type == &"echo":
+		point = move.hit_rect(source.position, source.facing).get_center()
 	projectiles.append({"uid": projectile_serial, "source": source, "attack": move, "type": type, "position": point, "previous": point, "velocity": velocity, "remaining": lifetime, "age": 0.0, "facing": source.facing, "hits": {}, "pulsed": false})
 	if projectiles.size() > 24:
 		projectiles.pop_front()
@@ -176,7 +180,21 @@ func _step_projectiles(delta: float, contacts: Array[Dictionary]) -> void:
 					spent += amount
 				broadcast(&"repair", {"fighter": source, "amount": spent})
 		else:
-			if projectile.type == &"snare":
+			if projectile.type == &"disc":
+				if not source.alive():
+					projectiles.erase(projectile)
+					continue
+				if projectile.age >= projectile.attack.phase_delay:
+					if not projectile.pulsed:
+						projectile.pulsed = true
+						projectile.hits.clear()
+					var home := parts.socket_position(source, &"weapon_arm") - Vector2(projectile.position)
+					projectile.velocity = home.limit_length(1490.0 * delta) / delta
+					if absf(projectile.velocity.x) > 1.0: projectile.facing = signf(projectile.velocity.x)
+					if home.length() < 32.0: projectile.remaining = 0.0
+			elif projectile.type == &"echo":
+				projectile.pulsed = projectile.age >= projectile.attack.phase_delay
+			elif projectile.type == &"snare":
 				projectile.velocity.y += 1700.0 * delta
 			elif projectile.type == &"field" and projectile.age >= 0.35:
 				projectile.velocity = Vector2.ZERO
@@ -192,6 +210,7 @@ func _step_projectiles(delta: float, contacts: Array[Dictionary]) -> void:
 			var hitbox := Rect2(projectile.position - radius, radius * 2.0)
 			hitbox = hitbox.merge(Rect2(projectile.previous - radius, radius * 2.0))
 			for target in fighters:
+				if projectile.type == &"echo" and not projectile.pulsed: break
 				if target == source or not target.can_be_hit() or projectile.hits.has(target.slot):
 					continue
 				if hitbox.intersects(target.hurt_rect()):

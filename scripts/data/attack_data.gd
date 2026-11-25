@@ -22,6 +22,7 @@ enum Ejection { FORWARD, RISE, DROP }
 @export var travel_distance: float = 0.0
 @export var projectile_speed: Vector2 = Vector2.ZERO
 @export var projectile_lifetime: float = 1.0
+@export var phase_delay: float = 0.0
 @export var projectile_radius: Vector2 = Vector2(48, 34)
 @export var piercing: bool = false
 

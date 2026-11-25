@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"resonance_shell"
+display_name = "RESONANCE SHELL"
+short_name = "RESONATOR"
+slot = &"shell"
+donor = &"coda"
+color = Color(0.647059, 0.298039, 0.568627, 1)
+energy = Color(1.0, 0.819608, 0.462745, 1)
+maximum = 55
+air_scale = 1.06
+dodge_cooldown_scale = 0.85

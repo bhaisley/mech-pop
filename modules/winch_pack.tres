@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"winch_pack"
+display_name = "WINCH PACK"
+short_name = "WINCH"
+slot = &"shell"
+donor = &"rivet"
+color = Color(0.921569, 0.509804, 0.219608, 1)
+energy = Color(0.380392, 0.956863, 0.878431, 1)
+maximum = 61
+acceleration_scale = 1.09
+resistance = 1.06

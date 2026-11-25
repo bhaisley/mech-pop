@@ -1,7 +1,7 @@
 class_name Roster
 extends RefCounted
 
-const IDS: Array[StringName] = [&"nova", &"kuren", &"terra", &"momo", &"shadow", &"lumi", &"kai", &"zero"]
+const IDS: Array[StringName] = [&"nova", &"kuren", &"terra", &"momo", &"shadow", &"lumi", &"kai", &"zero", &"rivet", &"kite", &"rook", &"coda"]
 const PLAYER_COLORS: Array[Color] = [Color("57caff"), Color("ff687f"), Color("c8eb57"), Color("ff9ee0")]
 static var _mechs: Dictionary = {}
 static var _modules: Dictionary = {}

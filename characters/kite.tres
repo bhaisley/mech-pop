@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"kite_light"
+startup = 0.046
+active = 0.066
+recovery = 0.15
+damage = 7
+component_damage = 7
+knockback = Vector2(300, -210)
+offset = Vector2(83, -82)
+size = Vector2(137, 78)
+breaker = false
+target_slot = &"weapon_arm"
+hitstop = 0.04
+feedback = &"light"
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"kite_heavy"
+startup = 0.15
+active = 0.09
+recovery = 0.24
+damage = 17
+component_damage = 18
+knockback = Vector2(865, -405)
+offset = Vector2(117, -86)
+size = Vector2(178, 97)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+ejection = 1
+id = &"kite_uppercut"
+startup = 0.12
+active = 0.08
+recovery = 0.24
+damage = 16
+component_damage = 18
+knockback = Vector2(210, -1190)
+offset = Vector2(48, -132)
+size = Vector2(129, 187)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+ejection = 2
+id = &"kite_slam"
+startup = 0.175
+active = 0.1
+recovery = 0.25
+damage = 19
+component_damage = 21
+knockback = Vector2(630, -650)
+offset = Vector2(87, -38)
+size = Vector2(169, 110)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.075
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+id = &"kite"
+display_name = "KITE"
+role = "AIR COURIER"
+quote = "See you on the way back."
+description = "Jump twice in midair. Line up both passes of the Gale Disc."
+native_weapon = &"gale_disc"
+native_shell = &"sail_frame"
+face_region = Rect2(125, 94, 510, 510)
+color = Color(0.145098, 0.737255, 0.690196, 1)
+energy = Color(1.0, 0.901961, 0.501961, 1)
+height = 163
+width = 66
+mass = 0.76
+speed = 835
+gravity = 2140
+air_acceleration = 3850
+jump_speed = 1260
+air_jump_speed = 890
+air_jumps = 2
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

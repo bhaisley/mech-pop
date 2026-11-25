@@ -20,11 +20,11 @@ func _run() -> void:
 	router = PlayerInputRouter.new()
 	root.add_child(router)
 	router.devices = [-2, -2, -2, -2]
-	for group in range(2):
+	for group in range(ceili(Roster.IDS.size() / 4.0)):
 		session = MatchSession.new()
 		root.add_child(session)
 		var ids: Array[StringName] = []
-		for index in range(4): ids.append(Roster.IDS[group * 4 + index])
+		for index in range(group * 4, mini(group * 4 + 4, Roster.IDS.size())): ids.append(Roster.IDS[index])
 		session.setup(router, ids, {"skip_intro": true, "stage": "neon_alley"})
 		session.simulation_enabled = false
 		await physics_frame
@@ -45,14 +45,17 @@ func _run() -> void:
 		check(session.parts.conservation_errors().is_empty(), "compatibility permutations preserve single ownership")
 		check(MatchWire.valid(MatchWire.capture(session)), "all chassis and module identifiers serialize")
 		if group == 1: await _new_mechanics()
+		if group == 2: _challenger_mechanics()
 		session.queue_free()
 		await process_frame
-	check(loadouts == 512, "all eight chassis × eight arms × eight shells exercised")
+	check(loadouts == 1728, "all twelve chassis × twelve arms × twelve shells exercised")
 	router.queue_free()
 	await process_frame
 	print("EXPANSION TESTS: %d checks, %d loadouts, %d failures" % [checks, loadouts, failures.size()])
-	var output := FileAccess.open("res://work/expansion-test-results.json", FileAccess.WRITE)
-	output.store_string(JSON.stringify({"checks": checks, "loadouts": loadouts, "failures": failures}, "  "))
+	if DirAccess.dir_exists_absolute("res://work"):
+		var output := FileAccess.open("res://work/expansion-test-results.json", FileAccess.WRITE)
+		if output:
+			output.store_string(JSON.stringify({"checks": checks, "loadouts": loadouts, "failures": failures}, "  "))
 	quit(0 if failures.is_empty() else 1)
 
 func _start_special(fighter: Fighter, direction: Vector2 = Vector2.ZERO) -> void:
@@ -62,6 +65,102 @@ func _start_special(fighter: Fighter, direction: Vector2 = Vector2.ZERO) -> void
 	fighter.action_buffer = &"special"
 	fighter.buffered_direction = direction
 	fighter._start_buffered_attack()
+
+func _challenger_mechanics() -> void:
+	var rivet := session.fighters[0]
+	var kite := session.fighters[1]
+	var rook := session.fighters[2]
+	var coda := session.fighters[3]
+	var down := FighterCommand.new()
+	down.move = Vector2.DOWN
+	coda.reset_at(Vector2(0, -800))
+	coda.velocity.y = 200.0
+	coda.step(down, 0.01)
+	check(is_equal_approx(coda.velocity.y, 200.0 + coda.data.gravity * 2.7 * 0.01), "holding down accelerates Coda's descent")
+	rook.network_replica = true
+	rook.network_grounded = true
+	rook.apply_hit(rivet, rivet.data.light, 1)
+	var planted_launch := rook.velocity.x
+	rook.velocity.x = 100.0
+	rook.apply_hit(rivet, rivet.data.light, 1)
+	check(is_equal_approx(planted_launch * rook.data.ground_brace, rook.velocity.x) and planted_launch < rook.velocity.x, "a planted Rook takes less launch than a moving Rook")
+	rook.network_replica = false
+	_start_special(rook)
+	rook.facing = -1
+	rook.attack_time = rook.attack.startup + 0.01
+	var before := rook.core
+	check(not rook.apply_hit(rivet, rivet.data.light, 1) and rook.attack.id == &"gate_bash" and rook.core == before,
+		"an active forward shield blocks the hit and begins its counter")
+	_start_special(rook)
+	rook.attack_time = rook.attack.startup + 0.01
+	check(rook.apply_hit(rivet, rivet.data.light, 1) and rook.core < before, "a rear hit beats the shield")
+	_start_special(rook)
+	rook.facing = -1
+	check(rook.apply_hit(rivet, rivet.data.light, 1), "the shield has a vulnerable startup")
+	_start_special(kite)
+	check(kite.jumps_left == 2 and rivet.data.air_jumps == 1, "Kite has two midair hops on its chassis")
+	session.projectiles.clear()
+	session._on_active_attack(kite)
+	var disc: Dictionary = session.projectiles[0]
+	for f in [rivet,rook,coda]: f.reset_at(Vector2(900,-200))
+	var target := Vector2(kite.position.x + 180.0, kite.position.y)
+	rook.reset_at(target)
+	rook.invulnerable = 0.0
+	var hits: Array[Dictionary] = []
+	session._step_projectiles(0.04, hits)
+	check(hits.size() == 1 and hits[0].target == rook, "disc can hit on its outward flight")
+	hits.clear()
+	session._step_projectiles(0.01, hits)
+	check(hits.is_empty(), "an overlapping opponent takes one hit per pass")
+	kite.position.x -= 80.0
+	disc.age = disc.attack.phase_delay
+	session._step_projectiles(0.01, hits)
+	check(disc.pulsed and disc.velocity.x < 0 and hits.size() == 1, "disc homes to the moving carrier with one fresh return hit")
+	check(MatchWire.valid(MatchWire.capture(session)), "return flight serializes with its phase and hit list")
+	kite.core = 0.0
+	session._step_projectiles(0.01, hits)
+	check(session.projectiles.is_empty(), "returning disc clears when its pilot is knocked out")
+	_start_special(coda)
+	session._on_active_attack(coda)
+	var echo: Dictionary = session.projectiles[0]
+	var mark := coda.attack.hit_rect(coda.position,coda.facing).get_center()
+	rook.reset_at(mark + Vector2(0,85))
+	rook.invulnerable = 0.0
+	coda.position.x += 430.0
+	hits.clear()
+	session._step_projectiles(0.2, hits)
+	check(hits.is_empty() and echo.position.is_equal_approx(mark), "echo stays at the strike and gives time to escape")
+	session._step_projectiles(0.29,hits)
+	check(echo.pulsed and hits.size() == 1 and hits[0].target == rook, "second beat hits a rival left inside the marked area")
+	hits.clear()
+	session._step_projectiles(0.03,hits)
+	check(hits.is_empty(), "second beat cannot repeatedly hit its victim")
+	_start_special(rivet)
+	var gate := session.parts.break_part(rook, &"weapon_arm", Vector2.ZERO)
+	var socket := session.parts.socket_position(rivet,&"weapon_arm")
+	gate.entity.age = 0.3
+	gate.entity.position = socket + Vector2(390,20)
+	session._on_active_attack(rivet)
+	check(gate.entity.velocity.x < -600.0 and gate.state == &"loose" and rivet.reserved_part == -1, "Mag Fork reels the actual loose part without claiming it")
+	var start := rivet.position + Vector2(0,-rivet.data.height*.35)
+	gate.entity.position = start + Vector2(180,0)
+	rivet.attack = null
+	check(session.parts.nearest(rivet) == gate.entity, "Rivet reaches beyond the usual salvage radius")
+	session.parts.resolve_requests([rivet])
+	gate.entity.velocity = Vector2(27,19)
+	coda.position = gate.entity.position + Vector2(-145,90)
+	coda.facing = 1
+	session.parts.reel_nearest(coda)
+	check(gate.entity.velocity == Vector2(27,19) and gate.claimed_by == rivet.slot, "magnet leaves a reserved part and its claim intact")
+	session.parts.commit_claim(rivet)
+	_start_special(rivet)
+	rivet.attack_time = rivet.attack.startup + 0.01
+	check(not rivet.apply_hit(coda,coda.data.light,-1) and rivet.attack == gate.definition.counter_attack, "stolen Gate Shield counters on Rivet")
+	var parry := MatchWire.event_to_wire(&"parry", {"fighter": rivet, "source": coda, "position": rivet.position})
+	var reel := MatchWire.event_to_wire(&"magnet_reel", {"fighter": rivet, "part": gate, "position": socket})
+	check(MatchWire.valid_event(parry) and MatchLink.EVENT_KINDS.has("parry"), "peers accept the shield counter cue")
+	check(MatchWire.valid_event(reel) and MatchLink.EVENT_KINDS.has("magnet_reel"), "peers accept the loose-part reel cue")
+	check(session.parts.conservation_errors().is_empty() and MatchWire.valid(MatchWire.capture(session)), "mixed challenger equipment, cues and attacks preserve network state")
 
 func _new_mechanics() -> void:
 	var shadow: Fighter = session.fighters[0]

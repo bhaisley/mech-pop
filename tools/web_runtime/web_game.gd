@@ -186,7 +186,7 @@ func _process(delta: float) -> void:
 			loose.append([item.uid, item.definition.id, snappedf(item.entity.position.x, 0.1), snappedf(item.entity.position.y, 0.1), item.entity.age, item.entity.settled, item.claimed_by])
 	var shots: Array = []
 	for shot in session.projectiles:
-		shots.append([shot.uid, shot.type, shot.position.x, shot.position.y, shot.facing, shot.source.slot, shot.age, String(shot.attack.id)])
+		shots.append([shot.uid, shot.type, shot.position.x, shot.position.y, shot.facing, shot.source.slot, shot.age, String(shot.attack.id), shot.pulsed])
 	var offset := session.stage.ferry_offset
 	var frame := {
 		"fighters": frames, "parts": loose, "shots": shots, "ferry": [offset.x, offset.y],

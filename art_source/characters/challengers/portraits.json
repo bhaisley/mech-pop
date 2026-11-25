@@ -1,0 +1,11 @@
+{
+  "provider": "OpenAI built-in ImageGen",
+  "use": "Illustrated mech portraits for the MECH★POP browser hangar and HUD. The native portraits are renders of the separate articulated models.",
+  "art_direction": "Chibi robot head and shoulders in three-quarter view. Crisp dark ink contours, flat cel shadows, sharp enamel highlights, a plain midtone backdrop and a silhouette readable at 90 pixels.",
+  "portraits": {
+    "rivet": "Squat traffic-orange salvage tug with a reinforced hardhat brim, hazard stripes, cyan worklight, bolted cheeks and a magnet fork against burnt ochre.",
+    "kite": "Aerial courier with a turquoise teardrop helmet, white swept winglets with vermilion tips and mango-yellow optics against petrol teal.",
+    "rook": "Ivory rook-tower helmet with three battlements, ultramarine visor, amber eyes and a slab shield with a cobalt stripe against slate blue.",
+    "coda": "Mulberry percussion robot with bronze drumhead ear cups, an ivory tuning fork, amber optics and a flared bell against dark lilac."
+  }
+}

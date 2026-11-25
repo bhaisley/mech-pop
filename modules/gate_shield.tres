@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"gate_guard"
+startup = 0.095
+active = 0.235
+recovery = 0.34
+damage = 0
+component_damage = 0
+knockback = Vector2(0, 0)
+offset = Vector2(81, -92)
+size = Vector2(130, 158)
+delivery = &"parry"
+feedback = &"chassis/rook_special"
+
+[sub_resource type="Resource" id="counter_attack"]
+script = ExtResource("2")
+id = &"gate_bash"
+startup = 0.045
+active = 0.11
+recovery = 0.32
+damage = 27
+component_damage = 27
+knockback = Vector2(1080, -455)
+offset = Vector2(115, -89)
+size = Vector2(218, 146)
+breaker = true
+movement = 385
+hitstop = 0.09
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+id = &"gate_shield"
+display_name = "GATE SHIELD"
+short_name = "GATE"
+slot = &"weapon_arm"
+donor = &"rook"
+color = Color(0.862745, 0.898039, 0.815686, 1)
+energy = Color(1.0, 0.788235, 0.376471, 1)
+cooldown = 1.48
+action = &"parry"
+attack = SubResource("attack")
+counter_attack = SubResource("counter_attack")

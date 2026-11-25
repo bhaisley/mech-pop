@@ -296,7 +296,7 @@ def main():
     args = parser.parse_args()
     if args.test_roster:
         characters = args.test_roster.split(",")
-        if len(characters) != 4 or any(character not in ["nova", "kuren", "terra", "momo", "shadow", "lumi", "kai", "zero"] for character in characters):
+        if len(characters) != 4 or any(character not in ["nova", "kuren", "terra", "momo", "shadow", "lumi", "kai", "zero", "rivet", "kite", "rook", "coda"] for character in characters):
             parser.error("The test roster must contain four existing character IDs")
     gateway = Gateway(args)
     app = web.Application(client_max_size=2048, middlewares=[browser_access(set(args.browser_origin))])

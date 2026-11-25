@@ -23,6 +23,10 @@ extends Resource
 @export var jump_speed: float = 1360.0
 @export var air_jump_speed: float = 1150.0
 @export var air_boost_speed: float = 1260.0
+@export var air_jumps: int = 1
+@export var pickup_reach: float = 150.0
+@export var ground_brace: float = 1.0
+@export var fast_fall: float = 1.7
 @export var native_weapon: StringName = &"arc_blade"
 @export var native_shell: StringName = &"fin_plate"
 @export var light: AttackData

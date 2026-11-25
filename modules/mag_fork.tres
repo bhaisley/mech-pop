@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"mag_tug"
+startup = 0.17
+active = 0.09
+recovery = 0.29
+damage = 12
+component_damage = 17
+knockback = Vector2(-440, -220)
+offset = Vector2(112, -82)
+size = Vector2(192, 116)
+delivery = &"magnet"
+feedback = &"chassis/rivet_special"
+
+[resource]
+script = ExtResource("1")
+id = &"mag_fork"
+display_name = "MAG FORK"
+short_name = "MAG FORK"
+slot = &"weapon_arm"
+donor = &"rivet"
+color = Color(0.921569, 0.509804, 0.219608, 1)
+energy = Color(0.380392, 0.956863, 0.878431, 1)
+cooldown = 1.45
+action = &"magnet"
+attack = SubResource("attack")

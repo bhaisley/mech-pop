@@ -25,6 +25,10 @@
   };
 
   function style(id, definition, weapon, serial) {
+    if (definition.delivery === 'disc') return 'toss';
+    if (definition.delivery === 'parry') return 'guard';
+    if (definition.delivery === 'magnet') return 'cast';
+    if (definition.delivery === 'echo') return 'sweep';
     if (definition.delivery === 'rail' || definition.delivery === 'cannon')
       return 'fire';
     if (definition.delivery === 'snare')

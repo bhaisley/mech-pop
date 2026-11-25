@@ -650,7 +650,7 @@ h1,h2,h3,p {
 
 .roster {
   display: grid;
-  grid-template-columns: repeat(8,minmax(0,1fr));
+  grid-template-columns: repeat(12,minmax(0,1fr));
   gap: clamp(4px,.6vw,10px);
 }
 

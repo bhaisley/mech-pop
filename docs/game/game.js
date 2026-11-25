@@ -14,7 +14,8 @@
   const weaponActions = {
     arc_blade: 'Sweep blade', burst_knuckle: 'Rush punch', pile_cannon: 'Fire cannon',
     halo_caster: 'Repair gear', phase_talon: 'Blink strike', prism_emitter: 'Cast field',
-    rail_lance: 'Fire rail shot', switch_driver: 'Drive strike'
+    rail_lance: 'Fire rail shot', switch_driver: 'Drive strike',
+    mag_fork: 'Reel gear', gale_disc: 'Throw disc', gate_shield: 'Parry', echo_bell: 'Echo strike'
   };
   let countdown = '', hud = [], lastHud = 0, lastBanner = 0, finished = false;
   try {
@@ -297,7 +298,7 @@
     text('roster-player', 'Player ' + (slot + 1));
     text('mech-name', m.name);
     text('ghost-name', m.name.toUpperCase());
-    text('chassis-number', String(ids.indexOf(id) + 1).padStart(2, '0') + ' / 08');
+    text('chassis-number', String(ids.indexOf(id) + 1).padStart(2, '0') + ' / ' + String(ids.length).padStart(2, '0'));
     text('mech-role', m.role);
     text('mech-description', m.description);
     text('weapon-name', parts[m.weapon].name);
@@ -368,7 +369,7 @@
                  });
                  // Cache the engine separately from the smaller game pack. Its
                  // move timeline must match the version of the renderer in HTML.
-                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=7', 'sim.pck')])
+                 Promise.all([engine.init(path), engine.preloadFile(path + '.pck?v=8', 'sim.pck')])
                      .then(() => engine.start()).catch(reject);
                } catch (error) {
                  reject(error);
@@ -731,6 +732,9 @@
           sound.sound(e.cue, .75, pan, 2);
         else
           chassis(e.breaker ? 'heavy' : 'light', e.breaker ? .74 : .57, 2);
+        break;
+      case 'parry':
+        chassis('guard', 1, 4);
         break;
       case 'attack_start':
         if (e.attackId === 'rail_shot')

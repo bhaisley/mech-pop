@@ -173,6 +173,8 @@
       f.root.scale.setScalar(catalog.mechs[id].height / 246);
       f.root.visible = false;
       battle.add(f.root);
+      f.guardCue = mesh(battle,loop,flat(0xffd474));
+      f.guardCue.visible = false;
       return f;
     });
     combatEffects = MechCombatEffects.create(battle, fighters, reducedMotion);
@@ -308,7 +310,29 @@
     const move = catalog.moves[moveId], f = frame.fighters[owner];
     const color = catalog.parts[move?.weapon || f.weapon[0]]?.energy || catalog.mechs[f.id].energy;
     const root = new T.Group();
-    if (type === 'rail' || type === 'cannon') {
+    if (type === 'disc') {
+      mesh(root,loop,flat(0xdafff8)).scale.set(.40,.25,.60);
+      for (let i=0; i<3; i++) {
+        const a = i*Math.PI*2/3;
+        const wing = mesh(root, crystal, flat(i ? color : 0xff7659));
+        wing.position.set(Math.cos(a)*.2,Math.sin(a)*.14,.04);
+        wing.rotation.z = a+.25;
+        wing.scale.set(.25,.08,.07);
+      }
+      const hub = mesh(root, orb, flat(0x25afa7));
+      hub.scale.set(.14,.14,.08);
+    } else if (type === 'echo') {
+      const [rx,ry] = move.radius;
+      const ring = mesh(root,loop,flat(color));
+      ring.scale.set(rx,ry,.9);
+      const beat = mesh(root,loop,flat(0xffdf9f));
+      root.userData.beat = beat;
+      for (const side of [-1,1]) {
+        const tick = mesh(root,crystal,flat(0xf38ccc));
+        tick.position.x = side*rx;
+        tick.scale.set(.09,.18,.06);
+      }
+    } else if (type === 'rail' || type === 'cannon') {
       const rail = type === 'rail';
       const shell = mesh(root, rail ? crystal : orb, flat(color));
       shell.scale.set(rail ? .38 : .47, rail ? .13 : .26, .20);
@@ -377,6 +401,15 @@
   function eventVisual(e, data) {
     const f = data.fighters[e.fighter], color = f ? catalog.mechs[f.id].energy : '#fff6be';
     let x = e.x / 100, y = -e.y / 100;
+    if (e.kind === 'magnet_reel' && f) {
+      const hand = fighters[e.fighter].tip.getWorldPosition(new T.Vector3());
+      effect(box, '#72ffdf', (x+hand.x)/2, (y+hand.y)/2, 0, 0, Math.atan2(y-hand.y,x-hand.x),
+          Math.hypot(x-hand.x,y-hand.y), .044, .15);
+    }
+    if (e.kind === 'parry') {
+      for (let i=-2; i<=2; i++) effect(crystal, i % 2 ? '#fff5c7' : '#8ebaff', x, y, f.facing*(3-Math.abs(i)*.4), i*1.7,
+          i*.33, .31, .071, .23);
+    }
     if (e.kind === 'fumble')
       fighters[e.fighter].fumbleAt = data.time;
     if (e.kind === 'part_loose' && fighters[e.fighter] && catalog.parts[e.part]) {
@@ -554,6 +587,14 @@
         fumble:unit.fumbleAt === undefined ? 0 : 1-T.MathUtils.smoothstep(t-unit.fumbleAt,0,.20), reducedMotion,
         dead: f.dead
       });
+      unit.guardCue.visible = f.moveId === 'gate_guard' && motion && motion.age >= motion.definition.startup &&
+          motion.age < motion.definition.startup + motion.definition.active;
+      if (unit.guardCue.visible) {
+        unit.mountFor('weapon_arm').getWorldPosition(unit.guardCue.position);
+        unit.guardCue.position.z += .26;
+        unit.guardCue.scale.set(.49,.68,.5);
+        unit.guardCue.rotation.y = f.facing*.45;
+      }
       combatEffects.updateFighter(i, f, motion, t);
       const marker = labels[i];
       marker.hidden = f.dead;
@@ -582,7 +623,13 @@
     placePickupLabels();
     syncEntities(shots, frame.shots, projectile, (node, a) => {
       node.position.set(a[2] / 100, -a[3] / 100, .28);
-      if (node.userData.tail) {
+      if (a[1] === 'disc') {
+        node.rotation.z = reducedMotion ? 0 : a[6]*18;
+      } else if (node.userData.beat) {
+        const radii = catalog.moves[a[7]].radius;
+        const beat = a[8] ? 1.07 : Math.max(.11,1-a[6]/catalog.moves[a[7]].delay);
+        node.userData.beat.scale.set(radii[0]*beat,radii[1]*beat,.97);
+      } else if (node.userData.tail) {
         node.scale.x = a[4];
         const rail = a[1] === 'rail';
         node.userData.tail.scale.x = Math.min(rail ? 3.3 : 1.62, a[6] * (rail ? 22 : 12));

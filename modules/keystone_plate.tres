@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"keystone_plate"
+display_name = "KEYSTONE PLATE"
+short_name = "KEYSTONE"
+slot = &"shell"
+donor = &"rook"
+color = Color(0.862745, 0.898039, 0.815686, 1)
+energy = Color(1.0, 0.788235, 0.376471, 1)
+maximum = 67
+acceleration_scale = 0.91
+resistance = 1.18

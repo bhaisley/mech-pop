@@ -32,6 +32,9 @@ func _ready() -> void:
 		if ResourceLoader.exists(path):
 			sounds[cue] = load(path)
 	for id in Roster.IDS:
+		var special := String(Roster.part(Roster.mech(id).native_weapon).attack.feedback)
+		if special.begins_with("chassis/"):
+			sounds[special] = load("res://audio/sfx/%s.wav" % special)
 		for role in ["light", "heavy", "hit", "guard", "boost", "ko"]:
 			var bank := "chassis/%s_%s" % [id, role]
 			sounds[bank] = load("res://audio/sfx/%s.wav" % bank)
@@ -142,6 +145,8 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 		&"snap":
 			cue("snap", point, 4, 5.0)
 			_rumble(fighter, 0.35, 0.075)
+		&"parry":
+			cue(bank + "guard", point, 4, 1.0)
 		&"attack_active":
 			if payload.special or payload.attack.id == &"zero_scope":
 				cue(String(payload.attack.feedback), point, 2, 0.0 if payload.attack.id == &"pile_shot" else 1.0)

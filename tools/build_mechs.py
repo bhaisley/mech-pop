@@ -28,6 +28,10 @@ PALETTES = {
     'lumi': dict(color='EEC460', pale='FFF8E7', dark='90733E', energy='ACEEFF', accent='FFE8A1'),
     'kai': dict(color='328ADC', pale='D6EEFF', dark='24476C', energy='78E9FF', accent='B9F8FF'),
     'zero': dict(color='474551', pale='ACABB7', dark='2B2936', energy='FF5C77', accent='FFBAC3'),
+    'rivet': dict(color='EB8238', pale='FFE39A', dark='93451F', energy='61F4E0', accent='FFF0BE'),
+    'kite': dict(color='32C7B9', pale='E9FFF6', dark='197578', energy='FFE680', accent='FF7452'),
+    'rook': dict(color='E5E8D6', pale='FFF7DD', dark='33477D', energy='FFC960', accent='FFDD9E'),
+    'coda': dict(color='AE5798', pale='EDB46C', dark='59335F', energy='FFD176', accent='FFE6AB'),
 }
 MATERIALS = {}
 
@@ -467,6 +471,42 @@ def build_zero():
 MODULE_DONORS = {'arc_blade':'nova','fin_plate':'nova','pile_cannon':'terra','bulwark':'terra','burst_knuckle':'kuren','vent_shell':'kuren','halo_caster':'momo','halo_shell':'momo','phase_talon':'shadow','mirage_mantle':'shadow','prism_emitter':'lumi','prism_shell':'lumi','rail_lance':'kai','flux_frame':'kai','switch_driver':'zero','adaptive_shell':'zero'}
 SHELLS = ('fin_plate','vent_shell','bulwark','halo_shell','mirage_mantle','prism_shell','flux_frame','adaptive_shell')
 
+CHALLENGER_MODULES = {'mag_fork':'rivet','winch_pack':'rivet','gale_disc':'kite','sail_frame':'kite',
+                      'gate_shield':'rook','keystone_plate':'rook','echo_bell':'coda','resonance_shell':'coda'}
+MODULE_DONORS.update(CHALLENGER_MODULES)
+SHELLS += ('winch_pack','sail_frame','keystone_plate','resonance_shell')
+
+def build_challenger(chassis):
+    p = palette(chassis)
+    root = empty('Rig')
+    _core_body(root,p,chassis)
+    head = empty('Head',root,(0,1.91,.02))
+    ellipsoid('Helmet',head,(0,.05,0),(1.25,1.05,1.0),p['color'])
+    plate('Face glass',head,[(-.53,.13),(.53,.13),(.44,-.21),(0,-.37),(-.44,-.21)],.43,.12,p['ink'])
+    for s in [-1,1]:
+        plate('EyeLeft' if s<0 else 'EyeRight',head,mirror_profile([(.07,-.11),(.41,.014),(.35,-.17),(.14,-.23)],s),.56,.026,p['energy'],.01)
+        plate('Cheek',head,mirror_profile([(.36,-.18),(.58,-.03),(.52,-.32),(.27,-.40)],s),.41,.13,p['dark'])
+    if chassis == 'rivet':
+        box('Work helmet brim',head,(0,.20,.055),(1.39,.12,1.02),p['color'],.055)
+        for x in [-.35,-.22]: box('Hazard stripe',head,(x,.27,.474),(.068,.16,.05),p['ink'],.006,-.45)
+        box('Work lamp',head,(.31,.32,.42),(.24,.20,.19),p['joint'])
+        box('Lamp glass',head,(.31,.32,.53),(.17,.12,.03),p['energy'],.015)
+    elif chassis == 'kite':
+        for s in [-1,1]:
+            plate('Swept temple wing',head,mirror_profile([(.43,-.09),(.64,0),(1.12,.57),(.73,.44),(.40,.21)],s),.06,.15,p['pale'])
+            plate('Wingtip',head,mirror_profile([(.83,.32),(1.11,.56),(.98,.51)],s),.22,.025,p['accent'])
+    elif chassis == 'rook':
+        box('Tower cornice',head,(0,.26,0),(1.22,.27,.93),p['color'],.06)
+        for x in [-.43,0,.43]: box('Battlement',head,(x,.48,.12),(.25,.29,.36),p['pale'],.027)
+    else:
+        for s in [-1,1]:
+            cylinder('Ear drum',head,(s*.61,.06,0),.30,.22,p['dark'],axis='x')
+            cylinder('Brass drumhead',head,(s*.73,.06,0),.245,.05,p['pale'],axis='x')
+            box('Tuning fork tine',head,(s*.083,.61,-.08),(.064,.33,.095),p['pale'],.015)
+        box('Fork yoke',head,(0,.48,-.08),(.225,.099,.11),p['pale'])
+    root['chassis'] = chassis
+    return root
+
 def build_module(name):
     donor=MODULE_DONORS[name]
     p=palette(donor)
@@ -476,7 +516,31 @@ def build_module(name):
         return _shell(root,p,name)
     cylinder('Universal coupler',root,(0,0,0),.155,.25,p['joint'],axis='x')
     cylinder('Coupler light',root,(.04,0,0),.168,.033,p['energy'],axis='x')
-    if name=='arc_blade':
+    if name == 'mag_fork':
+        box('Magnet yoke',root,(.22,-.04,0),(.42,.37,.53),p['dark'])
+        for s in [-1,1]:
+            box('Fork pole',root,(.50,-.05,s*.21),(.56,.20,.19),p['color'])
+            box('Pole face',root,(.80,-.05,s*.21),(.08,.17,.16),p['energy'])
+    elif name == 'gale_disc':
+        torus('Disc rim',root,(.37,0,.12),.38,.052,p['pale'])
+        cylinder('Disc hub',root,(.37,0,.12),.115,.15,p['color'])
+        for i in range(3):
+            a = i*math.tau/3
+            xy = [(0,-.047),(.22,-.07),(.48,.07),(.51,.17),(.22,.11),(0,.042)]
+            points = [(.37+x*math.cos(a)-y*math.sin(a),x*math.sin(a)+y*math.cos(a)) for x,y in xy]
+            plate('Swept disc spoke',root,points,.115,.07,p['accent'] if i==0 else p['color'])
+    elif name == 'gate_shield':
+        face = [(-.10,.51),(.42,.54),(.60,.34),(.56,-.30),(.22,-.57),(-.10,-.36)]
+        plate('Tower shield',root,face,.03,.24,p['dark'])
+        plate('Ivory face',root,[(x*.87,y*.89) for x,y in face],.28,.08,p['color'])
+        box('Cobalt stripe',root,(.24,.01,.37),(.11,.79,.028),p['dark'],.012)
+        diamond('Shield boss',root,(.24,.06,.39),.17,.24,.045,p['energy'])
+    elif name == 'echo_bell':
+        for x,r,depth,material in [(.20,.13,.26,'dark'),(.39,.21,.18,'pale'),(.55,.29,.17,'pale'),(.67,.34,.09,'accent')]:
+            cylinder('Bell casting',root,(x,0,0),r,depth,p[material],axis='x',vertices=24)
+        cylinder('Bell mouth',root,(.72,0,0),.286,.018,p['ink'],axis='x')
+        ellipsoid('Clapper',root,(.75,-.05,0),(.14,.16,.15),p['pale'])
+    elif name=='arc_blade':
         box('Blade forearm',root,(.17,-.12,0),(.40,.43,.36),p['color'],.055)
         plate('Blade white shroud',root,[(-.015,.07),(.34,.05),(.44,-.22),(.17,-.41),(-.04,-.27)],.24,.15,p['white'])
         diamond('Blade battery',root,(.20,-.11,.267),.14,.23,.035,p['color'])
@@ -569,7 +633,19 @@ def _shell(root,p,name):
     for side in (-1,1):
         box('Shoulder support',root,(side*.55,.22,-.04),(.40,.27,.45),p['dark'],.055)
         plate('Shoulder armor',root,mirror_profile([(.37,.36),(.66,.43),(.86,.22),(.77,.04),(.47,.05)],side),.22,.45,p['white'] if name=='fin_plate' else p['color'],.045)
-        if name=='fin_plate':
+        if name == 'winch_pack':
+            cylinder('Cable spool',root,(side*.56,.12,-.20),.22,.33,p['dark'],axis='x')
+            for x in [.43,.57,.69]: cylinder('Spool flange',root,(side*x,.12,-.20),.25,.043,p['pale'],axis='x')
+        elif name == 'sail_frame':
+            plate('Glider wing',root,mirror_profile([(.20,-.16),(.67,-.05),(1.30,.43),(1.37,.63),(.78,.45),(.26,.25)],side),-.23,.10,p['pale'])
+            plate('Signal tip',root,mirror_profile([(.91,.25),(1.29,.45),(1.36,.61),(1.13,.53)],side),-.12,.025,p['accent'])
+        elif name == 'keystone_plate':
+            box('Shoulder rampart',root,(side*.54,.21,-.06),(.44,.47,.50),p['color'],.05)
+            box('Cobalt inset',root,(side*.55,.20,.20),(.12,.39,.04),p['dark'])
+        elif name == 'resonance_shell':
+            cylinder('Resonating drum',root,(side*.56,.20,-.04),.26,.30,p['dark'])
+            torus('Bronze rim',root,(side*.56,.20,.13),.215,.04,p['pale'])
+        elif name=='fin_plate':
             plate('Shoulder cobalt inset',root,mirror_profile([(.51,.34),(.68,.38),(.78,.23),(.62,.26)],side),.273,.04,p['color'],.012)
         elif name=='bulwark':
             box('Fortress pauldrons',root,(side*.66,.25,-.02),(.69,.55,.66),p['color'],.05)
@@ -632,7 +708,9 @@ if __name__=='__main__':
     clear()
     builders={'nova':build_nova,'kuren':build_kuren,'terra':build_terra,'momo':build_momo,'shadow':build_shadow,'lumi':build_lumi,'kai':build_kai,'zero':build_zero}
     for chassis in filter(None,options.only.split(',')):
-        clear();root=builders[chassis]();export(root,EXPORT/f'{chassis}.glb',ART/f'{chassis}.blend')
+        clear()
+        root = builders[chassis]() if chassis in builders else build_challenger(chassis)
+        export(root,EXPORT/f'{chassis}.glb',ART/f'{chassis}.blend')
     if options.modules or options.module_only:
         for name in (MODULE_DONORS if options.modules else options.module_only.split(',')):
             clear();root=build_module(name);export(root,MODULES/f'{name}.glb',ART/f'{name}.blend')

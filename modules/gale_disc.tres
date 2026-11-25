@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ModuleData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/module_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="attack"]
+script = ExtResource("2")
+id = &"gale_return"
+startup = 0.16
+active = 0.08
+recovery = 0.23
+damage = 12
+component_damage = 10
+knockback = Vector2(390, -235)
+offset = Vector2(108, -86)
+size = Vector2(120, 72)
+delivery = &"disc"
+projectile_speed = Vector2(1040, 0)
+phase_delay = 0.4
+projectile_lifetime = 1.48
+projectile_radius = Vector2(44, 29)
+piercing = true
+feedback = &"chassis/kite_special"
+
+[resource]
+script = ExtResource("1")
+id = &"gale_disc"
+display_name = "GALE DISC"
+short_name = "DISC"
+slot = &"weapon_arm"
+donor = &"kite"
+color = Color(0.145098, 0.737255, 0.690196, 1)
+energy = Color(1.0, 0.901961, 0.501961, 1)
+cooldown = 1.55
+action = &"disc"
+attack = SubResource("attack")

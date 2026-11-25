@@ -7,13 +7,13 @@ signal status_changed(message: String)
 signal round_verified(report: Dictionary)
 
 const PROTOCOL: int = 4
-const RULESET: String = "mech-pop-0.5-directional-salvage"
+const RULESET: String = "mech-pop-0.6-new-challengers"
 const DEFAULT_PORT: int = 24872
 const RECONNECT_SECONDS: float = 20.0
 const MAX_SNAPSHOT_BYTES: int = 131072
 const SNAPSHOT_CHUNK_BYTES: int = 1100
 const MAX_WEBSOCKET_SNAPSHOTS: int = 2
-const EVENT_KINDS: Array[String] = ["hit", "part_pop", "core_pop", "snap", "attack_active", "attack_start", "jump", "dodge", "land", "repair", "go", "final_thirty", "match_end", "part_loose", "attach_start", "fumble", "recall", "respawn", "cannon_recoil", "phase_shift"]
+const EVENT_KINDS: Array[String] = ["hit", "part_pop", "core_pop", "snap", "attack_active", "attack_start", "jump", "dodge", "land", "repair", "go", "final_thirty", "match_end", "part_loose", "attach_start", "fumble", "magnet_reel", "parry", "recall", "respawn", "cannon_recoil", "phase_shift"]
 
 var active: bool = false
 var authority: bool = false

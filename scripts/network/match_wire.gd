@@ -18,7 +18,7 @@ static func prepare() -> void:
 			if move: attacks[String(move.id)] = move
 	for id in Roster.all_modules():
 		var module: ModuleData = Roster.part(id)
-		for move in [module.attack, module.up_attack, module.down_attack]:
+		for move in [module.attack, module.up_attack, module.down_attack, module.counter_attack]:
 			if move: attacks[String(move.id)] = move
 
 static func capture(session: MatchSession) -> Dictionary:
@@ -133,7 +133,7 @@ static func valid(state: Dictionary, count: int = 4) -> bool:
 		if not entry is Dictionary or not entry.get("uid") is int or entry.uid < 1 or uids.has(entry.uid): return false
 		uids[entry.uid] = true
 		if not entry.get("source") is int or entry.source < 0 or entry.source >= count: return false
-		if not attacks.has(entry.get("attack")) or entry.get("type") not in ["cannon", "snare", "repair", "field", "rail"]: return false
+		if not attacks.has(entry.get("attack")) or entry.get("type") not in ["cannon", "snare", "repair", "field", "rail", "disc", "echo"]: return false
 		for key in ["position", "previous", "velocity"]:
 			if not vector(entry.get(key)): return false
 		for key in ["remaining", "age", "facing"]:
@@ -249,6 +249,7 @@ static func valid_event(event: Dictionary, count: int = 4) -> bool:
 	var required: Dictionary = {
 		"hit": ["fighter", "source", "attack", "position", "armored"],
 		"part_pop": ["fighter", "part", "position"], "fumble": ["fighter", "part", "position"],
+		"parry": ["fighter", "source", "position"], "magnet_reel": ["fighter", "part", "position"],
 		"core_pop": ["fighter", "credited", "position"],
 		"snap": ["fighter", "part", "stolen"],
 		"attack_active": ["fighter", "attack", "special"],

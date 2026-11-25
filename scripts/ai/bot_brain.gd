@@ -90,7 +90,7 @@ func command(fighter: Fighter, session: Node, delta: float) -> FighterCommand:
 	var reach: float = 120.0 if fighter.data.id != &"terra" else 125.0
 	var equipped: PartInstance = fighter.part(&"weapon_arm")
 	var preferred_distance: float = reach * 0.7
-	if equipped and equipped.definition.action in [&"projectile", &"rail", &"field"]:
+	if equipped and equipped.definition.action in [&"projectile", &"rail", &"field", &"disc"]:
 		preferred_distance = 310.0
 		if equipped.definition.action == &"rail": preferred_distance = 540.0
 		elif equipped.definition.action == &"field": preferred_distance = 240.0
@@ -111,6 +111,8 @@ func command(fighter: Fighter, session: Node, delta: float) -> FighterCommand:
 		result.jump_pressed = true
 		jump_delay = 0.4
 	if collectible:
+		if equipped and equipped.definition.action == &"magnet" and fighter.special_cooldown <= 0.0 and absf(difference.y) < 195.0 and absf(difference.x) > fighter.data.pickup_reach and absf(difference.x) < 510.0:
+			result.special = true
 		return result
 	# Attack range uses the opponent, not the safe movement destination.
 	difference = enemy.position - fighter.position
@@ -138,6 +140,10 @@ func command(fighter: Fighter, session: Node, delta: float) -> FighterCommand:
 			&"blink": use_special = absf(difference.x) > 245.0 and absf(difference.x) < 415.0
 			&"repair": use_special = fighter.repair_budget > 0.0 and _needs_repair(fighter)
 			&"rush": use_special = absf(difference.x) > 130.0 and absf(difference.x) < 430.0
+			&"disc": use_special = absf(difference.x) > 165.0 and absf(difference.x) < 510.0
+			&"echo": use_special = absf(difference.x) > 65.0 and absf(difference.x) < 235.0
+			&"parry": use_special = enemy.attack != null and absf(difference.x) < 250.0
+			&"magnet": use_special = absf(difference.x) > 105.0 and absf(difference.x) < 205.0
 			_: use_special = absf(difference.x) < 255.0 and attack_delay <= 0.05
 		if use_special:
 			result.special = true

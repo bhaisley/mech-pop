@@ -14,6 +14,7 @@ extends Resource
 @export var attack: AttackData
 @export var up_attack: AttackData
 @export var down_attack: AttackData
+@export var counter_attack: AttackData
 @export var acceleration_scale: float = 1.0
 @export var air_scale: float = 1.0
 @export var resistance: float = 1.0

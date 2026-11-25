@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="MechData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mech_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="2"]
+
+[sub_resource type="Resource" id="light"]
+script = ExtResource("2")
+id = &"rivet_light"
+startup = 0.07
+active = 0.07
+recovery = 0.17
+damage = 9
+component_damage = 11
+knockback = Vector2(380, -170)
+offset = Vector2(91, -78)
+size = Vector2(151, 85)
+breaker = false
+target_slot = &"weapon_arm"
+hitstop = 0.04
+feedback = &"light"
+
+[sub_resource type="Resource" id="heavy"]
+script = ExtResource("2")
+id = &"rivet_heavy"
+startup = 0.19
+active = 0.1
+recovery = 0.28
+damage = 19
+component_damage = 24
+knockback = Vector2(770, -330)
+offset = Vector2(114, -78)
+size = Vector2(184, 112)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="uppercut"]
+script = ExtResource("2")
+ejection = 1
+id = &"rivet_uppercut"
+startup = 0.15
+active = 0.09
+recovery = 0.28
+damage = 18
+component_damage = 22
+knockback = Vector2(210, -1110)
+offset = Vector2(51, -131)
+size = Vector2(154, 184)
+breaker = true
+target_slot = &"weapon_arm"
+hitstop = 0.075
+feedback = &"heavy"
+
+[sub_resource type="Resource" id="slam"]
+script = ExtResource("2")
+ejection = 2
+id = &"rivet_slam"
+startup = 0.21
+active = 0.11
+recovery = 0.29
+damage = 23
+component_damage = 26
+knockback = Vector2(540, -670)
+offset = Vector2(92, -39)
+size = Vector2(192, 120)
+breaker = true
+target_slot = &"shell"
+hitstop = 0.075
+feedback = &"heavy"
+
+[resource]
+script = ExtResource("1")
+id = &"rivet"
+display_name = "RIVET"
+role = "SALVAGE RIGGER"
+quote = "Loose parts belong on a mech."
+description = "Reel loose gear closer with the Mag Fork. Start your catch from farther away."
+native_weapon = &"mag_fork"
+native_shell = &"winch_pack"
+face_region = Rect2(125, 94, 510, 510)
+color = Color(0.921569, 0.509804, 0.219608, 1)
+energy = Color(0.380392, 0.956863, 0.878431, 1)
+height = 168
+width = 88
+mass = 1.13
+speed = 725
+pickup_reach = 195
+light = SubResource("light")
+heavy = SubResource("heavy")
+uppercut = SubResource("uppercut")
+slam = SubResource("slam")

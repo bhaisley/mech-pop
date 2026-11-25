@@ -73,6 +73,16 @@ func _process(delta: float) -> void:
 			if projectile.type in [&"cannon", &"rail"]:
 				RigFactory.ball(root, Vector3.ZERO, Vector3(0.88, 0.31, 0.31), Color.WHITE, true)
 				RigFactory.ball(root, Vector3(-projectile.facing * 0.7, 0, -0.01), Vector3(2.3 if projectile.type == &"rail" else 1.6, 0.12 if projectile.type == &"rail" else 0.21, 0.2), color, true)
+			elif projectile.type == &"disc":
+				var rim := _ring(root,Color("defff6"),.43)
+				rim.rotation.x = PI/2
+				for side in [-1,1]:
+					var wing := RigFactory.box(root, Vector3(side*.20,.06,0), Vector3(.55,.13,.12), Color("69dcd1"), true)
+					wing.rotation.z = side*.40
+			elif projectile.type == &"echo":
+				var beat := _ring(root,Color("ffd57b"),projectile.attack.projectile_radius.x/100.0)
+				beat.rotation.x = PI/2
+				beat.scale.z = projectile.attack.projectile_radius.y / projectile.attack.projectile_radius.x
 			elif projectile.type == &"field":
 				var ring: MeshInstance3D = _ring(root, color, projectile.attack.projectile_radius.x / 100.0)
 				ring.rotation = Vector3(PI / 2, 0, 0)
@@ -88,6 +98,10 @@ func _process(delta: float) -> void:
 			projectile_views[uid] = root
 		projectile_views[uid].position = Vector3(projectile.position.x / 100.0, -projectile.position.y / 100.0 + 0.15, 0.3)
 		if projectile.type == &"field": projectile_views[uid].rotation.z = projectile.age * 2.5
+		elif projectile.type == &"disc": projectile_views[uid].rotation.z = projectile.age * 18.0
+		elif projectile.type == &"echo":
+			var pulse: float = 1.08 if projectile.pulsed else lerpf(0.55,1.0,projectile.age/projectile.attack.phase_delay)
+			projectile_views[uid].scale = Vector3.ONE*pulse
 	for uid in projectile_views.keys():
 		if not valid.has(uid):
 			projectile_views[uid].queue_free()
@@ -145,6 +159,12 @@ func _on_event(kind: StringName, payload: Dictionary) -> void:
 			slash(hit.get_center(), fighter.data.energy, fighter.facing, payload.attack.breaker or payload.special)
 		else:
 			burst(payload.fighter.position + Vector2(payload.fighter.facing * 150, -100), payload.fighter.data.energy, 8, 0.2)
+	elif kind == &"parry":
+		shockwave(payload.position,Color("ffd474"),0.18,0.66)
+	elif kind == &"magnet_reel":
+		var origin: Vector2 = session.parts.socket_position(payload.fighter,&"weapon_arm")
+		for i in range(1,5):
+			burst(origin.lerp(payload.position,i/5.0),Color("72ffdf"),2,0.15)
 	elif kind == &"phase_shift":
 		var tint: Color = Color("dc82ff")
 		for index in range(3):

@@ -58,10 +58,11 @@ func _run() -> void:
 	camera.size = 12.0
 	camera.position = Vector3(0, 5.3, 20)
 	for mode in [&"weapon", &"shell"]:
-		for row_group in range(2):
-			for column_group in range(2):
+		var groups := ceili(Roster.IDS.size() / 4.0)
+		for row_group in range(groups):
+			for column_group in range(groups):
 				await _gallery(mode, row_group, column_group)
-	print("PRODUCTION RENDERS COMPLETE: eight portraits and eight 16-fit galleries")
+	print("PRODUCTION RENDERS COMPLETE for ", Roster.IDS.size(), " chassis")
 	quit()
 
 func _gallery(mode: StringName, row_group: int, column_group: int) -> void:
@@ -71,6 +72,7 @@ func _gallery(mode: StringName, row_group: int, column_group: int) -> void:
 	for id in Roster.IDS: parts.append(Roster.mech(id).native_weapon if mode == &"weapon" else Roster.mech(id).native_shell)
 	for row in range(4):
 		for col in range(4):
+			if row_group * 4 + row >= Roster.IDS.size() or column_group * 4 + col >= parts.size(): continue
 			var data: MechData = Roster.mech(Roster.IDS[row_group * 4 + row])
 			var part_id: StringName = parts[column_group * 4 + col]
 			var rig: Node3D = assembled(data.id, part_id if mode == &"weapon" else data.native_weapon, part_id if mode == &"shell" else data.native_shell)

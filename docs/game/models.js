@@ -86,6 +86,22 @@
       eye: 0xff8d7e,
       weapon: 'switch_driver',
       shell: 'adaptive_shell'
+    },
+    rivet: {
+      armor: 0xf1923d, panel: 0x9c4d26, edge: 0xffdd79, inset: 0x293941,
+      light: 0x70f5e2, eye: 0x8bfff2, weapon: 'mag_fork', shell: 'winch_pack'
+    },
+    kite: {
+      armor: 0x67ddd0, panel: 0x178e92, edge: 0xff7051, inset: 0x184752,
+      light: 0xffeb80, eye: 0xffe174, weapon: 'gale_disc', shell: 'sail_frame'
+    },
+    rook: {
+      armor: 0xe8ecda, panel: 0x354981, edge: 0xffcc6e, inset: 0x233252,
+      light: 0xffc34a, eye: 0xffd982, weapon: 'gate_shield', shell: 'keystone_plate'
+    },
+    coda: {
+      armor: 0xbe68a2, panel: 0x63356c, edge: 0xe0ad6e, inset: 0x3c2943,
+      light: 0xffdc80, eye: 0xffce77, weapon: 'echo_bell', shell: 'resonance_shell'
     }
   };
   const ink = 0x101521, joint = 0x283448, iron = 0x506079, silver = 0xa9b6c5, ivory = 0xf4f2eb;
@@ -422,6 +438,11 @@
     cheekPatch(b, [[x, y + h], [x + w, y], [x, y - h], [x - w, y]], c, z, em);
   }
   function temple(b, id, p, s) {
+    if (id === 'coda') {
+      for (const [x, r, col] of [[.47,.27,p.panel],[.56,.25,p.edge],[.64,.20,joint],[.67,.15,p.edge]])
+        barrel(b, [s*x,.03,-.035], [s*(x+.047),.03,-.035], r, r*.93, col);
+      return;
+    }
     const wingPal = id === 'zero' ? p.edge : id === 'momo' ? p.armor : p.panel;
     const style = {
       nova: [[-.08, -.14], [.055, -.09], [.17, .11], [.215, .52], [.012, .34], [-.105, .13]],
@@ -431,7 +452,10 @@
       shadow: [[-.108, -.16], [.035, -.12], [.19, .18], [.255, .62], [.055, .44], [-.115, .19]],
       lumi: [[-.12, -.13], [.06, -.08], [.19, .11], [.22, .46], [.14, .53], [-.02, .30]],
       kai: [[-.11, -.18], [.1, -.09], [.22, .21], [.15, .53], [-.03, .34], [-.12, .13]],
-      zero: [[-.095, -.185], [.058, -.12], [.245, .18], [.25, .56], [.10, .38], [0, .24]]
+      zero: [[-.095, -.185], [.058, -.12], [.245, .18], [.25, .56], [.10, .38], [0, .24]],
+      rivet: [[-.10,-.19],[.12,-.18],[.17,.10],[.08,.18],[-.12,.13]],
+      kite: [[-.10,-.13],[.08,-.12],[.48,.27],[.61,.48],[.12,.31],[-.07,.12]],
+      rook: [[-.10,-.22],[.12,-.22],[.18,-.04],[.17,.29],[-.07,.29]]
     }[id];
     const y = id === 'terra' ? .06 : .09, x = rx * .80;
     sweptFin(b, style, wingPal, [s * x, y, -.053], s);
@@ -501,7 +525,7 @@
     const p = palettes[id];
     return rigid(id + '/optics', b => {
       for (const s of [-1, 1]) {
-        const highEye = id === 'momo', slit = ['terra', 'zero', 'shadow'].includes(id);
+        const highEye = id === 'momo' || id === 'coda', slit = ['terra', 'zero', 'shadow', 'rook', 'kite'].includes(id);
         let eye = highEye ?
             [
               [.074, -.112], [.13, .032], [.233, .087], [.361, .066], [.412, -.019], [.38, -.146], [.287, -.23],
@@ -538,6 +562,21 @@
     const p = palettes[id];
     return rigid(id + '/helmet', b => {
       oval(b, [0, 0, 0], [rx, ry, rz], ink, origin, 0, true);
+      if (id === 'rivet') {
+        loft(b, [[.12,.63,.54,.015],[.17,.67,.57,.045],[.22,.58,.47,0],[.38,.48,.39,-.025]], p.armor, 10);
+        for (const x of [-.32,-.21])
+          plate(b, [[0,0],[.062,0],[.12,.12],[.058,.12]], .018, joint, [x,.18,.459]);
+        barrel(b,[.29,.28,.31],[.29,.28,.46],.119,.116,ink,8);
+        barrel(b,[.29,.28,.46],[.29,.28,.48],.088,.085,p.light,8,1);
+      } else if (id === 'rook') {
+        loft(b, [[.12,.59,.47],[.26,.62,.49],[.37,.55,.44]],p.armor,8,.70);
+        for (const x of [-.34,0,.34])
+          plate(b,[[-.10,-.05],[.10,-.05],[.10,.17],[-.10,.17]],.25,p.armor,[x,.34,.11]);
+      } else if (id === 'coda') {
+        barrel(b,[0,.33,-.10],[0,.50,-.10],.058,.05,p.edge);
+        for (const s of [-1,1])
+          plate(b,[[0,-.035],[.07,0],[.09,.28],[.043,.26]],.075,ivory,[s*.013,.48,-.10],[0,0,0],[s,1,1]);
+      }
       if (id === 'momo') {
         const mask = [
           [0, -.05], [.174, -.011], [.338, .126], [.471, .112], [.535, -.025], [.48, -.225], [.24, -.342],
@@ -615,7 +654,23 @@
         plate(
             b, [[.17, -.09], [.275, -.035], [.26, -.08], [.164, -.137]], .012, joint, [0, .007, .207],
             [0, s * .1, 0], [s, 1, 1], .005);
-        if (id === 'terra' || id === 'kuren') {
+        if (id === 'rivet') {
+          barrel(b,[s*.16,.04,-.23],[s*.42,.04,-.23],.18,.18,p.inset);
+          for (const x of [.22,.30,.40])
+            barrel(b,[s*x,.04,-.23],[s*(x+.035),.04,-.23],.22,.22,p.edge);
+        } else if (id === 'kite') {
+          const wing = [[0,-.10],[.37,-.03],[.81,.21],[.91,.38],[.47,.27],[.05,.24]];
+          plate(b,wing,.07,ivory,[s*.18,.07,-.24],[-.35,0,0],[s,1,1]);
+          plate(b,[[.47,.11],[.81,.23],[.90,.36],[.65,.27]],.022,p.edge,[s*.18,.07,-.19],[-.35,0,0],[s,1,1]);
+        } else if (id === 'rook') {
+          plate(b,[[0,-.23],[.31,-.20],[.38,.10],[.32,.25],[0,.26]],.19,p.armor,[s*.09,.012,-.13],[0,s*.13,0],[s,1,1]);
+          barrel(b,[s*.27,-.18,-.22],[s*.27,.30,-.22],.089,.11,p.panel,8);
+        } else if (id === 'coda') {
+          const x = s*.31;
+          barrel(b,[x,.03,-.29],[x,.10,-.09],.23,.22,p.panel);
+          ring(b,[x,.10,-.075],.20,.032,p.edge);
+          ring(b,[x,.10,-.055],.11,.023,p.light,origin,.6);
+        } else if (id === 'terra' || id === 'kuren') {
           // Recoil housings and blackened exhaust stacks sit behind the scapula.
           const x = id === 'terra' ? .33 : .29;
           barrel(b, [s * x, -.16, -.20], [s * x, .22, -.24], .12, .142, iron);
@@ -677,7 +732,41 @@
   function weapon(id) {
     const p = palettes[id];
     return rigid(p.weapon, b => {
-      if (id === 'nova') {
+      if (id === 'rivet') {
+        hilt(b,p,.28,.155);
+        barrel(b,[0,0,.15],[0,0,.41],.19,.22,joint,8);
+        for (const s of [-1,1]) {
+          const x=s*.205;
+          barrel(b,[s*.10,0,.32],[x,0,.45],.112,.11,p.armor,8);
+          barrel(b,[x,0,.42],[x,0,.80],.115,.114,p.armor,8);
+          barrel(b,[x,0,.72],[x,0,.88],.12,.105,ivory,8);
+          barrel(b,[x,0,.881],[x,0,.894],.080,.082,p.light,8,.95);
+        }
+      } else if (id === 'kite') {
+        hilt(b,p,.29,.109);
+        ring(b,[0,0,.50],.34,.052,ivory);
+        ring(b,[0,0,.52],.28,.025,p.light,origin,.64);
+        for (let i=0; i<3; i++) {
+          const turn = [0,0,i*TAU/3];
+          plate(b,[[0,-.055],[.18,-.09],[.45,.04],[.48,.17],[.25,.11],[0,.048]],.085,p.armor,[0,0,.47],turn);
+          plate(b,[[.31,-.01],[.45,.044],[.478,.16],[.38,.119]],.02,p.edge,[0,0,.53],turn);
+        }
+        barrel(b,[0,0,.40],[0,0,.56],.105,.10,p.panel);
+      } else if (id === 'rook') {
+        hilt(b,p,.30,.145);
+        const face=[[-.34,.37],[-.20,.49],[.24,.45],[.36,.30],[.31,-.25],[0,-.51],[-.28,-.32]];
+        plate(b,face,.15,p.panel,[0,0,.43]);
+        plate(b,face,.056,p.armor,[0,0,.56],origin,[.88,.90,1]);
+        plate(b,[[-.062,.36],[.065,.36],[.065,-.30],[0,-.38],[-.062,-.30]],.023,p.panel,[0,0,.62]);
+        plate(b,[[0,.18],[.095,.055],[0,-.065],[-.095,.055]],.025,p.light,[0,0,.65],origin,unit,.006,.72);
+      } else if (id === 'coda') {
+        hilt(b,p,.29,.12);
+        for (const [a,z,r1,r2,c] of [[.19,.38,.10,.16,p.panel],[.38,.55,.16,.22,p.edge],[.55,.69,.22,.34,p.edge],[.69,.74,.34,.36,ivory]])
+          barrel(b,[0,0,a],[0,0,z],r1,r2,c,20);
+        barrel(b,[0,0,.74],[0,0,.745],.30,.30,p.inset,20);
+        ring(b,[0,0,.75],.32,.025,p.light,origin,.67);
+        oval(b,[0,-.043,.75],[.095,.102,.079],p.edge);
+      } else if (id === 'nova') {
         hilt(b, p, .48, .158);
         blade(
             b,
@@ -951,7 +1040,8 @@
     phase_talon: [0, .12, 1.15],
     prism_emitter: [0, 0, .90],
     rail_lance: [0, 0, 1.34],
-    switch_driver: [0, 0, .88]
+    switch_driver: [0, 0, .88],
+    mag_fork: [0,0,.89], gale_disc: [0,.075,.82], gate_shield: [0,.055,.65], echo_bell: [0,0,.75]
   };
   // Steps per distance, stride angle, vertical travel, forward lean and leading knee.
   const gaits = {
@@ -962,7 +1052,11 @@
     shadow: {pace: 16, stride: .84, lift: .016, lean: .39, tuck: 1.08},
     lumi:   {pace: 10, stride: .63, lift: .067, lean: .02, tuck: .45},
     kai:    {pace: 9,  stride: .98, lift: .038, lean: .19, tuck: .76},
-    zero:   {pace: 15, stride: .57, lift: .027, lean: .16, tuck: .52}
+    zero:   {pace: 15, stride: .57, lift: .027, lean: .16, tuck: .52},
+    rivet:  {pace: 10, stride: .59, lift: .051, lean: .21, tuck: .46},
+    kite:   {pace: 14, stride: .81, lift: .055, lean: .23, tuck: 1.05},
+    rook:   {pace: 8.6,stride: .43, lift: .032, lean: -.04,tuck: .36},
+    coda:   {pace: 12, stride: .76, lift: .105, lean: .10, tuck: .73}
   };
   function retainer(side) {
     return rigid('retainer/' + side, b => {
@@ -1016,7 +1110,7 @@
     const arms = [], legs = [], popPlates = [];
     const gait = gaits[id], heelPoint = new T.Vector3(), heelTarget = new T.Vector3();
     let stridePhase = blinkPhase, plantedX = null;
-    const bulk = id === 'terra' ? 1.12 : (id === 'momo' ? .94 : 1);
+    const bulk = ({terra:1.12,momo:.94,rivet:1.09,kite:.89,rook:1.15,coda:.98})[id] || 1;
     let socket, armItem, shellItem, weaponId, shellId;
     const breast = group(upper, 0, .213, 0);
     for (const s of [-1, 1]) {
@@ -1141,7 +1235,7 @@
         }
       }
       const thrust = [
-        'pile_cannon', 'rail_lance', 'prism_emitter', 'burst_knuckle', 'switch_driver', 'halo_caster'
+        'pile_cannon', 'rail_lance', 'prism_emitter', 'burst_knuckle', 'switch_driver', 'halo_caster', 'mag_fork', 'gate_shield', 'echo_bell', 'gale_disc'
       ].includes(weaponId);
       // In the hangar the gun sights and blade profile read across the frame.
       // During combat the elbow turns toward the attack axis.
@@ -1161,6 +1255,10 @@
             if (id === 'kuren' || id === 'shadow') shoulder.rotation.x += .76*walk;
             if (id === 'momo' || id === 'lumi') shoulder.rotation.z += .47*walk + .45*hoverTuck;
             if (id === 'kai') shoulder.rotation.y -= .52*walk;
+            if (id === 'kite') shoulder.rotation.z += .97*flight + .34*walk;
+            if (id === 'rook') { shoulder.rotation.x -= .37; elbow.rotation.x += .47; }
+            if (id === 'rivet') shoulder.rotation.x += .42*walk;
+            if (id === 'coda') elbow.rotation.x += .39*stride;
             if (id === 'zero') { shoulder.rotation.x -= .36; elbow.rotation.x -= .69; }
           }
           if (hero && s > 0) {
