@@ -2,6 +2,12 @@
 
 The **native 0.2.0 preview, build 16**, shipped with eight fighters, sixteen interchangeable equipment parts and five arenas. Its release tag preserves that native build’s source. The complete private development record also retains failed investigations and raw device diagnostics.
 
+## Browser controls patch 0.6.1
+
+- Chrome opened the hangar in fullscreen, carried it into a match, and switched back from the arena and pause menu. A browser-initiated exit synchronized the two buttons.
+- Measurements on the music and effects outputs confirmed independent volume, silence at 0%, and restoration after master mute. The mixer previewed the arena track while the local fight stayed paused. Reloading restored both levels and the master mute setting.
+- Keyboard, simulated controller and touch input adjusted both dials. Portrait and landscape touch checks covered direct taps, fine dragging and fullscreen. Browser capability checks covered an unavailable or denied fullscreen request, the older mute preference and music playback without Web Audio.
+
 ## New Challengers browser release 0.6.0
 
 The expansion suite exercised all 1,728 combinations of twelve chassis, twelve weapon arms and twelve shells. It checked both passes of the Gale Disc, the fixed position and timing of the Echo Bell, frontal and rear shield hits, stolen shield counters, salvage range, exclusive pickup claims, Coda’s descent and Rook’s grounded knockback. Eight Godot suites passed 2,216 checks.

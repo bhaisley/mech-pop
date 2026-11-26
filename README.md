@@ -19,6 +19,8 @@ A colorful, four-player arena fighter built around **FIGHT → BREAK → STEAL �
 
 ![Rivet, Kite, Rook and Coda with their starting equipment in the playable hangar](docs/media/new-challengers.webp)
 
+Open **Audio** in the hangar or pause menu to turn the **Music** and **Sound effects** dials. Each runs from 0% to 100%. The speaker button mutes both and restores your saved mix when you unmute. The fullscreen button is in the hangar and beside the arena’s pause button.
+
 **Cannon Scramble · v0.5.0.** Choose **Rematch Terra** in the hangar or after winning the practice duel. On Skyport, Terra chases his Pile Cannon, can knock it out of your hands during a catch and can take it back. If he gets there first, break it off again. Win by hitting him with his own cannon.
 
 On the one-handed layout, **S + E** slams the part down close, **E** sends it forward, and **W + E** launches it for an aerial catch. Press **F** within reach of the outlined part. The loose mount opens before it breaks, and the cannon travels to the new pilot’s wrist during the 0.18-second catch. Face Terra and press **R** to fire.

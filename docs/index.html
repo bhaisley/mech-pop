@@ -7,7 +7,7 @@
   <meta name="description" content="Play MECH★POP. Pick one of twelve mechs, break off your rival’s gear, and steal it in a four-player arena brawl.">
   <title>MECH★POP — Play in your browser</title>
   <link rel="icon" href="game/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="game/style.css?v=8">
+  <link rel="stylesheet" href="game/style.css?v=9">
   <script defer src="game/vendor/three.min.js"></script>
   <script defer src="game/catalog.js?v=8"></script>
   <script defer src="game/attack-motion.js?v=8"></script>
@@ -15,9 +15,10 @@
   <script defer src="game/combat-effects.js?v=4"></script>
   <script defer src="game/arenas.js?v=4"></script>
   <script defer src="game/controls.js?v=7"></script>
-  <script defer src="game/audio.js?v=4"></script>
+  <script defer src="game/audio.js?v=9"></script>
+  <script defer src="game/settings.js?v=9"></script>
   <script defer src="game/view.js?v=8"></script>
-  <script defer src="game/game.js?v=8"></script>
+  <script defer src="game/game.js?v=9"></script>
 </head>
 <body data-screen="hangar">
   <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -25,6 +26,8 @@
     <symbol id="i-pad" viewBox="0 0 24 24"><path d="M7 7h10c2 0 3 2 4 6l.5 3c.5 2.5-1.8 3.5-3.4 2L15 15H9l-3.1 3c-1.6 1.5-3.9.5-3.4-2l.5-3c1-4 2-6 4-6Z"/><path d="M7.5 9.5v4m-2-2h4m5.7 1.5h.1m2.1-2.8h.1"/></symbol>
     <symbol id="i-audio" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zm13-1c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></symbol>
     <symbol id="i-mute" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zm13 0 6 6m0-6-6 6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></symbol>
+    <symbol id="i-contract" viewBox="0 0 24 24"><path d="M4 9h5V4m6 0v5h5M9 20v-5H4m16 0h-5v5"/></symbol>
     <symbol id="i-prev" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
     <symbol id="i-next" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M3 12h16m-6-6 6 6-6 6"/></symbol>
@@ -37,7 +40,14 @@
   </defs></svg>
   <header class="topbar">
     <a class="wordmark" aria-label="MECH POP hangar" href="./">MECH<span>★</span><b>POP</b></a>
-    <div class="nav-tools"><button id="help-button" class="plain"><svg><use href="#i-pad"/></svg><span>Controls</span></button><button class="plain icon" id="sound-button" aria-label="Mute sound" title="Mute sound"><svg><use href="#i-audio"/></svg></button></div>
+    <div class="nav-tools">
+      <button id="help-button" class="plain" aria-label="Controls"><svg><use href="#i-pad"/></svg><span>Controls</span></button>
+      <div class="audio-tools">
+        <button class="plain icon" id="sound-button" data-mute aria-label="Mute all audio" title="Mute all audio"><svg><use href="#i-audio"/></svg></button>
+        <button class="plain" id="audio-button" aria-haspopup="dialog">Audio</button>
+      </div>
+      <button id="fullscreen-button" class="plain fullscreen-toggle" data-fullscreen aria-label="Enter fullscreen"><svg><use href="#i-expand"/></svg><span>Fullscreen</span></button>
+    </div>
   </header>
   <main id="hangar" aria-label="Mech hangar">
     <div class="hangar-heading"><h1>Mech hangar<span>.</span></h1><div class="slot-tabs" aria-label="Player to configure" id="slot-tabs"></div></div>
@@ -66,10 +76,10 @@
       </section>
     </div>
     <section class="roster-wrap" aria-label="Character selection"><div class="section-label"><h2>Choose your mech</h2><span id="roster-player">Player 1</span></div><div id="roster" class="roster"></div></section>
-    <footer><a href="https://github.com/bhaisley/mech-pop/releases/tag/v0.6.0-web" target="_blank" rel="noopener">v0.6.0 · New Challengers ↗</a><a href="https://github.com/bhaisley/mech-pop" target="_blank" rel="noopener">Source & credits ↗</a></footer>
+    <footer><a href="https://github.com/bhaisley/mech-pop/releases/tag/v0.6.1-web" target="_blank" rel="noopener">v0.6.1 · New Challengers ↗</a><a href="https://github.com/bhaisley/mech-pop" target="_blank" rel="noopener">Source & credits ↗</a></footer>
   </main>
   <section id="battle" hidden aria-label="Battle arena">
-    <div id="field"><div id="arena-matte"></div><div id="battle-mount"></div><div id="field-labels"></div><div class="battle-strip"><span id="arena-title"></span><span id="set-score" hidden></span><b id="clock">3:00</b><button id="pause" class="plain icon" aria-label="Pause match"><svg><use href="#i-pause"/></svg></button></div><div id="countdown" hidden></div><div id="announcement" role="status"></div>
+    <div id="field"><div id="arena-matte"></div><div id="battle-mount"></div><div id="field-labels"></div><div class="battle-strip"><span id="arena-title"></span><span id="set-score" hidden></span><b id="clock">3:00</b><div class="battle-tools"><button class="plain icon fullscreen-toggle" data-fullscreen aria-label="Enter fullscreen"><svg><use href="#i-expand"/></svg></button><button id="pause" class="plain icon" aria-label="Pause match"><svg><use href="#i-pause"/></svg></button></div></div><div id="countdown" hidden></div><div id="announcement" role="status"></div>
       <ol id="score-feed" aria-label="Recent points" aria-live="polite" aria-relevant="additions"></ol>
       <div id="duel-guide" role="status" hidden><b id="duel-step"></b><span id="duel-hint"></span></div>
     </div>
@@ -77,6 +87,22 @@
     <div id="touch" hidden><div class="stick" id="stick" aria-label="Move and aim"><i></i></div><div class="touch-actions"><button data-act="dodge">Dash</button><button data-act="special">Special</button><button data-act="salvage">Salvage</button><button data-act="light">Light</button><button data-act="heavy">Break</button><button data-act="jump">Jump</button></div></div>
   </section>
   <dialog id="modal" aria-labelledby="modal-title"><div class="dialog-head"><h2 id="modal-title"></h2><button id="close-dialog" class="plain icon" aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div id="dialog-body"></div></dialog>
+  <template id="audio-panel">
+    <div class="mixer">
+      <div class="mixer-channel">
+        <label for="music-volume">Music</label>
+        <div class="volume-dial"><input id="music-volume" data-volume="music" type="range" min="0" max="100" step="1" aria-describedby="dial-hint"></div>
+        <output for="music-volume" aria-hidden="true"></output>
+      </div>
+      <div class="mixer-channel">
+        <label for="effects-volume">Sound effects</label>
+        <div class="volume-dial"><input id="effects-volume" data-volume="effects" type="range" min="0" max="100" step="1" aria-describedby="dial-hint"></div>
+        <output for="effects-volume" aria-hidden="true"></output>
+      </div>
+    </div>
+    <p id="dial-hint">Turn a dial or use the arrow keys.</p>
+    <button type="button" class="secondary mixer-mute" data-mute><svg><use href="#i-audio"/></svg><span>Mute all audio</span></button>
+  </template>
   <div id="notice" role="status" aria-live="polite"></div>
   <canvas id="simulation" width="2" height="2" aria-hidden="true" tabindex="-1"></canvas>
   <noscript>Turn on JavaScript to play MECH★POP.</noscript>

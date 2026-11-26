@@ -71,7 +71,9 @@
       resume();
       return;
     }
-    if (dialogType === 'help' && screen === 'battle') {
+    if ((dialogType === 'help' || dialogType === 'audio') && screen === 'battle') {
+      if (dialogType === 'audio')
+        sound.pause();
       showPauseMenu();
       return;
     }
@@ -93,17 +95,15 @@
     e.preventDefault();
     closeDialog();
   });
-  function soundButton() {
-    const label = sound.muted ? 'Enable sound' : 'Mute sound';
-    $('sound-button').setAttribute('aria-label', label);
-    $('sound-button').title = label;
-    $('sound-button').querySelector('use').setAttribute('href', sound.muted ? '#i-mute' : '#i-audio');
+  function showAudio() {
+    show('audio', 'Audio');
+    body.append(MechSettings.mixer(), action(screen === 'battle' ? 'Back to match menu' : 'Back to hangar', closeDialog));
+    body.querySelector('input').focus();
+    if (screen === 'battle')
+      sound.resume();
   }
-  $('sound-button').onclick = () => {
-    sound.toggle();
-    soundButton();
-  };
-  for (const type of ['pointerdown', 'keydown'])
+  $('audio-button').onclick = showAudio;
+  for (const type of ['pointerdown', 'click', 'keydown'])
     document.addEventListener(type, () => sound.unlock(), {once: true, capture: true});
   function help() {
     show('help', 'Controls');
@@ -538,7 +538,12 @@
     if (online)
       body.append(node('p', 'The room keeps playing while your controls are paused.'));
     const resumeButton = action('Resume match', resume, true);
-    body.append(resumeButton, action('Controls', help));
+    const fullscreen = $('fullscreen-button').cloneNode(true);
+    fullscreen.removeAttribute('id');
+    fullscreen.className = 'secondary fullscreen-toggle';
+    const status = node('p', '', 'display-status');
+    status.setAttribute('role', 'status');
+    body.append(resumeButton, action('Controls', help), action('Audio', showAudio), fullscreen, status);
     if (duel)
       body.append(action('Restart duel', () => launch(true, pickupTrial, contested)));
     body.append(action('Return to hangar', returnHangar));
@@ -1151,7 +1156,20 @@
     }
     if (!['left', 'right', 'up', 'down'].includes(command))
       return;
-    const host = dialog.open ? dialog : $('hangar'), active = document.activeElement;
+    const host = dialog.open ? dialog : document.body, active = document.activeElement;
+    if (dialogType === 'audio') {
+      if (command === 'up' || command === 'down') {
+        const items = [...dialog.querySelectorAll('input,button')];
+        items[(items.indexOf(active) + (command === 'down' ? 1 : -1) + items.length) % items.length].focus();
+        return;
+      }
+      if (active?.matches('input[data-volume]')) {
+        active.stepUp(command === 'right' ? 5 : -5);
+        for (const type of ['input', 'change'])
+          active.dispatchEvent(new Event(type, {bubbles: true}));
+        return;
+      }
+    }
     if (active instanceof HTMLSelectElement && ['left', 'right'].includes(command)) {
       active.selectedIndex =
           (active.selectedIndex + (command === 'right' ? 1 : -1) + active.options.length) % active.options.length;
@@ -1208,7 +1226,7 @@
         pause();
       controls.clear();
       sound.pause();
-    } else if (!finished && (screen !== 'battle' || !dialog.open))
+    } else if (!finished && (screen !== 'battle' || !dialog.open || dialogType === 'audio'))
       sound.resume();
   });
   window.addEventListener('blur', () => {
@@ -1218,7 +1236,7 @@
   setStage(stage);
   view?.hangar(roster[0]);
   updateHangar();
-  soundButton();
+  MechSettings.configure(say);
   invited();
   if (!view)
     say('WebGL could not start. Enable graphics acceleration to play.');

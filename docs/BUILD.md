@@ -1,6 +1,6 @@
 # Build MECH★POP
 
-This checkout builds the **0.6.0 browser edition**. To reproduce the packaged **0.2.0 native preview, build 16**, use its release tag. [Native build 16](https://github.com/bhaisley/mech-pop/tree/v0.2.0-preview.16)
+This checkout builds the **0.6.1 browser edition**. To reproduce the packaged **0.2.0 native preview, build 16**, use its release tag. [Native build 16](https://github.com/bhaisley/mech-pop/tree/v0.2.0-preview.16)
 
 ## Requirements
 
@@ -13,7 +13,7 @@ The browser game is ready to serve from this checkout. The following toolchain i
 
 ## Run the browser game
 
-The browser game includes the twelve-mech New Challengers roster. Run the four-seat room authority from the matching `v0.6.0-web` release tag.
+The 0.6.1 browser controls use the New Challengers simulation. For a four-seat room, both the `v0.6.0-web` and `v0.6.1-web` tags supply the matching authority.
 
 Serve the `docs` directory from the repository root.
 
